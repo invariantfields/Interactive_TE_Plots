@@ -6,6 +6,8 @@
 #     "cupy-cuda12x",
 #     "plotly",
 #     "scipy",
+#     "fsspec",
+#     "requests",
 # ]
 # ///
 
@@ -26,8 +28,20 @@ def _():
     import pickle
     from itertools import combinations
     import os
+    from fsspec.implementations.github import GithubFileSystem
 
-    return combinations, cp, go, make_subplots, mo, np, os, pc, pickle
+    return (
+        GithubFileSystem,
+        combinations,
+        cp,
+        go,
+        make_subplots,
+        mo,
+        np,
+        os,
+        pc,
+        pickle,
+    )
 
 
 @app.cell
@@ -76,9 +90,9 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(cp, go, is_TE, make_subplots, np, pc, pickle):
+def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
     def plot_te_filtered_trajectories(
-        pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics
+        pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, fs=None
     ):
         """Plot trajectories with optional TE filtering."""
         if not selected_metrics:
@@ -98,8 +112,12 @@ def _(cp, go, is_TE, make_subplots, np, pc, pickle):
             if not file or not label:
                 continue
             try:
-                with open(file, "rb") as f:
-                    data = pickle.load(f)
+                if fs:
+                    with fs.open(file, "rb") as f:
+                        data = pickle.load(f)
+                else:
+                    with open(file, "rb") as f:
+                        data = pickle.load(f)
             except Exception as e:
                 print(f"Error loading {file}: {e}")
                 continue
@@ -215,22 +233,46 @@ def _(mo):
 
 
 @app.cell
-def _(mo, os):
+def _(mo):
+    # Data source selection UI
+    data_source = mo.ui.radio(
+        options=["Local", "GitHub"],
+        value="Local",
+        label="**Data Source:**",
+        inline=True
+    )
+    
+    refresh_button = mo.ui.button(label="🔄 Refresh File List", value=0)
+    
+    mo.md(f"### 1. Data Selection\n{mo.hstack([data_source, refresh_button], align='center', gap=2)}")
+    return data_source, refresh_button
+
+
+@app.cell
+def _(GithubFileSystem, data_source, mo, os, refresh_button):
     import re
 
-    # Dynamic file selection from data directory
-    data_dir = "data"
-
-    refresh_button = mo.ui.button(label="🔄 Refresh File List", value=0)
-
     # We use refresh_button.value as a dependency to trigger re-scanning
-    refresh_button
+    refresh_button.value
 
-    available_files = (
-        sorted([os.path.join(data_dir, f) for f in os.listdir(data_dir) if f.endswith(".pkl")])
-        if os.path.exists(data_dir)
-        else []
-    )
+    available_files = []
+    fs = None
+    
+    if data_source.value == "Local":
+        data_dir = "data"
+        if os.path.exists(data_dir):
+            available_files = sorted([os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")])
+    else:
+        # GitHub configuration
+        org = "invariantfields"
+        repo = "Interactive_TE_Plots"
+        try:
+            fs = GithubFileSystem(org=org, repo=repo)
+            # Fetch files from /data folder in the repo
+            repo_data_dir = "data"
+            available_files = sorted([_f for _f in fs.ls(repo_data_dir) if _f.endswith(".pkl")])
+        except Exception as e:
+            mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
 
     # Group files by prefix (everything before 'stps' or 'steps')
     groups = {}
@@ -241,7 +283,7 @@ def _(mo, os):
             _group_name = _match.group(1).rstrip("_")
         else:
             _group_name = _basename.replace(".pkl", "")
-
+            
         if _group_name not in groups:
             groups[_group_name] = []
         groups[_group_name].append(_f)
@@ -282,16 +324,17 @@ def _(mo, os):
     plot_button = mo.ui.run_button(label="🚀 Generate Plot")
 
     mo.vstack([
-        mo.md("### 1. Data Selection"),
-        mo.hstack([group_selector, refresh_button], align="end"),
+        group_selector,
         mo.md("### 2. Plot Settings"),
         mo.hstack([metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         plot_button
     ])
     return (
+        fs,
         group_selector,
         groups,
+        metric_options,
         metric_selector,
         metrics_to_plot,
         plot_button,
@@ -303,6 +346,7 @@ def _(mo, os):
 
 @app.cell
 def _(
+    fs,
     group_selector,
     groups,
     metric_selector,
@@ -334,9 +378,10 @@ def _(
         use_te_filter=te_filter_checkbox.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
+        fs=fs,
     )
     plot
-    return
+    return labels, plot
 
 
 @app.cell
