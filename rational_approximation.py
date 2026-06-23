@@ -87,7 +87,7 @@ def _(Fraction, np):
         approx_coeffs = []
         fracs = []
         for c in psi:
-            approx_c, r_frac, i_frac = approximate_coefficient(c, max_denominator)
+            approx_c, r_frac, i_frac = approximate_coefficient(c,10**max_denominator)
             approx_coeffs.append(approx_c)
             fracs.append((r_frac, i_frac))
 
@@ -104,6 +104,8 @@ def _(Fraction, np):
         return f"{f.numerator}/{f.denominator}"
 
     def format_complex_fraction(r_frac, i_frac):
+        if i_frac is None:
+            return format_fraction(r_frac)
         r_str = format_fraction(r_frac)
         i_str = format_fraction(i_frac)
         if i_frac == 0:
@@ -186,11 +188,11 @@ def _(mo, state_list):
             state_output = mo.md("⚠️ **No threshold Entangled (TE) states found in this file.**")
         else:
             denominator_input = mo.ui.slider(
-                start=2,
+                start=1,
                 stop=12,
-                value=10,
+                value=2,
                 step=1,
-                label="🔢 **Max Denominator Limit:** ",
+                label="🔢 **Max Len Denominator Limit:** ",
             )
             state_output = None
     state_output
@@ -243,10 +245,10 @@ def _(approximate_state, denominator_input, is_TE, mo, np, state_list):
             # Summary callout
             if num_remaining == total_te:
                 kind = "success"
-                msg = f"🎉 **All {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {max_denom}!"
+                msg = f"🎉 **All {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {10**max_denom}!"
             elif num_remaining > 0:
                 kind = "warn"
-                msg = f"⚠️ **{num_remaining} out of {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {max_denom}."
+                msg = f"⚠️ **{num_remaining} out of {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {10**max_denom}."
             else:
                 kind = "danger"
                 msg = f"❌ **None of the {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {max_denom}."
@@ -401,7 +403,7 @@ def _(go, mo, selected_state_data):
             title=f"Comparison of Coefficients for State Index {state_index}: Original vs Rational Approximation",
             xaxis_title="Coefficient Index",
             yaxis_title="Value",
-            bgroupmode="group",
+            barmode="group",
             template="plotly_white",
             height=450,
             width=900
