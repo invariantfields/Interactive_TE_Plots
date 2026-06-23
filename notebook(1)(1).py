@@ -727,8 +727,8 @@ def _(gen_data, mo, run_sim_btn):
         ),
     )
     stpsi=[5]
-    qbt_nmbs = [ 4,7]
-    num_seds = [ 1500, 600]
+    qbt_nmbs = [7]
+    num_seds = [  600]
     for _ in range(len(qbt_nmbs)):
         flnm = f"new_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
