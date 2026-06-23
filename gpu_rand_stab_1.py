@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.23.9"
+__generated_with = "0.23.10"
 app = marimo.App(width="full")
 
 
@@ -15,7 +15,15 @@ def import_pkgs():
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import plotly.colors as pc
-
+    jl.seval("""
+    import Pkg
+    Pkg.add(["CUDA"])"""
+            )
+    jl.seval("""Pkg.add(url="https://github.com/bsc-quantic/HadaMAG.jl/")""")
+    jl.seval("""
+    Pkg.resolve()
+     # Ensures all dependencies are installed
+    """) 
     jl.seval("using HadaMAG")
     jl.seval("using CUDA")
     import numpy as np
@@ -241,15 +249,11 @@ def _(cp):
     return (haar_random_unitary_gpu,)
 
 
-app._unparsable_cell(
-    r"""
-    def par_trace(psi, dim, n, n_parties):
+@app.function
+def par_trace(psi, dim, n, n_parties):
     n_rem = n - n_parties
     psi_mat = psi.reshape(dim**n_rem, dim**n_parties)
     return psi_mat @ psi_mat.conj().T
-    """,
-    name="_"
-)
 
 
 @app.cell
@@ -621,11 +625,11 @@ app._unparsable_cell(
         del psi
         cp.get_default_memory_pool().free_all_blocks()
 
-    with open(filename, "wb") as f:
-        pickle.dump(trajectories, f)
-
-    print(f"Saved {num_starts} trajectories to {filename}")
-    return trajectories
+        with open(filename, "wb") as f:
+            pickle.dump(trajectories, f)
+    
+        print(f"Saved {num_starts} trajectories to {filename}")
+        return trajectories
     """,
     name="run_entanglement_optimization"
 )
@@ -754,7 +758,6 @@ app._unparsable_cell(
                     "status": f"Loaded ({file_path})",
                     "norm": _norm_psi,
                     "has_nan": bool(_has_nan_psi)}
-            
     """,
     name="_"
 )
@@ -773,16 +776,7 @@ def _(run_diag_btn):
 
 
 @app.cell
-def _(
-    combinations,
-    compute_sre,
-    cp,
-    mean,
-    mo,
-    par_trace,
-    pickle,
-    run_diag_btn,
-):
+def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
     import traceback
 
     # OPTIMIZATION: Halt execution of this expensive diagnostic unless manually triggered
