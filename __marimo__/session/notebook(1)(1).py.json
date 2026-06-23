@@ -27939,7 +27939,2707 @@
         {
           "type": "stream",
           "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 501/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 502/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
           "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 503/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 504/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 505/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 506/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 507/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 508/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 509/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 510/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 511/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 512/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 513/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 514/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 515/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 516/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 517/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 518/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 519/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 520/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 521/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 522/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 523/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 524/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 525/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 526/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 527/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 528/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 529/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 530/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 531/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 532/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 533/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 534/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 535/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 536/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 537/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 538/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 539/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 540/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 541/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 542/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 543/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 544/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 545/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 546/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 547/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 548/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 549/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 550/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 551/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 552/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 553/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 554/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 555/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 556/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 557/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 558/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 559/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 560/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 561/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 562/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 563/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 564/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 565/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 566/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 567/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 568/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 569/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 570/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 571/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 572/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 573/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 574/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 575/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 576/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 577/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 578/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 579/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 580/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 581/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 582/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 583/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 584/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 585/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 586/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 587/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 588/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 589/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 590/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 591/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 592/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 593/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 594/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 595/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 596/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 597/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 598/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 599/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 600/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Saved 600 trajectories to new_data/7_qbt_600_sds_ptmzng_fr_5_stps_3.pkl\ncomputing for 7-qubits with initial random 3-qubit stabilized state.\nRandom state trajectory: 1/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 2/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 3/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 4/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 5/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 6/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 7/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 8/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 9/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 10/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 11/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 12/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 13/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 14/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 15/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 16/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 17/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 18/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 19/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 20/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 21/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 22/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 23/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 24/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 25/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 26/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 27/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 28/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 29/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 30/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 31/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 32/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 33/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 34/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 35/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 36/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 37/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 38/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 39/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 40/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 41/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 42/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 43/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 44/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 45/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 46/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 47/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 48/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 49/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 50/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 51/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 52/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 53/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 54/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 55/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 56/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 57/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 58/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 59/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 60/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 61/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 62/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 63/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 64/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 65/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 66/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 67/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 68/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 69/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 70/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 71/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 72/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 73/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 74/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 75/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 76/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 77/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 78/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 79/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 80/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 81/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 82/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 83/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 84/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 85/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 86/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 87/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 88/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 89/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 90/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 91/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 92/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 93/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 94/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 95/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 96/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 97/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 98/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 99/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 100/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 101/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 102/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 103/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 104/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 105/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 106/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 107/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 108/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 109/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 110/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 111/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 112/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 113/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 114/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n/tmp/marimo_7546/__marimo__cell_ulZA_.py:8: RuntimeWarning: invalid value encountered in sqrt\n  if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 115/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 116/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 117/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 118/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 119/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 120/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 121/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 122/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 123/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 124/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Random state trajectory: 125/600\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
           "mimetype": "text/plain"
         }
       ]
