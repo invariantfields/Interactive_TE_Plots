@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.23.9"
+__generated_with = "0.23.10"
 app = marimo.App(width="medium")
 
 
@@ -90,7 +90,7 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
+def _(cp, go, is_TE, make_subplots, np, pc, pickle):
     def plot_te_filtered_trajectories(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, fs=None
     ):
@@ -143,19 +143,26 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
 
             for i, metric in enumerate(selected_metrics):
                 col = i + 1
-                arr = np.array(data[metric])[te_mask]
-                steps = np.arange(arr.shape[1]) * step_mes
+                filtered_trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                if not filtered_trajs:
+                    continue
+                max_len = max(len(t) for t in filtered_trajs)
+                arr = np.full((len(filtered_trajs), max_len), np.nan)
+                for j, traj in enumerate(filtered_trajs):
+                    arr[j, :len(traj)] = traj
+
+                steps = np.arange(max_len) * step_mes
 
                 if central_tendency == "Average":
-                    center_line = np.mean(arr, axis=0)
-                    std = np.std(arr, axis=0)
+                    center_line = np.nanmean(arr, axis=0)
+                    std = np.nanstd(arr, axis=0)
                     lower_bound = center_line - std
                     upper_bound = center_line + std
                     leg_suffix = f"(Avg ±1 Std)"
                 else:
-                    center_line = np.median(arr, axis=0)
-                    lower_bound = np.percentile(arr, 25, axis=0)
-                    upper_bound = np.percentile(arr, 75, axis=0)
+                    center_line = np.nanmedian(arr, axis=0)
+                    lower_bound = np.nanpercentile(arr, 25, axis=0)
+                    upper_bound = np.nanpercentile(arr, 75, axis=0)
                     leg_suffix = f"(Median & IQR)"
 
                 show_leg = i == 0
@@ -241,9 +248,9 @@ def _(mo):
         label="**Data Source:**",
         inline=True
     )
-    
+
     refresh_button = mo.ui.button(label="🔄 Refresh File List", value=0)
-    
+
     mo.md(f"### 1. Data Selection\n{mo.hstack([data_source, refresh_button], align='center', gap=2)}")
     return data_source, refresh_button
 
@@ -257,9 +264,9 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
     available_files = []
     fs = None
-    
+
     if data_source.value == "Local":
-        data_dir = "data"
+        data_dir = "new_data/"
         if os.path.exists(data_dir):
             available_files = sorted([os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")])
     else:
@@ -283,7 +290,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
             _group_name = _match.group(1).rstrip("_")
         else:
             _group_name = _basename.replace(".pkl", "")
-            
+
         if _group_name not in groups:
             groups[_group_name] = []
         groups[_group_name].append(_f)
@@ -334,7 +341,6 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         fs,
         group_selector,
         groups,
-        metric_options,
         metric_selector,
         metrics_to_plot,
         plot_button,
@@ -381,12 +387,10 @@ def _(
         fs=fs,
     )
     plot
-    return labels, plot
-
-
-@app.cell
-def _():
     return
+
+
+
 
 
 if __name__ == "__main__":

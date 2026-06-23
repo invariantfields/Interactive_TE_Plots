@@ -7,374 +7,158 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "463c854559f51f5e574ccc0c1abef15b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "    Updating registry at `~/.julia/registries/General.toml`\n   Resolving package versions...\n   Installed Crayons \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v4.1.1\n   Installed GPUArraysCore \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v0.2.0\n   Installed demumble_jll \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.3.0+0\n   Installed cuFFT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed NVML \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed CUPTI \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed Adapt \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v4.6.1\n   Installed PrettyTables \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v3.3.2\n   Installed HashArrayMappedTries \u2500\u2500\u2500 v0.2.0\n   Installed LLVMLoopInfo \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.0.0\n   Installed CUDA_Driver_jll \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v13.3.0+0\n   Installed CUDACore \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed cuSOLVER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed AbstractFFTs \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.5.0\n   Installed GPUCompiler \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.22.5\n   Installed CUDATools \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed StaticArrays \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.9.18\n   Installed CUDA_Runtime_Discovery \u2500 v2.1.0\n   Installed CUDA_Compiler_jll \u2500\u2500\u2500\u2500\u2500\u2500 v0.4.4+0\n   Installed StaticArraysCore \u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.4.4\n   Installed Tracy \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v0.1.6\n   Installed NVTX \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.0.3\n   Installed NVTX_jll \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v3.2.2+0\n   Installed LLVMExtra_jll \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v0.0.43+1\n   Installed LaTeXStrings \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v1.4.0\n   Installed CEnum \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v0.5.0\n   Installed cuSPARSE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 v6.2.0\n   Installed ScopedValues \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
-          "mimetype": "text/plain"
-        }
-      ]
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
       "id": "MJUe",
-      "code_hash": "bb2806652ef2cb47232bc46f28ad7c5b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "vblA",
-      "code_hash": "f424b01a1cdf8da684917ccf0b9f55ed",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "bkHC",
-      "code_hash": "e7b137cdba430cb532afba1a6817a69d",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "lEQa",
-      "code_hash": "0c14e9c20727477d09a2f012323d74cf",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "PKri",
-      "code_hash": "8bd0ef89f555aa46678f4a8e6c244b28",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "Xref",
-      "code_hash": "6c3e6687ac2fd1623d06c5d26c85f42a",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "SFPL",
-      "code_hash": "f2601d605470e3d05b02c67055d6b12a",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "BYtC",
-      "code_hash": "14609c8132d20bbdc5b9b1cce5b83827",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "RGSE",
-      "code_hash": "a8364592d6f59e6ba2a4651b8cf09615",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "Kclp",
-      "code_hash": "571a7bb0cd66fbe914ce1a5be35724de",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "emfo",
-      "code_hash": "d64fcdc858dd3cc8686cf1d185c5d62c",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "Hstk",
-      "code_hash": "21493fb793ec7604d590951965c3a4f2",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "nWHF",
-      "code_hash": "c4fb46fbfe6b4f43d7b6c07a896ef102",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "iLit",
-      "code_hash": "870e2398527c61337100d6eb95917ce4",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "syntax",
-          "evalue": "line 82\nSyntaxError: 'return' outside function\n",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "ZHCJ",
-      "code_hash": "23df6385dd63b2f8c0161fbbef343245",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "ROlb",
-      "code_hash": "65f01076cf14fb5539f92f60d745822d",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "exception",
-          "evalue": "name 'run_entanglement_optimization' is not defined",
-          "traceback": null
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_ROlb_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">run_entanglement_optimization</span><span class=\"p\">(</span><span class=\"mi\">4</span><span class=\"p\">,</span><span class=\"mi\">1</span><span class=\"p\">,</span><span class=\"mi\">50</span><span class=\"p\">,</span><span class=\"mi\">1</span><span class=\"p\">,</span><span class=\"n\">filename</span><span class=\"o\">=</span><span class=\"s2\">&quot;boo&quot;</span><span class=\"p\">)</span>\n<span class=\"w\">    </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"gr\">NameError</span>: <span class=\"n\">name &#39;run_entanglement_optimization&#39; is not defined</span>\n</pre></div>\n</span>",
-          "mimetype": "application/vnd.marimo+traceback"
-        }
-      ]
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
       "id": "qnkX",
-      "code_hash": "cb736ce1ac442991291d8750cc13ff68",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<marimo-ui-element object-id='nWHF-0' random-id='a7db677f-4584-454b-4d67-cd35c6c9a45e'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element>"
-          }
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "TqIu",
-      "code_hash": "976657807654382de4831971137a1cb5",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "exception",
-          "evalue": "[Errno 2] No such file or directory: 'data/4_qbt_100_sds_ptmzng_fr_5000_stps0.pkl'",
-          "traceback": null
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_TqIu_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">plot_trajectories_marimo</span><span class=\"p\">(</span>\n<span class=\"w\">    </span><span class=\"pm\">~~~~~~~~~~~~~~~~~~~~~~~~^</span>\n<span class=\"w\">    </span>    <span class=\"n\">pkl_files</span><span class=\"o\">=</span><span class=\"p\">[</span><span class=\"s2\">&quot;data/4_qbt_100_sds_ptmzng_fr_5000_stps0.pkl&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;data/4_qbt_100_sds_ptmzng_fr_5000_stps1.pkl&quot;</span><span class=\"p\">,</span><span class=\"s2\">&quot;data/4_qbt_100_sds_ptmzng_fr_5000_stps2.pkl&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;data/4_qbt_100_sds_ptmzng_fr_5000_stps3.pkl&quot;</span><span class=\"p\">,</span><span class=\"s2\">&quot;data/4_qbt_100_sds_ptmzng_fr_5000_stps4.pkl&quot;</span><span class=\"p\">],</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"o\">...&lt;</span><span class=\"mi\">2</span> <span class=\"n\">lines</span><span class=\"o\">&gt;...</span>\n<span class=\"w\">    </span>    <span class=\"n\">central_tendency</span><span class=\"o\">=</span><span class=\"n\">metric_selector</span><span class=\"o\">.</span><span class=\"n\">value</span><span class=\"p\">,</span>  <span class=\"c1\"># &lt;--- This makes the plot reactive!</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"p\">)</span>\n<span class=\"w\">    </span><span class=\"pm\">^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_nWHF_.py&quot;</span>, line <span class=\"m\">91</span>, in <span class=\"n\">plot_trajectories_marimo</span>\n<span class=\"w\">    </span><span class=\"k\">with</span> <span class=\"nb\">open</span><span class=\"p\">(</span><span class=\"n\">file</span><span class=\"p\">,</span> <span class=\"s2\">&quot;rb&quot;</span><span class=\"p\">)</span> <span class=\"k\">as</span> <span class=\"n\">f</span><span class=\"p\">:</span>\n<span class=\"w\">         </span><span class=\"pm\">~~~~^^^^^^^^^^^^</span>\n<span class=\"gr\">FileNotFoundError</span>: <span class=\"n\">[Errno 2] No such file or directory: &#39;data/4_qbt_100_sds_ptmzng_fr_5000_stps0.pkl&#39;</span>\n</pre></div>\n</span>",
-          "mimetype": "application/vnd.marimo+traceback"
-        }
-      ]
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
       "id": "Vxnm",
-      "code_hash": "5b243eda2adac8d55b24620605f51381",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "interruption",
-          "evalue": "This cell was interrupted and needs to be re-run",
-          "traceback": []
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "Processing almost_gap = 0 / 4 ...\n",
-          "mimetype": "text/plain"
-        },
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_Vxnm_.py&quot;</span>, line <span class=\"m\">1</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">plot_sre_vs_gap</span><span class=\"p\">(</span><span class=\"mi\">4</span><span class=\"p\">,</span> <span class=\"mi\">1000</span><span class=\"p\">)</span>\n<span class=\"w\">    </span><span class=\"pm\">~~~~~~~~~~~~~~~^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_nWHF_.py&quot;</span>, line <span class=\"m\">25</span>, in <span class=\"n\">plot_sre_vs_gap</span>\n<span class=\"w\">    </span><span class=\"n\">_sre_val</span><span class=\"p\">,</span> <span class=\"n\">_lost_norm</span> <span class=\"o\">=</span> <span class=\"n\">compute_sre</span><span class=\"p\">(</span><span class=\"n\">_psi</span><span class=\"p\">,</span> <span class=\"n\">alpha</span><span class=\"o\">=</span><span class=\"mi\">2</span><span class=\"p\">)</span>\n<span class=\"w\">                           </span><span class=\"pm\">~~~~~~~~~~~^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_2355/__marimo__cell_Hstk_.py&quot;</span>, line <span class=\"m\">30</span>, in <span class=\"n\">compute_sre</span>\n<span class=\"w\">    </span><span class=\"n\">jl</span><span class=\"o\">.</span><span class=\"n\">seval</span><span class=\"p\">(</span><span class=\"s2\">&quot;&quot;&quot;</span>\n<span class=\"w\">    </span><span class=\"pm\">~~~~~~~~^^^^</span>\n<span class=\"w\">    </span>    <span class=\"c1\"># Cast the PyArray to a strict Julia Complex Vector</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"o\">...&lt;</span><span class=\"mi\">7</span> <span class=\"n\">lines</span><span class=\"o\">&gt;...</span>\n<span class=\"w\">    </span>    <span class=\"n\">sre_result</span><span class=\"p\">,</span> <span class=\"n\">lost_norm</span> <span class=\"o\">=</span> <span class=\"n\">SRE</span><span class=\"p\">(</span><span class=\"n\">psi_sv</span><span class=\"p\">,</span> <span class=\"n\">alpha</span><span class=\"p\">,</span> <span class=\"n\">backend</span><span class=\"o\">=</span> <span class=\"p\">:</span><span class=\"n\">CUDA</span><span class=\"p\">)</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"s2\">&quot;&quot;&quot;)</span>\n<span class=\"w\">    </span><span class=\"pm\">^^^^</span>\n  File <span class=\"nb\">&quot;/home/naga/.julia/packages/PythonCall/5WGSP/src/JlWrap/module.jl&quot;</span>, line <span class=\"m\">27</span>, in <span class=\"n\">seval</span>\n<span class=\"w\">    </span><span class=\"k\">return</span> <span class=\"bp\">self</span><span class=\"o\">.</span><span class=\"n\">_jl_callmethod</span><span class=\"p\">(</span><span class=\"err\">$</span><span class=\"p\">(</span><span class=\"n\">pyjl_methodnum</span><span class=\"p\">(</span><span class=\"n\">pyjlmodule_seval</span><span class=\"p\">)),</span> <span class=\"n\">expr</span><span class=\"p\">)</span>\n<span class=\"w\">           </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/home/naga/marimo/lib/python3.14/site-packages/marimo/_runtime/handlers.py&quot;</span>, line <span class=\"m\">72</span>, in <span class=\"n\">interrupt_handler</span>\n<span class=\"w\">    </span><span class=\"k\">raise</span> <span class=\"n\">MarimoInterrupt</span>\n<span class=\"gr\">KeyboardInterrupt</span>\n</pre></div>\n</span>",
-          "mimetype": "application/vnd.marimo+traceback"
-        }
-      ]
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     },
     {
       "id": "DnEU",
-      "code_hash": "751a13b2a49302118674883cd5064b9c",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "multiple-defs",
-          "evalue": "The variable 'f' was defined by another cell",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "ulZA",
-      "code_hash": "11ff61ae1d4f4dde4988519b61c49b49",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "syntax",
-          "evalue": "line 26\n    \"has_nan\": bool(_has_nan_psi)}\n                                  ^\nSyntaxError: expected 'except' or 'finally' block\n",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "ecfG",
-      "code_hash": "27df590515560c26f4c2a19b3ba75350",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "interruption",
-          "evalue": "This cell was interrupted and needs to be re-run",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "Pvdt",
-      "code_hash": "a120bdb8fcec099bb8078c7052b80dc0",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "interruption",
-          "evalue": "This cell was interrupted and needs to be re-run",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "ZBYS",
-      "code_hash": "d60dacc9a104582c5cb3eed09a3fa6ff",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "multiple-defs",
-          "evalue": "The variable 'f' was defined by another cell",
-          "traceback": []
-        }
-      ],
+      "code_hash": null,
+      "outputs": [],
       "console": []
     },
     {
       "id": "aLJB",
       "code_hash": null,
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/plain": ""
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     }
   ]

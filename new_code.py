@@ -2,7 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = [
 #     "cupy-cuda13x==14.1.1",
-#     "jax[cuad13]==0.10.2",
+#     "jax[cuda13]==0.10.2",
 #     "jaxopt==0.8.5",
 #     "juliacall==0.9.35",
 #     "numpy==2.4.6",
@@ -18,6 +18,9 @@ app = marimo.App(
     css_file="/usr/local/_marimo/custom.css",
     auto_download=["html"],
 )
+
+
+
 
 
 @app.cell
@@ -42,8 +45,6 @@ def _():
     import sys
     import os
 
-    sys.setrecursionlimit(10000)
-    os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = "0.90"
 
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -52,9 +53,6 @@ def _():
     import cupy as cp
 
     # RTX 6000 96GB VRAM Optimization
-    mempool = cp.get_default_memory_pool()
-    mempool.set_limit(size=90 * 1024**3) # 90 GB limit
-
     from functools import reduce
     from scipy.stats import unitary_group
     import scipy.linalg as la
@@ -298,7 +296,7 @@ def _(cp, expm):
         a /= cp.linalg.norm(a)
         return expm(epsilon * a)
 
-    return
+    return (near_identity_unitary,)
 
 
 @app.function
@@ -352,11 +350,7 @@ def _(cp, jl, np):
     return (compute_sre,)
 
 
-@app.cell
-def _():
-    # OPTIMIZATION: Cached this expensive computation so it doesn't re-run
-    # unless inputs change.
-    return
+
 
 
 @app.cell
@@ -448,19 +442,26 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
 
             for i, metric in enumerate(metrics):
                 col = i + 1
-                arr = np.array(data[metric])
-                steps = np.arange(arr.shape[1]) * step_mes
+                trajs = data[metric]
+                if not trajs:
+                    continue
+                max_len = max(len(t) for t in trajs)
+                arr = np.full((len(trajs), max_len), np.nan)
+                for j, traj in enumerate(trajs):
+                    arr[j, :len(traj)] = traj
+
+                steps = np.arange(max_len) * step_mes
 
                 if central_tendency == "Average":
-                    center_line = np.mean(arr, axis=0)
-                    std = np.std(arr, axis=0)
+                    center_line = np.nanmean(arr, axis=0)
+                    std = np.nanstd(arr, axis=0)
                     lower_bound = center_line - std
                     upper_bound = center_line + std
                     legend_suffix = "(Avg \u00b11 Std)"
                 else:
-                    center_line = np.median(arr, axis=0)
-                    lower_bound = np.percentile(arr, 25, axis=0)
-                    upper_bound = np.percentile(arr, 75, axis=0)
+                    center_line = np.nanmedian(arr, axis=0)
+                    lower_bound = np.nanpercentile(arr, 25, axis=0)
+                    upper_bound = np.nanpercentile(arr, 75, axis=0)
                     legend_suffix = "(Median & IQR)"
 
                 show_leg = i == 0
@@ -540,7 +541,7 @@ def _(random):
     def bool_prob(p: float = 0.05) -> bool:
         return random.random() < p
 
-    return
+    return (bool_prob,)
 
 
 @app.cell
@@ -560,14 +561,13 @@ def _(cp, np):
 
 
 @app.cell
-def is_te(combinations, is_appt, np):
+def is_te(combinations, cp, is_appt, np):
     def is_TE(psi: np.array, dim: int = 2) -> bool:
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
             per = list(set(range(n)) - set(_i)) + list(_i)
-            # FIXED: Use psi_moved to avoid overwriting original psi
-            psi_moved = np.transpose(
+            psi_moved = cp.transpose(
                 psi.reshape([dim] * n), per
             ).flatten()
             _x = par_trace(psi_moved, dim, n, k)
@@ -727,8 +727,8 @@ def _(gen_data, mo, run_sim_btn):
         ),
     )
     stpsi=[5]
-    qbt_nmbs = [7]
-    num_seds = [  600]
+    qbt_nmbs = [4]
+    num_seds = [10 ]
     for _ in range(len(qbt_nmbs)):
         flnm = f"new_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
@@ -884,7 +884,7 @@ def _(
 
         print(f"Saved {num_starts} GD trajectories to {filename}")
         #return trajectories
-    return
+    return (run_gradient_descent_optimization,)
 
 
 @app.cell
@@ -1015,7 +1015,7 @@ def _(
 
         return trajectories
 
-    return
+    return (run_jax_gpu_optimization,)
 
 
 @app.cell
@@ -1128,17 +1128,30 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
 def _(metric_selector, plot_te_filtered_trajectories, te_filter_checkbox):
     # Reactive call — re-runs when checkbox or radio changes
     plot_te_filtered_trajectories(
-        pkl_files=["9_qbt_640_sds_ptmzng_fr_15_stps90.pkl","9_qbt_640_sds_ptmzng_fr_15_stps80.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps70.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps60.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps50.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps40.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps30.pkl",
-                   "9_qbt_640_sds_ptmzng_fr_15_stps20.pkl",
-                    "9_qbt_640_sds_ptmzng_fr_15_stps10.pkl",
-                                  "9_qbt_640_sds_ptmzng_fr_15_stps00.pkl"],
-        labels=["gap0", "gap1", "gap2", "gap3", "gap4"],
-
+        pkl_files=[
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps90.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps80.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps70.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps60.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps50.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps40.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps30.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps20.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps10.pkl",
+            "data/9_qbt_640_sds_ptmzng_fr_15_stps00.pkl",
+        ],
+        labels=[
+            "gap9",
+            "gap8",
+            "gap7",
+            "gap6",
+            "gap5",
+            "gap4",
+            "gap3",
+            "gap2",
+            "gap1",
+            "gap0",
+        ],
         step_mes=1,
         use_te_filter=te_filter_checkbox.value,
         central_tendency=metric_selector.value,
@@ -1206,7 +1219,7 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
         _gap_info = {"gap": _gap, "stages": {}}
         try:
             # --- LOAD THE EXISTING PKL FILE FOR THIS GAP ---
-            file_path = f"data/4_qbt_200_sds_ptmzng_fr_100_stps{_gap}.pkl"  # Adjust filename format if needed
+            file_path = f"data/4_qbt_500_sds_ptmzng_fr_10_stps{_gap}.pkl"  # Adjust filename format if needed
             with open(file_path, "rb") as f:
                 _psi_test = pickle.load(f)
 
@@ -1482,12 +1495,10 @@ def _(rnd_run_entanglement_optimization):
                 filename=_ffname,
             )
 
-    return
+    return (rand_gen_data,)
 
 
-@app.cell
-def _():
-    return
+
 
 
 if __name__ == "__main__":
