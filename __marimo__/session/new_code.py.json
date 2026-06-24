@@ -20,12 +20,14 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "6df460fecaf16b11dce4f8762e9c2a56",
+      "code_hash": "20cbb7e3c0415a85fa188c3422dff1ac",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "application/vnd.marimo+mimebundle": {
+              "text/plain": "LogLevel(-999)"
+            }
           }
         }
       ],
@@ -33,7 +35,7 @@
     },
     {
       "id": "vblA",
-      "code_hash": "919577683bfee88839cfc9193e61be8c",
+      "code_hash": "785a57e4d9610a84f7eab33c3af26518",
       "outputs": [
         {
           "type": "data",
@@ -51,7 +53,7 @@
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='bkHC-0' random-id='600b834d-33af-fed0-5b4c-84f729989d9a'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='bkHC-1' random-id='ab5f0c33-455e-ed7c-0fbe-293d95df514b'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='bkHC-0' random-id='bf543dfe-c309-b1e6-d1fe-13340ffec215'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='bkHC-1' random-id='9c27ac20-218d-e269-2ae5-b5d3f9ea412d'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
           }
         }
       ],
@@ -228,7 +230,7 @@
     },
     {
       "id": "qnkX",
-      "code_hash": "d3ab666381373d1ad97a2b8f8a0d7b3f",
+      "code_hash": "ded106b0332d47024cbaec5c4c851082",
       "outputs": [
         {
           "type": "data",
@@ -293,7 +295,7 @@
     },
     {
       "id": "ecfG",
-      "code_hash": "93d4e63e44fa6b3ab12d8beb43d672a9",
+      "code_hash": "941dd28637d6215d60c1f98bf809d1bf",
       "outputs": [
         {
           "type": "data",
@@ -311,7 +313,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='bkHC-0' random-id='600b834d-33af-fed0-5b4c-84f729989d9a'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='bkHC-0' random-id='bf543dfe-c309-b1e6-d1fe-13340ffec215'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
@@ -319,7 +321,7 @@
     },
     {
       "id": "ZBYS",
-      "code_hash": "0cfa849736be65dded6bc98969786840",
+      "code_hash": "ffe0d4e6aae2aecb3f9aad7f54c55900",
       "outputs": [
         {
           "type": "data",
@@ -328,7 +330,212 @@
           }
         }
       ],
-      "console": []
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "new_data/11_qbt_1000_sds_ptmzng_fr_\ncomputing for 11-qubits with initial random 11-qubit stabilized state.\nJAX GPU Trajectory: 1/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 6.09e-01\nJAX GPU Trajectory: 2/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 1.35e+00\nJAX GPU Trajectory: 3/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 7.30e-01\nJAX GPU Trajectory: 4/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 1.23e+00\nJAX GPU Trajectory: 5/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 4.14e-01\nJAX GPU Trajectory: 6/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 7.93e-01\nJAX GPU Trajectory: 7/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 5.55e-01\nJAX GPU Trajectory: 8/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 7.19e-01\nJAX GPU Trajectory: 9/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 5.47e-01\nJAX GPU Trajectory: 10/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 1.04e+00\nJAX GPU Trajectory: 11/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 7.73e-01\nJAX GPU Trajectory: 12/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 9.10e-01\nJAX GPU Trajectory: 13/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 9.61e-01\nJAX GPU Trajectory: 14/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 1.09e+00\nJAX GPU Trajectory: 15/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 6.87e-01\nJAX GPU Trajectory: 16/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "\n  Final Violation: 1.51e+00\nJAX GPU Trajectory: 17/1000\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "\u250c Warning: Progress bar not implemented for CUDA backend.\n\u2514 @ HadaMAGCUDAExt ~/.julia/packages/HadaMAG/l6OhG/ext/HadaMAGCUDAExt.jl:1383\n",
+          "mimetype": "text/plain"
+        }
+      ]
     },
     {
       "id": "aLJB",
@@ -345,7 +552,7 @@
     },
     {
       "id": "nHfw",
-      "code_hash": "28f386ad4c077491829fafd57a82bde5",
+      "code_hash": "588f73433d6f5063b36c89f5f208854e",
       "outputs": [
         {
           "type": "data",
@@ -372,22 +579,8 @@
     {
       "id": "AjVT",
       "code_hash": "14e44a0b68dfab69a53c78f518601eb1",
-      "outputs": [
-        {
-          "type": "error",
-          "ename": "exception",
-          "evalue": "libcusolver.so.11: cannot open shared object file: No such file or directory",
-          "traceback": null
-        }
-      ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "<span class=\"codehilite\"><div class=\"highlight\"><pre><span></span><span class=\"gt\">Traceback (most recent call last):</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_13544/__marimo__cell_AjVT_.py&quot;</span>, line <span class=\"m\">2</span>, in <span class=\"n\">&lt;module&gt;</span>\n<span class=\"w\">    </span><span class=\"n\">plot_te_filtered_trajectories</span><span class=\"p\">(</span>\n<span class=\"w\">    </span><span class=\"pm\">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^</span>\n<span class=\"w\">    </span>    <span class=\"n\">pkl_files</span><span class=\"o\">=</span><span class=\"p\">[</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"o\">...&lt;</span><span class=\"mi\">25</span> <span class=\"n\">lines</span><span class=\"o\">&gt;...</span>\n<span class=\"w\">    </span>    <span class=\"n\">central_tendency</span><span class=\"o\">=</span><span class=\"n\">metric_selector</span><span class=\"o\">.</span><span class=\"n\">value</span><span class=\"p\">,</span>\n<span class=\"w\">        </span><span class=\"pm\">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n<span class=\"w\">    </span><span class=\"p\">)</span>\n<span class=\"w\">    </span><span class=\"pm\">^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_13544/__marimo__cell_xXTn_.py&quot;</span>, line <span class=\"m\">18</span>, in <span class=\"n\">plot_te_filtered_trajectories</span>\n<span class=\"w\">    </span><span class=\"nb\">bool</span><span class=\"p\">(</span><span class=\"n\">is_TE</span><span class=\"p\">(</span><span class=\"n\">cp</span><span class=\"o\">.</span><span class=\"n\">asarray</span><span class=\"p\">(</span><span class=\"n\">state</span><span class=\"o\">.</span><span class=\"n\">full</span><span class=\"p\">()</span> <span class=\"k\">if</span> <span class=\"nb\">hasattr</span><span class=\"p\">(</span><span class=\"n\">state</span><span class=\"p\">,</span> <span class=\"s2\">&quot;full&quot;</span><span class=\"p\">)</span> <span class=\"k\">else</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">asarray</span><span class=\"p\">(</span><span class=\"n\">state</span><span class=\"p\">))))</span>\n<span class=\"w\">         </span><span class=\"pm\">~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_13544/__marimo__cell_DnEU_.py&quot;</span>, line <span class=\"m\">11</span>, in <span class=\"n\">is_TE</span>\n<span class=\"w\">    </span><span class=\"k\">if</span> <span class=\"ow\">not</span> <span class=\"n\">is_appt</span><span class=\"p\">(</span><span class=\"n\">_x</span><span class=\"p\">):</span>\n<span class=\"w\">           </span><span class=\"pm\">~~~~~~~^^^^</span>\n  File <span class=\"nb\">&quot;/tmp/marimo_13544/__marimo__cell_Vxnm_.py&quot;</span>, line <span class=\"m\">6</span>, in <span class=\"n\">is_appt</span>\n<span class=\"w\">    </span><span class=\"n\">_ex</span><span class=\"p\">,</span> <span class=\"n\">_</span> <span class=\"o\">=</span> <span class=\"n\">cp</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">eigh</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span>\n<span class=\"w\">             </span><span class=\"pm\">~~~~~~~~~~~~~~^^^</span>\n  File <span class=\"nb\">&quot;/home/naga/marimo/lib/python3.14/site-packages/cupy/linalg/_eigenvalue.py&quot;</span>, line <span class=\"m\">256</span>, in <span class=\"n\">eigh</span>\n<span class=\"w\">    </span><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">cupyx.cusolver</span>\n<span class=\"gr\">ImportError</span>: <span class=\"n\">libcusolver.so.11: cannot open shared object file: No such file or directory</span>\n</pre></div>\n</span>",
-          "mimetype": "application/vnd.marimo+traceback"
-        }
-      ]
+      "outputs": [],
+      "console": []
     },
     {
       "id": "pHFh",
@@ -396,7 +589,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='qnkX-0' random-id='aa3cd105-8c6e-bbbe-7e58-e0a2d1b81b97'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='qnkX-1' random-id='cd0705a3-b5a8-78dd-756f-e5858a44e484'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='qnkX-0' random-id='4bb93f9c-34a7-b2a3-12c8-f1b49018f561'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='qnkX-1' random-id='b793070a-f249-db96-c1fd-5b929d9b8afc'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
           }
         }
       ],
@@ -421,7 +614,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='bkHC-1' random-id='ab5f0c33-455e-ed7c-0fbe-293d95df514b'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='bkHC-1' random-id='9c27ac20-218d-e269-2ae5-b5d3f9ea412d'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
@@ -456,6 +649,19 @@
     {
       "id": "yCnT",
       "code_hash": "7ec521d08550f75731ef17e4a99adbd0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "wlCL",
+      "code_hash": null,
       "outputs": [
         {
           "type": "data",

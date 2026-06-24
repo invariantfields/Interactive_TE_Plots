@@ -4,7 +4,6 @@
 #     "cupy-cuda13x==14.1.1",
 #     "jax[cuda13]==0.10.2",
 #     "jaxopt==0.8.5",
-#     "juliacall==0.9.35",
 #     "numpy==2.4.6",
 #     "scipy==1.17.1",
 # ]
@@ -22,31 +21,12 @@ app = marimo.App(
 
 @app.cell
 def _():
-    from juliacall import Main as jl
-
-
-    return (jl,)
-
-
-@app.cell
-def _(jl):
-    jl.seval("using Logging")
-    jl.seval("disable_logging(Logging.Error)")
-    jl.seval("using HadaMAG")
-    jl.seval("using CUDA")
-    jl.seval("disable_logging(Logging.Debug)")
-    return
-
-
-@app.cell
-def _():
 
     import marimo as mo
     import sys
     import os
 
     os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
-
 
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -67,7 +47,6 @@ def _():
     import jax.numpy as jnp
     from jaxopt import LBFGS
     from scipy.optimize import minimize
-
 
     return (
         LBFGS,
@@ -319,118 +298,13 @@ def _(cp):
 
 
 @app.cell
-def _(cp, jl, np):
-    def compute_sre(psi_np, alpha=2):
-        import warnings
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            try:
-                dim = len(psi_np)
-                n_qubits = int(np.log2(dim))
-
-                jl.psi_python = cp.asnumpy(psi_np)
-                jl.alpha = alpha
-                jl.n_qubits = n_qubits
-                jl.dim = dim
-
-                jl.seval(""" 
-                    psi_jl = Vector{ComplexF64}(psi_python)
-                    psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, n_qubits, dim)
-                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-                """)
-
-                sre_result = jl.sre_result
-                lost_norm = jl.lost_norm
-
-                return sre_result, lost_norm
-
-            except Exception as e:
-                print(f"Execution Error: {e}")
-                return None, None
-
-    return (compute_sre,)
-
-
-@app.cell
-def _(compute_sre, go, np, rand_Almost_Stab_state):
-    def plot_sre_vs_gap(n_qubits: int, num_samples: int) -> go.Figure:
-        gaps = list(range(0, n_qubits + 1))
-        _sre_all = {gap: [] for gap in gaps}
-        _sre_means = []
-        _sre_stds = []
-
-        for gap in gaps:
-            print(f"Processing almost_gap = {gap} / {n_qubits} ...")
-            for i in range(num_samples):
-                try:
-                    _psi = rand_Almost_Stab_state(n_qubits, gap)
-                    _sre_val, _lost_norm = compute_sre(_psi, alpha=2)
-                    if _sre_val is not None:
-                        _sre_all[gap].append(_sre_val)
-                except Exception as e:
-                    print(f"  Error at sample {i}: {e}")
-
-            _gap_vals = _sre_all[gap]
-            _mean = float(np.mean(_gap_vals))
-            _std = float(np.std(_gap_vals))
-            _sre_means.append(_mean)
-            _sre_stds.append(_std)
-            print(f"  Done: mean SRE = {_mean:.4f}  ±  {_std:.4f}")
-
-        _fig = go.Figure()
-        _fig.add_trace(
-            go.Scatter(
-                x=gaps,
-                y=_sre_means,
-                error_y=dict(
-                    type="data",
-                    array=_sre_stds,
-                    visible=True,
-                    thickness=1.5,
-                    width=3,
-                ),
-                mode="markers+lines",
-                marker=dict(
-                    size=8, color="royalblue", line=dict(color="navy", width=1)
-                ),
-                line=dict(color="royalblue", width=2),
-                name="Mean SRE",
-            )
-        )
-
-        _fig.update_layout(
-            title=dict(
-                text=f"Stabilizer Rényi Entropy (α=2) vs Almost-Gap<br><sup>{n_qubits}-qubit system, {num_samples} samples per gap</sup>",
-                x=0.5,
-            ),
-            xaxis_title="Almost Gap (free qubits not projected onto stabilizer)",
-            yaxis_title="SRE (α=2)",
-            template="plotly_white",
-            hovermode="x unified",
-            width=700,
-            height=500,
-            xaxis=dict(dtick=1),
-        )
-
-        return _fig
-
-
-    def hex_to_rgba(hex_color, alpha=0.2):
-        hex_color = hex_color.lstrip("#")
-        return f"rgba({int(hex_color[0:2], 16)}, {int(hex_color[2:4], 16)}, {int(hex_color[4:6], 16)}, {alpha})"
-
-    return hex_to_rgba, plot_sre_vs_gap
-
-
-@app.cell
 def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
     def plot_trajectories_marimo(pkl_files, labels, step_mes, central_tendency):
-        metrics = ["average_purity", "max_purity", "sre"]
-        metric_titles = ["Average Purity", "Max Purity", "SRE"]
+        metrics = ["average_purity", "max_purity"]
+        metric_titles = ["Average Purity", "Max Purity"]
 
         colors = pc.qualitative.Plotly
-        fig = make_subplots(rows=1, cols=3, subplot_titles=metric_titles)
+        fig = make_subplots(rows=1, cols=2, subplot_titles=metric_titles)
 
         for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
             with open(file, "rb") as f:
@@ -456,7 +330,7 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
                     std = np.nanstd(arr, axis=0)
                     lower_bound = center_line - std
                     upper_bound = center_line + std
-                    legend_suffix = "(Avg \u00b11 Std)"
+                    legend_suffix = "(Avg ±1 Std)"
                 else:
                     center_line = np.nanmedian(arr, axis=0)
                     lower_bound = np.nanpercentile(arr, 25, axis=0)
@@ -510,7 +384,7 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
         fig.update_layout(
             title=f"Entanglement Optimization Trajectories ({central_tendency})",
             height=500,
-            width=1200,
+            width=800,
             hovermode="x unified",
             template="plotly_white",
             legend=dict(
@@ -533,6 +407,15 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
         label="**Select Central Tendency:** ",
     )
     return metric_selector, plot_trajectories_marimo, te_filter_checkbox
+
+
+@app.cell
+def _():
+    def hex_to_rgba(hex_color, alpha=0.2):
+        hex_color = hex_color.lstrip("#")
+        return f"rgba({int(hex_color[0:2], 16)}, {int(hex_color[2:4], 16)}, {int(hex_color[4:6], 16)}, {alpha})"
+
+    return (hex_to_rgba,)
 
 
 @app.cell
@@ -581,7 +464,6 @@ def is_te(combinations, cp, is_appt, np):
 @app.cell
 def _(
     combinations,
-    compute_sre,
     cp,
     inv_perm,
     is_TE,
@@ -604,7 +486,6 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
-            "sre": [],
             "final_states": [],
         }
 
@@ -613,7 +494,6 @@ def _(
             psi = rand_Almost_Stab_state(n, gap)
             traj_avg_p = []
             traj_max_p = []
-            traj_sre = []
 
             s = []
             for j in combinations(range(n), k):
@@ -625,9 +505,6 @@ def _(
 
             traj_avg_p.append(mean(s))
             traj_max_p.append(max(s))
-            _s_val, _ = compute_sre(psi)
-            current_sre = float(_s_val) if _s_val is not None else 0.0
-            traj_sre.append(current_sre)
 
             for ent_step in range(num_loops):
                 for _i in combinations(range(n), k):
@@ -646,11 +523,8 @@ def _(
                     psi = cp.transpose(psi.reshape([dim] * n), list(inv_perm(per))
                     ).flatten()
                     psi = psi / cp.sqrt(cp.sum(psi * cp.conj(psi)))
-                    # if bool_prob(0.1):
-                    #   psi = near_identity_unitary(n) @ psi
 
                     # OPTIMIZATION: Explicitly free GPU memory to prevent memory leaks
-                    # during massive nested loop computations.
                     del x, evals, evecs, evals_inv_sqrt, x_inv_sqrt, rho
 
                 if ent_step % step_mes == 0:
@@ -664,27 +538,21 @@ def _(
 
                     traj_avg_p.append(mean(s))
                     traj_max_p.append(max(s))
-                    _s_val, _ = compute_sre(psi)
-                    current_sre = float(_s_val) if _s_val is not None else 0.0
-                    traj_sre.append(current_sre)
                 if is_TE(psi):
                     break
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
-            trajectories["sre"].append(traj_sre)
             trajectories["final_states"].append(cp.asnumpy(psi))
 
         # Final cleanup for this start
         del psi
-        # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         print(f"Saved {num_starts} trajectories to {filename}")
-        #return trajectories
-    return
+    return (run_entanglement_optimization,)
 
 
 @app.cell
@@ -706,7 +574,6 @@ def _(run_jax_gpu_optimization):
                 filename=_ffname,
             )
 
-
     return (gen_data,)
 
 
@@ -727,7 +594,7 @@ def _(gen_data, mo, run_sim_btn):
     )
     stpsi=[500]
     qbt_nmbs = [11]
-    num_seds = [1000 ]
+    num_seds = [1000]
     for _ in range(len(qbt_nmbs)):
         flnm = f"new_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
@@ -738,7 +605,6 @@ def _(gen_data, mo, run_sim_btn):
 @app.cell(hide_code=True)
 def _(
     combinations,
-    compute_sre,
     cp,
     mean,
     minimize,
@@ -767,7 +633,6 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
-            "sre": [],
             "final_states": [],
             "total_violation": [],
         }
@@ -775,7 +640,6 @@ def _(
         def hildebrand_violation(rho, k_dim):
             """Calculates violation of the 1-vs-rest ASEP condition (CPU logic)."""
             D = 2**k_dim
-            # Perform eigvalsh on GPU, then move to CPU for the logical check
             evals = cp.linalg.eigvalsh(rho)
             evals = cp.asnumpy(evals)[::-1]  # Sort descending
             evals = np.clip(evals, 1e-15, None)
@@ -791,7 +655,6 @@ def _(
         def objective(params):
             """Objective function for SciPy optimizer."""
             psi_np = params[:n_dim] + 1j * params[n_dim:]
-            # Normalize to keep the state on the unit hypersphere
             norm = np.linalg.norm(psi_np)
             if norm > 0:
                 psi_np /= norm
@@ -800,11 +663,10 @@ def _(
             total_viol = 0.0
 
             for combo in combos:
-                # Reorder qubits so target qubits are at the end for par_trace
                 per = list(set(range(n)) - set(combo)) + list(combo)
                 psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
 
-                rho = par_trace(psi_moved, dim, n, k) # Assumes par_trace is available in scope
+                rho = par_trace(psi_moved, dim, n, k)
                 viol = hildebrand_violation(rho, k)
                 total_viol += viol**2
 
@@ -816,12 +678,11 @@ def _(
         for st in range(num_starts):
             print(f"GD Trajectory: {st + 1}/{num_starts}")
 
-            # Initialize with your existing rand_Almost_Stab_state function
             psi_init_cp = rand_Almost_Stab_state(n, gap) 
             psi_init_np = cp.asnumpy(psi_init_cp)
             init_params = np.concatenate([psi_init_np.real, psi_init_np.imag])
 
-            traj_avg_p, traj_max_p, traj_sre, traj_viol = [], [], [], []
+            traj_avg_p, traj_max_p, traj_viol = [], [], []
             state = {"count": 0}
 
             def callback(xk):
@@ -845,12 +706,7 @@ def _(
                     traj_max_p.append(max(purities))
                     traj_viol.append(v_total)
 
-                    # compute_sre assumes it exists in your scope
-                    sre_val, _ = compute_sre(psi_np) 
-                    traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
-
                     del psi
-                    # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
                 state["count"] += 1
 
             # Record initial state
@@ -870,19 +726,16 @@ def _(
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
-            trajectories["sre"].append(traj_sre)
             trajectories["total_violation"].append(traj_viol)
             trajectories["final_states"].append(final_psi_np)
 
             print(f"  Final Violation Score: {res.fun:.2e}")
-            # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         # Save to disk compatible with your plotting notebook
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         print(f"Saved {num_starts} GD trajectories to {filename}")
-        #return trajectories
     return
 
 
@@ -890,7 +743,6 @@ def _(
 def _(
     LBFGS,
     combinations,
-    compute_sre,
     jax,
     jnp,
     np,
@@ -953,62 +805,54 @@ def _(
             _, _, total_viol = get_purity_and_violation(params)
             return total_viol
 
-        trajectories = {
-            "average_purity": [],
-            "max_purity": [],
-            "sre": [],
-            "total_violation": [],
-            "final_states": [],
-        }
-
         # Initialize JAX Solver with maxiter set to num_loops
         solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-11)
 
+        # 1. Generate all initial states
+        print(f"Generating {num_starts} initial states...")
+        init_params_list = []
         for st in range(num_starts):
-            print(f"JAX GPU Trajectory: {st + 1}/{num_starts}")
-
             psi_init = rand_Almost_Stab_state(n, gap)
-
-            # Explicit CPU fallback extraction
             if hasattr(psi_init, "get"):
                 psi_np = psi_init.get()
             else:
                 psi_np = np.array(psi_init)
+            p = np.concatenate([np.real(psi_np), np.imag(psi_np)])
+            init_params_list.append(p)
+        init_params_batch = jnp.array(init_params_list, dtype=jnp.float64)
 
-            params = jnp.concatenate([jnp.real(psi_np), jnp.imag(psi_np)]).astype(jnp.float64)
-            traj_avg_p, traj_max_p, traj_sre, traj_viol = [], [], [], []
+        # 2. Compute initial metrics for all states in parallel
+        print("Computing initial metrics...")
+        vmapped_metrics = jax.vmap(get_purity_and_violation)
+        init_avg_p, init_max_p, init_viol = vmapped_metrics(init_params_batch)
 
-            # 1. Record metrics for the first step (initial state)
-            avg_p, max_p, viol = get_purity_and_violation(params)
-            traj_avg_p.append(float(avg_p))
-            traj_max_p.append(float(max_p))
-            traj_viol.append(float(viol))
+        traj_avg_p = [[float(init_avg_p[i])] for i in range(num_starts)]
+        traj_max_p = [[float(init_max_p[i])] for i in range(num_starts)]
+        traj_viol = [[float(init_viol[i])] for i in range(num_starts)]
 
-            curr_psi_complex = params[:n_dim] + 1j * params[n_dim:]
-            sre_val, _ = compute_sre(np.array(curr_psi_complex)) 
-            traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
+        # 3. Run the entire batch of optimizations in parallel on GPU
+        print(f"Running {num_starts} trajectories in parallel using JAX vmap on GPU...")
+        vmapped_run = jax.vmap(solver.run)
+        res = vmapped_run(init_params_batch)
+        final_params_batch = res.params
 
-            # 2. Run the entire optimization using solver.run
-            res = solver.run(params)
-            params = res.params
+        # 4. Compute final metrics for all states in parallel
+        print("Computing final metrics...")
+        final_avg_p, final_max_p, final_viol = vmapped_metrics(final_params_batch)
+        for i in range(num_starts):
+            traj_avg_p[i].append(float(final_avg_p[i]))
+            traj_max_p[i].append(float(final_max_p[i]))
+            traj_viol[i].append(float(final_viol[i]))
 
-            # 3. Record metrics for the last step (final state)
-            avg_p, max_p, viol = get_purity_and_violation(params)
-            traj_avg_p.append(float(avg_p))
-            traj_max_p.append(float(max_p))
-            traj_viol.append(float(viol))
+        print(f"Final Average Violation: {float(jnp.mean(final_viol)):.2e}")
 
-            curr_psi_complex = params[:n_dim] + 1j * params[n_dim:]
-            sre_val, _ = compute_sre(np.array(curr_psi_complex)) 
-            traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
-
-            print(f"\n  Final Violation: {traj_viol[-1]:.2e}")
-
-            trajectories["average_purity"].append(traj_avg_p)
-            trajectories["max_purity"].append(traj_max_p)
-            trajectories["sre"].append(traj_sre)
-            trajectories["total_violation"].append(traj_viol)
-            trajectories["final_states"].append(np.array(params))
+        # Assemble final trajectories
+        trajectories = {
+            "average_purity": traj_avg_p,
+            "max_purity": traj_max_p,
+            "total_violation": traj_viol,
+            "final_states": [np.array(final_params_batch[i]) for i in range(num_starts)],
+        }
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
@@ -1023,11 +867,11 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
     def plot_te_filtered_trajectories(pkl_files, labels, step_mes,
                                       use_te_filter, central_tendency):
         """Plot trajectories with optional TE filtering, handling ragged arrays via NaN padding."""
-        metrics_to_plot = ["average_purity", "max_purity", "sre"]
-        metric_titles = ["Average Purity", "Max Purity", "SRE"]
+        metrics_to_plot = ["average_purity", "max_purity"]
+        metric_titles = ["Average Purity", "Max Purity"]
 
         colors = pc.qualitative.Plotly
-        fig = make_subplots(rows=1, cols=3, subplot_titles=metric_titles)
+        fig = make_subplots(rows=1, cols=2, subplot_titles=metric_titles)
 
         for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
             with open(file, "rb") as f:
@@ -1112,7 +956,7 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
         fig.update_layout(
             title=f"Entanglement Trajectories ({central_tendency})"
                   + (" — TE Filtered" if use_te_filter else ""),
-            height=500, width=1200, hovermode="x unified",
+            height=500, width=900, hovermode="x unified",
             template="plotly_white",
             margin=dict(b=120),
             legend=dict(orientation="h", yanchor="top", y=-0.15,
@@ -1183,17 +1027,6 @@ def plots_for_magic(metric_selector, plot_trajectories_marimo):
     return
 
 
-@app.cell(disabled=True, hide_code=True)
-def _(mo, plot_sre_vs_gap):
-    # OPTIMIZATION: Lazy loading the cached plot
-    def render_sre_plot():
-        return plot_sre_vs_gap(4, 1000)
-
-
-    mo.lazy(render_sre_plot)
-    return
-
-
 @app.cell
 def _(run_diag_btn):
     run_diag_btn
@@ -1201,7 +1034,7 @@ def _(run_diag_btn):
 
 
 @app.cell(hide_code=True)
-def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
+def _(combinations, cp, mean, mo, pickle, run_diag_btn):
     import traceback
 
     # OPTIMIZATION: Halt execution of this expensive diagnostic unless manually triggered
@@ -1219,12 +1052,10 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
         _gap_info = {"gap": _gap, "stages": {}}
         try:
             # --- LOAD THE EXISTING PKL FILE FOR THIS GAP ---
-            file_path = f"data/4_qbt_500_sds_ptmzng_fr_10_stps{_gap}.pkl"  # Adjust filename format if needed
+            file_path = f"data/4_qbt_500_sds_ptmzng_fr_10_stps{_gap}.pkl"
             with open(file_path, "rb") as f:
                 _psi_test = pickle.load(f)
 
-            # SAFETY CHECK: If your pickle files contain NumPy arrays,
-            # we need to push them to CuPy (GPU) so the rest of your pipeline works.
             if hasattr(_psi_test, "get") or type(_psi_test).__module__ == "numpy":
                 _psi_test = cp.asarray(_psi_test)
 
@@ -1268,25 +1099,6 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
             else:
                 _gap_info["stages"]["purity"] = {"status": "Skipped (NaN state)"}
 
-            if not _has_nan_psi:
-                try:
-                    _sre_val, _lost_norm = compute_sre(_psi_test, alpha=2)
-                    _gap_info["stages"]["sre"] = {
-                        "status": "Success"
-                        if _sre_val is not None
-                        else "Returned None",
-                        "sre_val": _sre_val,
-                        "lost_norm": _lost_norm,
-                    }
-                except Exception as _sre_err:
-                    _gap_info["stages"]["sre"] = {
-                        "status": "Failed",
-                        "error": str(_sre_err),
-                        "traceback": traceback.format_exc(),
-                    }
-            else:
-                _gap_info["stages"]["sre"] = {"status": "Skipped (NaN state)"}
-
             _k_test = _n_qubits_test - _n_qubits_test // 2
             _dim_test = 2
             try:
@@ -1316,7 +1128,6 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
 
         diagnostic_results.append(_gap_info)
 
-
     # OPTIMIZATION: Render UI output lazily
     def render_diagnostics():
         return mo.vstack(
@@ -1336,29 +1147,19 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
                             "Max Purity": res["stages"]
                             .get("purity", {})
                             .get("max_purity", "N/A"),
-                            "SRE Status": res["stages"]
-                            .get("sre", {})
-                            .get("status", "N/A"),
-                            "SRE Val": res["stages"]
-                            .get("sre", {})
-                            .get("sre_val", "N/A"),
-                            "SRE Error": res["stages"]
-                            .get("sre", {})
-                            .get("error", "None"),
                         }
-                        for res in diagnostic_results  # FIXED: Changed ':' to 'for'
+                        for res in diagnostic_results
                     ]
                 ),
                 mo.accordion(
                     {
-                        "Detailed Diagnostic Diagnostic JSON Tree": mo.tree(
+                        "Detailed Diagnostic JSON Tree": mo.tree(
                             diagnostic_results
                         )
                     }
                 ),
             ]
         )
-
 
     mo.lazy(render_diagnostics)
     return
@@ -1367,7 +1168,6 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
 @app.cell
 def _(
     combinations,
-    compute_sre,
     cp,
     inv_perm,
     mean,
@@ -1390,7 +1190,6 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
-            "sre": [],
             "final_states": [],
         }
 
@@ -1398,7 +1197,6 @@ def _(
             psi = rand_Almost_Stab_state(n, gap)
             traj_avg_p = []
             traj_max_p = []
-            traj_sre = []
 
             s = []
             for j in combinations(range(n), k):
@@ -1410,9 +1208,6 @@ def _(
 
             traj_avg_p.append(mean(s))
             traj_max_p.append(max(s))
-            _s_val, _ = compute_sre(psi)
-            current_sre = float(_s_val) if _s_val is not None else 0.0
-            traj_sre.append(current_sre)
 
             last_pick = ""
             comb_list = list(combinations(range(n), k))
@@ -1437,11 +1232,7 @@ def _(
                 psi = cp.transpose(psi.reshape([dim] * n), list(inv_perm(per))
                 ).flatten()
                 psi = psi / cp.sqrt(cp.sum(psi * cp.conj(psi)))
-                # if bool_prob(0.1):
-                #   psi = near_identity_unitary(n) @ psi
 
-                # OPTIMIZATION: Explicitly free GPU memory to prevent memory leaks
-                # during massive nested loop computations.
                 del x, evals, evecs, evals_inv_sqrt, x_inv_sqrt, rho
 
                 if ent_step % step_mes == 0:
@@ -1455,18 +1246,13 @@ def _(
 
                     traj_avg_p.append(mean(s))
                     traj_max_p.append(max(s))
-                    _s_val, _ = compute_sre(psi)
-                    current_sre = float(_s_val) if _s_val is not None else 0.0
-                    traj_sre.append(current_sre)
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
-            trajectories["sre"].append(traj_sre)
             trajectories["final_states"].append(cp.asnumpy(psi))
 
         # Final cleanup for this start
         del psi
-        # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)

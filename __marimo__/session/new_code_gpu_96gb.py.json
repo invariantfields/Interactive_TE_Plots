@@ -1,0 +1,207 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.10",
+    "script_metadata_hash": "9b359ca4c55be997cfcad0e728832177"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "e1502ef6f5aa5c8301c12e34ff9093c2",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "53305e6d52848a7bfef6329ef95c46c3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "9648e8fb90cda03e1d8046cbabf1a6e3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "6e474632e49ee0deaa955d50dc5f7a24",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "f9873c12b785efa8ba264313581c703c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "329d5f1f479783f6baa3f2529a918dda",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "af2e18499bde8f31903fe4dd9f35f5bd",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "ed3bbb62781c07c643368800a10068cf",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "f2601d605470e3d05b02c67055d6b12a",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "a2a4b2df38bc41f26f6026d10b256242",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "d071bb96b4a2393f792f226a4ddc45f2",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "a8364592d6f59e6ba2a4651b8cf09615",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "571a7bb0cd66fbe914ce1a5be35724de",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "a7abf6b05cb5046795d2281ad2c2cbd6",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "572db3c5e1516027fe5c87a3fe0d9d9e",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "bd773d96c853817cebf4a004fd0d2ca9",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": "624fb19a559b455e088cea9787f15bbf",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": "4baa00903d9dd651370c0c2cd32a6284",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TqIu",
+      "code_hash": "476251f3f0cfba289e05cafdb857e8bc",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "4d617ac54872c2fe67b2ba6dace1c94e",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "7d157e24829d4454d3f71ea099931b84",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "9d1e42a4f2f9e33101cce4b3389a8db3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "8ad8b708a01e5f23883eaa2315873cd2",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "1931cdcdd7afa189dd9137d82adb3305",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ZBYS",
+      "code_hash": "cb27cc6da528c70b2d64088e398dbebf",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "14e44a0b68dfab69a53c78f518601eb1",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "28ae364269443bd1ec95614ad702e19c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "61ab8db6c83f6d3ef9d89136f79b8fbe",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": "a120bdb8fcec099bb8078c7052b80dc0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "pHFh",
+      "code_hash": "e000e4301b5c226cda77d228da769555",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "NCOB",
+      "code_hash": "a4d7ca0d0d0f15d6fe0fbc45dbcaa1eb",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "aqbW",
+      "code_hash": "7ec521d08550f75731ef17e4a99adbd0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "TRpd",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    }
+  ]
+}

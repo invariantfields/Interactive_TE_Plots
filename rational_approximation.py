@@ -191,7 +191,7 @@ def _(mo, state_list):
                 start=1,
                 stop=12,
                 value=2,
-                step=1,
+                step=0.1,
                 label="🔢 **Max Len Denominator Limit:** ",
             )
             state_output = None
@@ -245,13 +245,13 @@ def _(approximate_state, denominator_input, is_TE, mo, np, state_list):
             # Summary callout
             if num_remaining == total_te:
                 kind = "success"
-                msg = f"🎉 **All {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {10**max_denom}!"
+                msg = f"🎉 **All {total_te} TE states remained threshold entangled** under rational approximation with max denominator digits= {max_denom}!"
             elif num_remaining > 0:
                 kind = "warn"
-                msg = f"⚠️ **{num_remaining} out of {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {10**max_denom}."
+                msg = f"⚠️ **{num_remaining} out of {total_te} TE states remained threshold entangled** under rational approximation with max denominator digits = {max_denom}."
             else:
                 kind = "danger"
-                msg = f"❌ **None of the {total_te} TE states remained threshold entangled** under rational approximation with max denominator = {max_denom}."
+                msg = f"❌ **None of the {total_te} TE states remained threshold entangled** under rational approximation with max denominator digits= {max_denom}."
 
             callout = mo.callout(msg, kind=kind)
 
@@ -260,7 +260,6 @@ def _(approximate_state, denominator_input, is_TE, mo, np, state_list):
                 [
                     {
                         "Index": r["Index"],
-                        "Original TE": r["Original TE"],
                         "Remaining TE": r["Remaining TE"],
                         "Fidelity": r["Fidelity"],
                         "Max Error": r["Max Error"]
@@ -420,6 +419,18 @@ def _(go, mo, selected_state_data):
 def _(mo, plot_output):
     if plot_output is not None:
         mo.output.replace(plot_output)
+    return
+
+
+@app.cell
+def _():
+    10**1.2
+
+    return
+
+
+@app.cell
+def _():
     return
 
 
