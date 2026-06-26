@@ -53,7 +53,7 @@
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='bkHC-0' random-id='bf543dfe-c309-b1e6-d1fe-13340ffec215'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='bkHC-1' random-id='9c27ac20-218d-e269-2ae5-b5d3f9ea412d'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='bkHC-0' random-id='91e16ba0-17ae-aef6-863c-655fac89255e'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='bkHC-1' random-id='84be9379-faaa-ff7e-1224-250e6c622f83'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
           }
         }
       ],
@@ -313,7 +313,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='bkHC-0' random-id='bf543dfe-c309-b1e6-d1fe-13340ffec215'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='bkHC-0' random-id='91e16ba0-17ae-aef6-863c-655fac89255e'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
@@ -346,7 +346,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 6.09e-01\nJAX GPU Trajectory: 2/1000\n",
+          "text": "\n  Final Violation: 4.84e-01\nJAX GPU Trajectory: 2/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -358,7 +358,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 1.35e+00\nJAX GPU Trajectory: 3/1000\n",
+          "text": "\n  Final Violation: 2.07e+00\nJAX GPU Trajectory: 3/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -370,7 +370,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 7.30e-01\nJAX GPU Trajectory: 4/1000\n",
+          "text": "\n  Final Violation: 9.65e-01\nJAX GPU Trajectory: 4/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -382,7 +382,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 1.23e+00\nJAX GPU Trajectory: 5/1000\n",
+          "text": "\n  Final Violation: 1.32e+00\nJAX GPU Trajectory: 5/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -394,7 +394,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 4.14e-01\nJAX GPU Trajectory: 6/1000\n",
+          "text": "\n  Final Violation: 1.37e+00\nJAX GPU Trajectory: 6/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -406,7 +406,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 7.93e-01\nJAX GPU Trajectory: 7/1000\n",
+          "text": "\n  Final Violation: 6.17e-01\nJAX GPU Trajectory: 7/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -418,7 +418,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 5.55e-01\nJAX GPU Trajectory: 8/1000\n",
+          "text": "\n  Final Violation: 5.74e-01\nJAX GPU Trajectory: 8/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -430,7 +430,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 7.19e-01\nJAX GPU Trajectory: 9/1000\n",
+          "text": "\n  Final Violation: 9.61e-01\nJAX GPU Trajectory: 9/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -442,7 +442,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 5.47e-01\nJAX GPU Trajectory: 10/1000\n",
+          "text": "\n  Final Violation: 6.60e-01\nJAX GPU Trajectory: 10/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -454,7 +454,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 1.04e+00\nJAX GPU Trajectory: 11/1000\n",
+          "text": "\n  Final Violation: 8.40e-01\nJAX GPU Trajectory: 11/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -466,7 +466,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 7.73e-01\nJAX GPU Trajectory: 12/1000\n",
+          "text": "\n  Final Violation: 1.55e+00\nJAX GPU Trajectory: 12/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -478,7 +478,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 9.10e-01\nJAX GPU Trajectory: 13/1000\n",
+          "text": "\n  Final Violation: 1.18e+00\nJAX GPU Trajectory: 13/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -490,7 +490,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 9.61e-01\nJAX GPU Trajectory: 14/1000\n",
+          "text": "\n  Final Violation: 6.13e-01\nJAX GPU Trajectory: 14/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -502,7 +502,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 1.09e+00\nJAX GPU Trajectory: 15/1000\n",
+          "text": "\n  Final Violation: 1.55e+00\nJAX GPU Trajectory: 15/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -514,7 +514,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 6.87e-01\nJAX GPU Trajectory: 16/1000\n",
+          "text": "\n  Final Violation: 9.73e-01\nJAX GPU Trajectory: 16/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -526,7 +526,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "\n  Final Violation: 1.51e+00\nJAX GPU Trajectory: 17/1000\n",
+          "text": "\n  Final Violation: 1.86e+00\nJAX GPU Trajectory: 17/1000\n",
           "mimetype": "text/plain"
         },
         {
@@ -589,7 +589,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='qnkX-0' random-id='4bb93f9c-34a7-b2a3-12c8-f1b49018f561'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='qnkX-1' random-id='b793070a-f249-db96-c1fd-5b929d9b8afc'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='qnkX-0' random-id='c05e8f3a-1a74-e3dd-8819-acc4e49c3c79'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='qnkX-1' random-id='8bb9f506-3d1b-dd51-8e65-a15cac4ca99a'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
           }
         }
       ],
@@ -614,7 +614,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='bkHC-1' random-id='9c27ac20-218d-e269-2ae5-b5d3f9ea412d'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='bkHC-1' random-id='84be9379-faaa-ff7e-1224-250e6c622f83'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
