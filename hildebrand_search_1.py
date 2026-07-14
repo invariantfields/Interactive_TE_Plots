@@ -138,7 +138,7 @@ def _(cp, jl, np):
         return psi_mat @ psi_mat.conj().T
 
     def is_appt(x: cp.ndarray) -> bool:
-        _purity = cp.sum(x * x)
+        _purity = cp.sum(x.real**2 + x.imag**2)
         _D = cp.shape(x)[0]
         if _purity <= 1 / (_D - 1):
             return True

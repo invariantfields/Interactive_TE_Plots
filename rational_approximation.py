@@ -51,10 +51,12 @@ def _(combinations, np):
         if _purity <= 1 / (_D - 1):
             return True
         _ex = np.linalg.eigvalsh(x)
+        _ex[(_ex<0)]=0
         constraint= _ex[-1] - _ex[1] - 2 * np.sqrt(max(0.0, _ex[0] * _ex[2]))
         if constraint<=0:
             return True
         return False
+    
     def par_trace(psi, dim, n, n_parties):
         """
         Computes the partial trace of a pure state over the last n_parties.
@@ -65,39 +67,17 @@ def _(combinations, np):
         # Tr_B(|psi><psi|) = psi_mat @ psi_mat^dagger
         return psi_mat @ psi_mat.conj().T
 
-    def is_TE(psi: np.ndarray, dim: int = 2, atol: float = 1e-8) -> bool:
-        """
-        Checks if a pure state is Totally Entangled (AME / k-uniform).
-        Returns True if tracing out roughly half the system always yields 
-        the maximally mixed state.
-        """
-        # Calculate total number of subsystems (works for any dimension)
-        n = int(np.round(np.log(len(psi)) / np.log(dim)))
-    
-        # Number of parties to trace out (ceiling of n/2)
-        k = n - n // 2 
-    
-        # The expected reduced density matrix is the maximally mixed state: I / d^(n-k)
-        expected_rho = np.eye(dim**(n - k)) / (dim**(n - k))
-    
-        # Iterate over all possible bipartitions of size k
+    def is_TE(psi: np.array, dim: int = 2) -> bool:
+        n = int(np.log2(len(psi)))
+        k = n - n // 2
         for _i in combinations(range(n), k):
-        
-            # Maintain relative order of the remaining subsystems, put traced ones at the end
-            rem_parties = [x for x in range(n) if x not in _i]
-            per = rem_parties + list(_i)
-        
-            # Permute the subsystems and flatten back to a state vector
-            psi_moved = psi_moved = np.transpose(psi.reshape([dim] * n), per).flatten()
-        
-            # Compute the partial trace over the k subsystems now at the end
+            per = [x for x in range(n) if x not in _i] + list(_i)
+            psi_moved = np.transpose(
+                psi.reshape([dim] * n), per
+            ).flatten()
             _x = par_trace(psi_moved, dim, n, k)
-        
-            # Enforce Hermiticity to correct minor floating-point inaccuracies
             _x = (_x + _x.conj().T) / 2.0
-        
-            # Check if the reduced density matrix is maximally mixed
-            if not np.allclose(_x, expected_rho, atol=atol):
+            if not is_appt(_x):
                 return False
         return True
        
@@ -178,13 +158,17 @@ def _(Fraction, np):
 
 @app.cell
 def _(glob, mo):
-    # Find all trajectory pickle files in data/ and new_data/
-    files = glob.glob("new_data/*.pkl")
+    # Find all trajectory pickle files in data/, new_data/, and correct_data/
+    files = (
+        glob.glob("correct_data/*.pkl")
+        + glob.glob("new_data/*.pkl")
+        + glob.glob("data/*.pkl")
+    )
     files.sort()
 
     if not files:
         file_selector = None
-        file_output = mo.md("⚠️ **No pickle data files found in data/ or new_data/ directories.**")
+        file_output = mo.md("⚠️ **No pickle data files found in data/ or new_data/ or correct_data/ directories.**")
     else:
         file_selector = mo.ui.dropdown(
             options={f: f for f in files},
