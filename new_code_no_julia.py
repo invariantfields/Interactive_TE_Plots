@@ -545,7 +545,7 @@ def is_te(combinations, cp, is_appt, np):
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
-            per = list(set(range(n)) - set(_i)) + list(_i)
+            per = [x for x in range(n) if x not in _i] + list(_i)
             psi_moved = cp.transpose(
                 psi.reshape([dim] * n), per
             ).flatten()
@@ -597,21 +597,51 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                per = [x for x in range(n) if x not in j] + list(j)
                 psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x_meas = par_trace(psi_moved, dim, n, k)
                 s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
                 del x_meas  # Free measurement memory
 
-            traj_avg_p.append(mean(s))
-            traj_max_p.append(max(s))
+            mean_s = mean(s)
+            max_s = max(s)
             _s_val, _ = compute_sre(psi)
             current_sre = float(_s_val) if _s_val is not None else 0.0
-            traj_sre.append(current_sre)
+            is_te_flag = False
 
             for ent_step in range(num_loops):
+                if not is_te_flag:
+                    if is_TE(psi):
+                        is_te_flag = True
+
+                if is_te_flag:
+                    remaining_measurements = (num_loops - 1 - ent_step) // step_mes
+                    if ent_step % step_mes != 0:
+                        s = []
+                        for j in combinations(range(n), k):
+                            rem_parties = [x for x in range(n) if x not in j]
+                            per = rem_parties + list(j)
+                            psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
+                            x_meas = par_trace(psi_moved, dim, n, k)
+                            s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
+                            del x_meas
+                        mean_s = mean(s)
+                        max_s = max(s)
+                        _s_val, _ = compute_sre(psi)
+                        current_sre = float(_s_val) if _s_val is not None else 0.0
+                    else:
+                        mean_s = traj_avg_p[-1]
+                        max_s = traj_max_p[-1]
+                        current_sre = traj_sre[-1]
+
+                    traj_avg_p.extend([mean_s] * remaining_measurements)
+                    traj_max_p.extend([max_s] * remaining_measurements)
+                    traj_sre.extend([current_sre] * remaining_measurements)
+                    break
+
                 for _i in combinations(range(n), k):
-                    per = list(set(range(n)) - set(_i)) + list(_i)
+                    rem_parties = [x for x in range(n) if x not in _i]
+                    per = rem_parties + list(_i)
                     psi = cp.transpose(psi.reshape([dim] * n), per).flatten()
                     x = par_trace(psi, dim, n, k)
 
@@ -636,7 +666,8 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        rem_parties = [x for x in range(n) if x not in j]
+                        per = rem_parties + list(j)
                         psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                         x_meas = par_trace(psi_moved, dim, n, k)
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -648,6 +679,28 @@ def _(
                     current_sre = float(_s_val) if _s_val is not None else 0.0
                     traj_sre.append(current_sre)
                 if is_TE(psi):
+                    remaining_measurements = (num_loops - 1 - ent_step) // step_mes
+                    if ent_step % step_mes != 0:
+                        s = []
+                        for j in combinations(range(n), k):
+                            rem_parties = [x for x in range(n) if x not in j]
+                            per = rem_parties + list(j)
+                            psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
+                            x_meas = par_trace(psi_moved, dim, n, k)
+                            s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
+                            del x_meas
+                        mean_s = mean(s)
+                        max_s = max(s)
+                        _s_val, _ = compute_sre(psi)
+                        current_sre = float(_s_val) if _s_val is not None else 0.0
+                    else:
+                        mean_s = traj_avg_p[-1]
+                        max_s = traj_max_p[-1]
+                        current_sre = traj_sre[-1]
+
+                    traj_avg_p.extend([mean_s] * remaining_measurements)
+                    traj_max_p.extend([max_s] * remaining_measurements)
+                    traj_sre.extend([current_sre] * remaining_measurements)
                     break
 
             trajectories["average_purity"].append(traj_avg_p)
@@ -781,7 +834,7 @@ def _(
 
             for combo in combos:
                 # Reorder qubits so target qubits are at the end for par_trace
-                per = list(set(range(n)) - set(combo)) + list(combo)
+                per = [x for x in range(n) if x not in combo] + list(combo)
                 psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
 
                 rho = par_trace(psi_moved, dim, n, k) # Assumes par_trace is available in scope
@@ -814,7 +867,7 @@ def _(
                     purities = []
                     v_total = 0.0
                     for combo in combos:
-                        per = list(set(range(n)) - set(combo)) + list(combo)
+                        per = [x for x in range(n) if x not in combo] + list(combo)
                         psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
                         rho = par_trace(psi_moved, dim, n, k)
                         purities.append(float(cp.sum(rho * rho).real))
@@ -1382,7 +1435,7 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                per = [x for x in range(n) if x not in j] + list(j)
                 psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x_meas = par_trace(psi_moved, dim, n, k)
                 s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -1402,7 +1455,7 @@ def _(
                 if _i == last_pick:
                     _i = comb_list[comb_list.index(_i) - 1]
                 last_pick = _i
-                per = list(set(range(n)) - set(_i)) + list(_i)
+                per = [x for x in range(n) if x not in _i] + list(_i)
                 psi = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x = par_trace(psi, dim, n, k)
 
@@ -1427,7 +1480,7 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        per = [x for x in range(n) if x not in j] + list(j)
                         psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                         x_meas = par_trace(psi_moved, dim, n, k)
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))

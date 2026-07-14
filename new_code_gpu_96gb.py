@@ -503,8 +503,8 @@ def _(
                 s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
                 del x_meas  # Free measurement memory
 
-            traj_avg_p.append(mean(s))
-            traj_max_p.append(max(s))
+            mean_s = mean(s)
+            max_s = max(s)
 
             for ent_step in range(num_loops):
                 for _i in combinations(range(n), k):
@@ -536,9 +536,29 @@ def _(
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
                         del x_meas  # Free measurement memory
 
-                    traj_avg_p.append(mean(s))
-                    traj_max_p.append(max(s))
+                    mean_s = mean(s)
+                    max_s = max(s)
+                    traj_avg_p.append(mean_s)
+                    traj_max_p.append(max_s)
                 if is_TE(psi):
+                    remaining_measurements = (num_loops - 1 - ent_step) // step_mes
+                    if ent_step % step_mes != 0:
+                        s = []
+                        for j in combinations(range(n), k):
+                            rem_parties = [x for x in range(n) if x not in j]
+                            per = rem_parties + list(j)
+                            psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
+                            x_meas = par_trace(psi_moved, dim, n, k)
+                            s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
+                            del x_meas
+                        mean_s = mean(s)
+                        max_s = max(s)
+                    else:
+                        mean_s = traj_avg_p[-1]
+                        max_s = traj_max_p[-1]
+
+                    traj_avg_p.extend([mean_s] * remaining_measurements)
+                    traj_max_p.extend([max_s] * remaining_measurements)
                     break
 
             trajectories["average_purity"].append(traj_avg_p)
