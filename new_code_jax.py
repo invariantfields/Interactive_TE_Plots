@@ -520,9 +520,9 @@ def _(cp, np):
         _D = cp.shape(x)[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex, _ = cp.linalg.eigh(x)
-        _ex = cp.asnumpy(_ex)
-        _ex[_ex<0]=0
+        x_cpu = cp.asnumpy(x)
+        _ex = np.linalg.eigvalsh(x_cpu)
+        _ex = np.clip(_ex, 0.0, None)
         if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):
             return True
         return False
@@ -656,11 +656,11 @@ def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
 
         print(f"Saved {num_starts} trajectories to {filename}")
         #return trajectories
-    return (run_entanglement_optimization,)
+    return
 
 
 @app.cell
-def _(run_entanglement_optimization):
+def _(run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
         gaps = range(0,n_qubits+1)
         for _gap in gaps:
@@ -669,7 +669,7 @@ def _(run_entanglement_optimization):
             )
 
             _ffname = f_name + str(num_steps) + "_stps_" + str(_gap) + ".pkl"
-            run_entanglement_optimization(
+            run_jax_gpu_optimization(
                 n_qubits,
                 num_seeds,
                 num_steps,
@@ -697,9 +697,9 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[500]
-    qbt_nmbs = [7]
-    num_seds = [200] 
+    stpsi=[250]
+    qbt_nmbs = [9]
+    num_seds = [15] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
@@ -850,7 +850,16 @@ def _(combinations, cp, mean, minimize, np, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
+def _(
+    LBFGS,
+    combinations,
+    is_TE,
+    jax,
+    jnp,
+    np,
+    pickle,
+    rand_Almost_Stab_state,
+):
     jax.config.update("jax_enable_x64", True)
     def run_jax_gpu_optimization(
         n_qubits: int,
@@ -929,6 +938,21 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
             else:
                 psi_np = np.array(psi_init)
 
+            # Check if initial state is already TE
+            if is_TE(psi_np):
+                print("  Initial state is already TE! Skipping optimization.")
+                avg_p, max_p, _ = get_purity_and_violation(np.concatenate([psi_np.real, psi_np.imag]))
+                traj_avg_p = [float(avg_p), float(avg_p)]
+                traj_max_p = [float(max_p), float(max_p)]
+                traj_sre = [0.0, 0.0]
+                traj_viol = [0.0, 0.0]
+                trajectories["average_purity"].append(traj_avg_p)
+                trajectories["max_purity"].append(traj_max_p)
+                trajectories["sre"].append(traj_sre)
+                trajectories["total_violation"].append(traj_viol)
+                trajectories["final_states"].append(psi_np)
+                continue
+
             params = jnp.concatenate([jnp.real(psi_np), jnp.imag(psi_np)]).astype(jnp.float64)
             traj_avg_p, traj_max_p, traj_sre, traj_viol = [], [], [], []
 
@@ -956,20 +980,24 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
             sre_val, _ = compute_sre(np.array(curr_psi_complex)) 
             traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
 
-            print(f"\n  Final Violation: {traj_viol[-1]:.2e}")
+            print(f"  Final Violation: {traj_viol[-1]:.2e}")
+
+            # Save complex state vector of size 2^n
+            final_psi = np.array(params[:n_dim] + 1j * params[n_dim:])
+            final_psi /= np.linalg.norm(final_psi)
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
             trajectories["sre"].append(traj_sre)
             trajectories["total_violation"].append(traj_viol)
-            trajectories["final_states"].append(np.array(params))
+            trajectories["final_states"].append(final_psi)
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         return trajectories
 
-    return
+    return (run_jax_gpu_optimization,)
 
 
 @app.cell
