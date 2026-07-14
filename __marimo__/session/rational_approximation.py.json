@@ -20,12 +20,12 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "5141419e160d0ddb22db43c0faf454c3",
+      "code_hash": "7543fe96a09f15bd1cf10754a8bf1690",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"rational-approximations-of-entangled-states-te-check\">\ud83d\udd2c Rational Approximations of Entangled States (TE Check)</h1>\n<span class=\"paragraph\">This notebook imports optimization trajectory data, extracts the final states, filters out the ones that are <strong>threshold Entangled (TE)</strong>, and applies a rational approximation to their complex coefficients. It then checks if the resulting rationalized state remains TE.</span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"rational-approximations-of-entangled-states-te-check\">\ud83d\udd2c Rational Approximations of Entangled States (TE Check)</h1>\n<span class=\"paragraph\">This notebook imports optimization trajectory data, extracts the final states, filters out the ones that are <strong>threshold Entangled (TE)</strong>, and applies a rational approximation to their complex coefficients. It then checks if the resulting rationalized state remains TE.# \ud83d\udd2c Rational Approximations of Entangled States (TE Check)</span></span>"
           }
         }
       ],
@@ -33,7 +33,7 @@
     },
     {
       "id": "vblA",
-      "code_hash": "cc39bbd9a9c5f576f2a55394f9830e70",
+      "code_hash": "02f4d797a2b6d30a21f9f891151afd0e",
       "outputs": [
         {
           "type": "data",
@@ -59,7 +59,7 @@
     },
     {
       "id": "lEQa",
-      "code_hash": "3630d20307ac76eb625dae792a20105e",
+      "code_hash": "e83173de32ff47439c266584f2dd5db9",
       "outputs": [
         {
           "type": "data",
@@ -77,7 +77,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='12267961-5432-71d4-3d79-7d07075cc998'><marimo-dropdown data-initial-value='[&quot;correct_data/4_qbt_20_sds_ptmzng_fr_500_stps_1.pkl&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udcc1 &#92;u003cstrong&#92;u003eSelect Trajectory Data File:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;correct_data/4_qbt_20_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_0.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_2.pkl&quot;,&quot;correct_data/7_qbt_5_sds_ptmzng_fr_500_stps_1.pkl&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='8d2fc264-2304-94d9-0f5d-52ec1c55c31c'><marimo-dropdown data-initial-value='[&quot;correct_data/4_qbt_20_sds_ptmzng_fr_500_stps_1.pkl&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udcc1 &#92;u003cstrong&#92;u003eSelect Trajectory Data File:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;correct_data/4_qbt_20_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;correct_data/7_qbt_20_sds_ptmzng_fr_50_stps_0.pkl&quot;,&quot;correct_data/7_qbt_20_sds_ptmzng_fr_50_stps_1.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_0.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_2.pkl&quot;,&quot;correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_3.pkl&quot;,&quot;correct_data/7_qbt_5_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_0_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_10_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_1_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_2_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_3_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_4_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_5_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_6_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_7_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_8_.pkl&quot;,&quot;data/10_qbt_160_sds_ptmzng_fr_7_stps15_gap_9_.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps00.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps10.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps20.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps30.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps40.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps50.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps60.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps70.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps80.pkl&quot;,&quot;data/11_qbt_160_sds_ptmzng_fr_15_stps90.pkl&quot;,&quot;data/4_qbt_2000_sds_ptmzng_fr_10_stps0.pkl&quot;,&quot;data/4_qbt_2000_sds_ptmzng_fr_10_stps1.pkl&quot;,&quot;data/4_qbt_2000_sds_ptmzng_fr_10_stps2.pkl&quot;,&quot;data/4_qbt_2000_sds_ptmzng_fr_10_stps3.pkl&quot;,&quot;data/4_qbt_2000_sds_ptmzng_fr_10_stps4.pkl&quot;,&quot;data/4_qbt_500_sds_ptmzng_fr_10_stps0.pkl&quot;,&quot;data/4_qbt_500_sds_ptmzng_fr_10_stps1.pkl&quot;,&quot;data/4_qbt_500_sds_ptmzng_fr_10_stps2.pkl&quot;,&quot;data/4_qbt_500_sds_ptmzng_fr_10_stps3.pkl&quot;,&quot;data/4_qbt_500_sds_ptmzng_fr_10_stps4.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps0.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps1.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps2.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps3.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps4.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps5.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps6.pkl&quot;,&quot;data/7_qbt_1500_sds_ptmzng_fr_10_stps7.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps0.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps1.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps2.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps3.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps4.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps5.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps6.pkl&quot;,&quot;data/7_qbt_5_sds_ptmzng_fr_10_stps7.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_0_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_1_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_2_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_3_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_4_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_5_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_6_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_7_.pkl&quot;,&quot;data/8_qbt_640_sds_ptmzng_fr_7_stps15_gap_8_.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps00.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps10.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps20.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps30.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps40.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps50.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps60.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps70.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps80.pkl&quot;,&quot;data/9_qbt_640_sds_ptmzng_fr_15_stps90.pkl&quot;,&quot;data/hildebrand_batch_4q_50s_gap0.pkl&quot;,&quot;data/hildebrand_batch_4q_50s_gap1.pkl&quot;,&quot;data/hildebrand_batch_4q_50s_gap2.pkl&quot;,&quot;data/hildebrand_batch_4q_50s_gap3.pkl&quot;,&quot;data/hildebrand_batch_4q_50s_gap4.pkl&quot;,&quot;data/opt_v2_4q_1000s_gap0.pkl&quot;,&quot;data/opt_v2_4q_1000s_gap1.pkl&quot;,&quot;data/opt_v2_4q_1000s_gap2.pkl&quot;,&quot;data/opt_v2_4q_1000s_gap3.pkl&quot;,&quot;data/opt_v2_4q_1000s_gap4.pkl&quot;,&quot;data/opt_v2_4q_100s_gap0.pkl&quot;,&quot;data/opt_v2_4q_100s_gap1.pkl&quot;,&quot;data/opt_v2_4q_100s_gap2.pkl&quot;,&quot;data/opt_v2_4q_100s_gap3.pkl&quot;,&quot;data/opt_v2_4q_100s_gap4.pkl&quot;,&quot;data/opt_v2_4q_10s_gap0.pkl&quot;,&quot;data/opt_v2_4q_10s_gap1.pkl&quot;,&quot;data/opt_v2_4q_10s_gap2.pkl&quot;,&quot;data/opt_v2_4q_10s_gap3.pkl&quot;,&quot;data/opt_v2_4q_10s_gap4.pkl&quot;,&quot;data/opt_v2_4q_200s_gap0.pkl&quot;,&quot;data/opt_v2_4q_200s_gap1.pkl&quot;,&quot;data/opt_v2_4q_200s_gap2.pkl&quot;,&quot;data/opt_v2_4q_200s_gap3.pkl&quot;,&quot;data/opt_v2_4q_200s_gap4.pkl&quot;,&quot;data/opt_v2_4q_50s_gap0.pkl&quot;,&quot;data/opt_v2_4q_50s_gap1.pkl&quot;,&quot;data/opt_v2_4q_50s_gap2.pkl&quot;,&quot;data/opt_v2_4q_50s_gap3.pkl&quot;,&quot;data/opt_v2_4q_50s_gap4.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap0.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap1.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap2.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap3.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap4.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap5.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap6.pkl&quot;,&quot;data/opt_v2_7q_1000s_gap7.pkl&quot;,&quot;data/opt_v2_7q_100s_gap0.pkl&quot;,&quot;data/opt_v2_7q_100s_gap1.pkl&quot;,&quot;data/opt_v2_7q_100s_gap2.pkl&quot;,&quot;data/opt_v2_7q_100s_gap3.pkl&quot;,&quot;data/opt_v2_7q_100s_gap4.pkl&quot;,&quot;data/opt_v2_7q_100s_gap5.pkl&quot;,&quot;data/opt_v2_7q_100s_gap6.pkl&quot;,&quot;data/opt_v2_7q_100s_gap7.pkl&quot;,&quot;data/opt_v2_7q_10s_gap0.pkl&quot;,&quot;data/opt_v2_7q_10s_gap1.pkl&quot;,&quot;data/opt_v2_7q_10s_gap2.pkl&quot;,&quot;data/opt_v2_7q_10s_gap3.pkl&quot;,&quot;data/opt_v2_7q_10s_gap4.pkl&quot;,&quot;data/opt_v2_7q_10s_gap5.pkl&quot;,&quot;data/opt_v2_7q_10s_gap6.pkl&quot;,&quot;data/opt_v2_7q_10s_gap7.pkl&quot;,&quot;data/opt_v2_7q_50s_gap0.pkl&quot;,&quot;data/opt_v2_7q_50s_gap1.pkl&quot;,&quot;data/opt_v2_7q_50s_gap2.pkl&quot;,&quot;data/opt_v2_7q_50s_gap3.pkl&quot;,&quot;data/opt_v2_7q_50s_gap4.pkl&quot;,&quot;data/opt_v2_7q_50s_gap5.pkl&quot;,&quot;data/opt_v2_7q_50s_gap6.pkl&quot;,&quot;data/opt_v2_7q_50s_gap7.pkl&quot;,&quot;data/test1_4_qbt_15_sds_ptmzng_fr_100_stps0.pkl&quot;,&quot;data/test1_4_qbt_15_sds_ptmzng_fr_100_stps1.pkl&quot;,&quot;data/test1_4_qbt_15_sds_ptmzng_fr_100_stps2.pkl&quot;,&quot;data/test1_4_qbt_15_sds_ptmzng_fr_100_stps3.pkl&quot;,&quot;data/test1_4_qbt_15_sds_ptmzng_fr_100_stps4.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps0.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps00.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps1.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps10.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps2.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps20.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps3.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps4.pkl&quot;,&quot;data/test2_4_qbt_1500_sds_ptmzng_fr_100_stps40.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps00.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps10.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps20.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps30.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps40.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps50.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps60.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps70.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps80.pkl&quot;,&quot;data/test2_9_qbt_2_sds_ptmzng_fr_20_stps90.pkl&quot;,&quot;data/test_4_qbt_15_sds_ptmzng_fr_100_stps0.pkl&quot;,&quot;data/test_4_qbt_15_sds_ptmzng_fr_100_stps1.pkl&quot;,&quot;data/test_4_qbt_15_sds_ptmzng_fr_100_stps2.pkl&quot;,&quot;data/test_4_qbt_15_sds_ptmzng_fr_100_stps3.pkl&quot;,&quot;data/test_4_qbt_15_sds_ptmzng_fr_100_stps4.pkl&quot;,&quot;new_data/4_qbt_1500_sds_ptmzng_fr_5_stps_0.pkl&quot;,&quot;new_data/4_qbt_1500_sds_ptmzng_fr_5_stps_1.pkl&quot;,&quot;new_data/4_qbt_1500_sds_ptmzng_fr_5_stps_2.pkl&quot;,&quot;new_data/4_qbt_1500_sds_ptmzng_fr_5_stps_3.pkl&quot;,&quot;new_data/4_qbt_1500_sds_ptmzng_fr_5_stps_4.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_0.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_1.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_2.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_3.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_4.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_5.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_6.pkl&quot;,&quot;new_data/7_qbt_600_sds_ptmzng_fr_5_stps_7.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_0.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_1.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_2.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_3.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_4.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_5.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_6.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_7.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_8.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_500_stps_9.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_0.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_1.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_2.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_3.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_4.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_5.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_6.pkl&quot;,&quot;new_data/9_qbt_200_sds_ptmzng_fr_5_stps_7.pkl&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element>"
           }
         }
       ],
@@ -98,7 +98,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "correct_data/7_qbt_50_sds_ptmzng_fr_500_stps_2.pkl\n",
+          "text": "correct_data/7_qbt_20_sds_ptmzng_fr_50_stps_0.pkl\n",
           "mimetype": "text/plain"
         }
       ]
@@ -208,7 +208,33 @@
       "console": []
     },
     {
-      "id": "jUur",
+      "id": "ZHCJ",
+      "code_hash": "8a0145917246d9902b44eb97d6d77727",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "FCaR",
+      "code_hash": "6d8d9ee4aa0f327c33f4b66ed1d8557a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<pre class='text-xs'>True</pre>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "JjPm",
       "code_hash": null,
       "outputs": [],
       "console": []

@@ -317,16 +317,13 @@ def _(cp):
     return (inv_perm,)
 
 
-@app.cell
-def _():
-    def compute_sre(psi_np, alpha=2):
-        return None, None
-
-    return (compute_sre,)
+@app.function
+def compute_sre(psi_np, alpha=2):
+    return None, None
 
 
 @app.cell
-def _(compute_sre, go, np, rand_Almost_Stab_state):
+def _(go, np, rand_Almost_Stab_state):
     def plot_sre_vs_gap(n_qubits: int, num_samples: int) -> go.Figure:
         gaps = list(range(0, n_qubits + 1))
         _sre_all = {gap: [] for gap in gaps}
@@ -553,16 +550,7 @@ def is_te(combinations, cp, is_appt, np):
 
 
 @app.cell
-def _(
-    combinations,
-    compute_sre,
-    cp,
-    inv_perm,
-    is_TE,
-    mean,
-    pickle,
-    rand_Almost_Stab_state,
-):
+def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
     def run_entanglement_optimization(
         n_qubits: int,
         num_starts: int,
@@ -607,6 +595,7 @@ def _(
                 if not is_te_flag:
                     if is_TE(psi):
                         is_te_flag = True
+                        print("yay!")
 
                 if is_te_flag:
                     remaining_steps = num_loops - ent_step
@@ -667,28 +656,27 @@ def _(
 
         print(f"Saved {num_starts} trajectories to {filename}")
         #return trajectories
-    return (run_entanglement_optimization,)
+    return
 
 
 @app.cell
-def _(run_entanglement_optimization):
+def _(run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
-        gaps = [1]
+        gaps = range(0,n_qubits+1)
         for _gap in gaps:
             print(
-                f"computing for {n_qubits}-qubits with initial random {n_qubits - _gap}-qubit stabilized state."
+                f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state."
             )
 
             _ffname = f_name + str(num_steps) + "_stps_" + str(_gap) + ".pkl"
-            run_entanglement_optimization(
+            run_jax_gpu_optimization(
                 n_qubits,
                 num_seeds,
                 num_steps,
-                _gap,
+                n_qubits - _gap,
                 step_mes=1,
                 filename=_ffname,
             )
-
 
     return (gen_data,)
 
@@ -708,9 +696,9 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[500]
-    qbt_nmbs = [4]
-    num_seds = [20] 
+    stpsi=[100]
+    qbt_nmbs = [7]
+    num_seds = [200] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
@@ -719,16 +707,7 @@ def _(gen_data, mo, run_sim_btn):
 
 
 @app.cell(hide_code=True)
-def _(
-    combinations,
-    compute_sre,
-    cp,
-    mean,
-    minimize,
-    np,
-    pickle,
-    rand_Almost_Stab_state,
-):
+def _(combinations, cp, mean, minimize, np, pickle, rand_Almost_Stab_state):
     def run_gradient_descent_optimization(
         n_qubits: int,
         num_starts: int,
@@ -873,7 +852,7 @@ def _(
 def _(
     LBFGS,
     combinations,
-    compute_sre,
+    is_TE,
     jax,
     jnp,
     np,
@@ -958,6 +937,21 @@ def _(
             else:
                 psi_np = np.array(psi_init)
 
+            # Check if initial state is already TE
+            if is_TE(psi_np):
+                print("  Initial state is already TE! Skipping optimization.")
+                avg_p, max_p, _ = get_purity_and_violation(np.concatenate([psi_np.real, psi_np.imag]))
+                traj_avg_p = [float(avg_p), float(avg_p)]
+                traj_max_p = [float(max_p), float(max_p)]
+                traj_sre = [0.0, 0.0]
+                traj_viol = [0.0, 0.0]
+                trajectories["average_purity"].append(traj_avg_p)
+                trajectories["max_purity"].append(traj_max_p)
+                trajectories["sre"].append(traj_sre)
+                trajectories["total_violation"].append(traj_viol)
+                trajectories["final_states"].append(psi_np)
+                continue
+
             params = jnp.concatenate([jnp.real(psi_np), jnp.imag(psi_np)]).astype(jnp.float64)
             traj_avg_p, traj_max_p, traj_sre, traj_viol = [], [], [], []
 
@@ -985,20 +979,24 @@ def _(
             sre_val, _ = compute_sre(np.array(curr_psi_complex)) 
             traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
 
-            print(f"\n  Final Violation: {traj_viol[-1]:.2e}")
+            print(f"  Final Violation: {traj_viol[-1]:.2e}")
+
+            # Save complex state vector of size 2^n
+            final_psi = np.array(params[:n_dim] + 1j * params[n_dim:])
+            final_psi /= np.linalg.norm(final_psi)
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
             trajectories["sre"].append(traj_sre)
             trajectories["total_violation"].append(traj_viol)
-            trajectories["final_states"].append(np.array(params))
+            trajectories["final_states"].append(final_psi)
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         return trajectories
 
-    return
+    return (run_jax_gpu_optimization,)
 
 
 @app.cell
@@ -1184,7 +1182,7 @@ def _(run_diag_btn):
 
 
 @app.cell(hide_code=True)
-def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
+def _(combinations, cp, mean, mo, pickle, run_diag_btn):
     import traceback
 
     # OPTIMIZATION: Halt execution of this expensive diagnostic unless manually triggered
@@ -1350,7 +1348,6 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
 @app.cell
 def _(
     combinations,
-    compute_sre,
     cp,
     inv_perm,
     mean,
