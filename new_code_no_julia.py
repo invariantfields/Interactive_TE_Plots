@@ -1,7 +1,6 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "cupy-cuda13x==14.1.1",
 #     "jax[cuda13]==0.10.2",
 #     "jaxopt==0.8.5",
 #     "numpy==2.4.6",
@@ -42,7 +41,23 @@ def _():
     from plotly.subplots import make_subplots
     import plotly.colors as pc
     import numpy as np
-    import cupy as cp
+
+    # Define a CPU fallback for cupy
+    class CupyFallback:
+        def __getattr__(self, name):
+            return getattr(np, name)
+        
+        @staticmethod
+        def asnumpy(x):
+            return np.asarray(x)
+            
+        @staticmethod
+        def asarray(x):
+            return np.asarray(x)
+        
+        ndarray = np.ndarray
+
+    cp = CupyFallback()
 
     # RTX 6000 96GB VRAM Optimization
     from functools import reduce
@@ -51,7 +66,7 @@ def _():
     from itertools import combinations, repeat
     import pickle
     from statistics import mean
-    from cupyx.scipy.linalg import expm
+    from scipy.linalg import expm
     import random
     import jax
     import jax.numpy as jnp
