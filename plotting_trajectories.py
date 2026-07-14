@@ -266,9 +266,13 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     fs = None
 
     if data_source.value == "Local":
-        data_dir = "new_data/"
-        if os.path.exists(data_dir):
-            available_files = sorted([os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")])
+        available_files = []
+        for data_dir in ["correct_data/", "new_data/", "data/"]:
+            if os.path.exists(data_dir):
+                available_files.extend(
+                    [os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")]
+                )
+        available_files.sort()
     else:
         # GitHub configuration
         org = "invariantfields"
