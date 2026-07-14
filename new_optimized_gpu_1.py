@@ -530,7 +530,7 @@ def is_te(combinations, is_appt, np):
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
-            per = list(set(range(n)) - set(_i)) + list(_i)
+            per = [x for x in range(n) if x not in _i] + list(_i)
             # FIXED: Use psi_moved to avoid overwriting original psi
             psi_moved = np.moveaxis(
                 psi.reshape([dim] * n), list(range(n)), per
@@ -582,7 +582,7 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                per = [x for x in range(n) if x not in j] + list(j)
                 psi_moved = cp.moveaxis(
                     psi.reshape([dim] * n), list(range(n)), per
                 ).flatten()
@@ -598,7 +598,7 @@ def _(
 
             for ent_step in range(num_loops):
                 for _i in combinations(range(n), k):
-                    per = list(set(range(n)) - set(_i)) + list(_i)
+                    per = [x for x in range(n) if x not in _i] + list(_i)
                     psi = cp.moveaxis(
                         psi.reshape([dim] * n), list(range(n)), per
                     ).flatten()
@@ -626,7 +626,7 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        per = [x for x in range(n) if x not in j] + list(j)
                         psi_moved = cp.moveaxis(
                             psi.reshape([dim] * n), list(range(n)), per
                         ).flatten()
@@ -772,7 +772,7 @@ def _(
 
             for combo in combos:
                 # Reorder qubits so target qubits are at the end for par_trace
-                per = list(set(range(n)) - set(combo)) + list(combo)
+                per = [x for x in range(n) if x not in combo] + list(combo)
                 psi_moved = cp.moveaxis(psi.reshape([dim]*n), list(range(n)), per).flatten()
 
                 rho = par_trace(psi_moved, dim, n, k) # Assumes par_trace is available in scope
@@ -805,7 +805,7 @@ def _(
                     purities = []
                     v_total = 0.0
                     for combo in combos:
-                        per = list(set(range(n)) - set(combo)) + list(combo)
+                        per = [x for x in range(n) if x not in combo] + list(combo)
                         psi_moved = cp.moveaxis(psi.reshape([dim]*n), list(range(n)), per).flatten()
                         rho = par_trace(psi_moved, dim, n, k)
                         purities.append(float(cp.sum(rho * rho).real))
@@ -1359,7 +1359,7 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                per = [x for x in range(n) if x not in j] + list(j)
                 psi_moved = cp.moveaxis(
                     psi.reshape([dim] * n), list(range(n)), per
                 ).flatten()
@@ -1381,7 +1381,7 @@ def _(
                 if _i == last_pick:
                     _i = comb_list[comb_list.index(_i) - 1]
                 last_pick = _i
-                per = list(set(range(n)) - set(_i)) + list(_i)
+                per = [x for x in range(n) if x not in _i] + list(_i)
                 psi = cp.moveaxis(
                     psi.reshape([dim] * n), list(range(n)), per
                 ).flatten()
@@ -1409,7 +1409,7 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        per = [x for x in range(n) if x not in j] + list(j)
                         psi_moved = cp.moveaxis(
                             psi.reshape([dim] * n), list(range(n)), per
                         ).flatten()

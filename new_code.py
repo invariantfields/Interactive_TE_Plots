@@ -12,7 +12,7 @@
 
 import marimo
 
-__generated_with = "0.23.10"
+__generated_with = "0.23.13"
 app = marimo.App(
     width="medium",
     css_file="/usr/local/_marimo/custom.css",
@@ -46,7 +46,6 @@ def _():
     import os
 
     os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
-
 
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -565,7 +564,8 @@ def is_te(combinations, cp, is_appt, np):
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
-            per = list(set(range(n)) - set(_i)) + list(_i)
+            rem_parties = [x for x in range(n) if x not in _i]
+            per = rem_parties + list(_i)
             psi_moved = cp.transpose(
                 psi.reshape([dim] * n), per
             ).flatten()
@@ -617,7 +617,8 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                rem_parties = [x for x in range(n) if x not in j]
+                per = rem_parties + list(j)
                 psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x_meas = par_trace(psi_moved, dim, n, k)
                 s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -631,7 +632,8 @@ def _(
 
             for ent_step in range(num_loops):
                 for _i in combinations(range(n), k):
-                    per = list(set(range(n)) - set(_i)) + list(_i)
+                    rem_parties = [x for x in range(n) if x not in _i]
+                    per = rem_parties + list(_i)
                     psi = cp.transpose(psi.reshape([dim] * n), per).flatten()
                     x = par_trace(psi, dim, n, k)
 
@@ -656,7 +658,8 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        rem_parties = [x for x in range(n) if x not in j]
+                        per = rem_parties + list(j)
                         psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                         x_meas = par_trace(psi_moved, dim, n, k)
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -684,11 +687,11 @@ def _(
 
         print(f"Saved {num_starts} trajectories to {filename}")
         #return trajectories
-    return
+    return (run_entanglement_optimization,)
 
 
 @app.cell
-def _(run_jax_gpu_optimization):
+def _(run_entanglement_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
         gaps = range(n_qubits+1)
         for _gap in gaps:
@@ -697,7 +700,7 @@ def _(run_jax_gpu_optimization):
             )
 
             _ffname = f_name + str(num_steps) + "_stps_" + str(_gap) + ".pkl"
-            run_jax_gpu_optimization(
+            run_entanglement_optimization(
                 n_qubits,
                 num_seeds,
                 num_steps,
@@ -726,8 +729,8 @@ def _(gen_data, mo, run_sim_btn):
         ),
     )
     stpsi=[500]
-    qbt_nmbs = [11]
-    num_seds = [1000 ]
+    qbt_nmbs = [9]
+    num_seds = [200] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"new_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
         print(flnm)
@@ -801,7 +804,8 @@ def _(
 
             for combo in combos:
                 # Reorder qubits so target qubits are at the end for par_trace
-                per = list(set(range(n)) - set(combo)) + list(combo)
+                rem_parties = [x for x in range(n) if x not in combo]
+                per = rem_parties + list(combo)
                 psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
 
                 rho = par_trace(psi_moved, dim, n, k) # Assumes par_trace is available in scope
@@ -834,7 +838,8 @@ def _(
                     purities = []
                     v_total = 0.0
                     for combo in combos:
-                        per = list(set(range(n)) - set(combo)) + list(combo)
+                        rem_parties = [x for x in range(n) if x not in combo]
+                        per = rem_parties + list(combo)
                         psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
                         rho = par_trace(psi_moved, dim, n, k)
                         purities.append(float(cp.sum(rho * rho).real))
@@ -1015,7 +1020,7 @@ def _(
 
         return trajectories
 
-    return (run_jax_gpu_optimization,)
+    return
 
 
 @app.cell
@@ -1242,9 +1247,8 @@ def _(combinations, compute_sre, cp, mean, mo, pickle, run_diag_btn):
                     _dim_test = 2
                     _purities = []
                     for _j in combinations(range(_n_qubits_test), _k_test):
-                        _per = list(set(range(_n_qubits_test)) - set(_j)) + list(
-                            _j
-                        )
+                        _rem_parties = [x for x in range(_n_qubits_test) if x not in _j]
+                        _per = _rem_parties + list(_j)
                         _psi_moved = cp.transpose(_psi_test.reshape([_dim_test] * _n_qubits_test), _per,).flatten()
                         _x_temp = par_trace(
                             _psi_moved, _dim_test, _n_qubits_test, _k_test
@@ -1402,7 +1406,8 @@ def _(
 
             s = []
             for j in combinations(range(n), k):
-                per = list(set(range(n)) - set(j)) + list(j)
+                rem_parties = [x for x in range(n) if x not in j]
+                per = rem_parties + list(j)
                 psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x_meas = par_trace(psi_moved, dim, n, k)
                 s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -1422,7 +1427,8 @@ def _(
                 if _i == last_pick:
                     _i = comb_list[comb_list.index(_i) - 1]
                 last_pick = _i
-                per = list(set(range(n)) - set(_i)) + list(_i)
+                rem_parties = [x for x in range(n) if x not in _i]
+                per = rem_parties + list(_i)
                 psi = cp.transpose(psi.reshape([dim] * n), per).flatten()
                 x = par_trace(psi, dim, n, k)
 
@@ -1447,7 +1453,8 @@ def _(
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        rem_parties = [x for x in range(n) if x not in j]
+                        per = rem_parties + list(j)
                         psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                         x_meas = par_trace(psi_moved, dim, n, k)
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))

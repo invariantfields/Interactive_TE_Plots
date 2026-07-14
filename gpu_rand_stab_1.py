@@ -571,7 +571,7 @@ app._unparsable_cell(
 
         for ent_step in range(num_loops):
             for _i in combinations(range(n), k):
-                per = list(set(range(n)) - set(_i)) + list(_i)
+                per = [x for x in range(n) if x not in _i] + list(_i)
                 psi = cp.moveaxis(
                     psi.reshape([dim] * n), list(range(n)), per
                 ).flatten()
@@ -602,7 +602,7 @@ app._unparsable_cell(
                 print(f"Random state trajectory: {st + 1}/{num_starts}")
                 s = []
                 for j in combinations(range(n), k):
-                    per = list(set(range(n)) - set(j)) + list(j)
+                    per = [x for x in range(n) if x not in j] + list(j)
                     psi_moved = cp.moveaxis(
                         psi.reshape([dim] * n), list(range(n)), per
                     ).flatten()

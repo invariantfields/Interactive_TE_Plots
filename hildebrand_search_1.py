@@ -421,7 +421,7 @@ def _(
     before_stats = {}
     with mo.status.spinner(title="Calculating initial state metrics..."):
         for _combo in _combos:
-            _per = list(set(range(_n)) - set(_combo)) + list(_combo)
+            _per = [x for x in range(_n) if x not in _combo] + list(_combo)
             _psi_moved = cp.moveaxis(
                 init_psi_cp.reshape([2] * _n), list(range(_n)), _per
             ).flatten()
@@ -461,7 +461,7 @@ def _(
 
     with mo.status.spinner(title="Generating verification report..."):
         for _combo in _combos:
-            _per = list(set(range(_n)) - set(_combo)) + list(_combo)
+            _per = [x for x in range(_n) if x not in _combo] + list(_combo)
             _psi_moved = cp.moveaxis(
                 _final_psi_cp.reshape([2] * _n), list(range(_n)), _per
             ).flatten()

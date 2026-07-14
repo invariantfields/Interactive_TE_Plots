@@ -70,7 +70,7 @@ def _(combinations, cp, is_appt, np, par_trace):
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
-            per = list(set(range(n)) - set(_i)) + list(_i)
+            per = [x for x in range(n) if x not in _i] + list(_i)
             psi_moved = cp.moveaxis(
                 psi.reshape([dim] * n), list(range(n)), per
             ).flatten()

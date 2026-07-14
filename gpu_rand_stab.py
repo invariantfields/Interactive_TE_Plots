@@ -586,7 +586,7 @@ def run_entanglement_optimization(
 
             for ent_step in range(num_loops):
                 for _i in combinations(range(n), k):
-                    per = list(set(range(n)) - set(_i)) + list(_i)
+                    per = [x for x in range(n) if x not in _i] + list(_i)
                     # Reshape and move axes for partial trace
                     psi = cp.moveaxis(
                         psi.reshape([dim] * n), list(range(n)), per
@@ -619,7 +619,7 @@ def run_entanglement_optimization(
                     print(f"Random state trajectory: {st + 1}/{num_starts}")
                     s = []
                     for j in combinations(range(n), k):
-                        per = list(set(range(n)) - set(j)) + list(j)
+                        per = [x for x in range(n) if x not in j] + list(j)
                         psi_moved = cp.moveaxis(
                             psi.reshape([dim] * n), list(range(n)), per
                         ).flatten()
@@ -785,7 +785,7 @@ def _(
                     _dim_test = 2
                     _purities = []
                     for _j in combinations(range(_n_qubits_test), _k_test):
-                        _per = list(set(range(_n_qubits_test)) - set(_j)) + list(_j)
+                        _per = [x for x in range(_n_qubits_test) if x not in _j] + list(_j)
                         _psi_moved = cp.moveaxis(
                             _psi_test.reshape([_dim_test] * _n_qubits_test), list(range(_n_qubits_test)), _per
                         ).flatten()
