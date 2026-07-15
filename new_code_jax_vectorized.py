@@ -662,7 +662,7 @@ def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
 @app.cell
 def _(run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
-        gaps = [0]#range(0,n_qubits+1)
+        gaps = range(0,n_qubits+1)
         for _gap in gaps:
             print(
                 f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state."
@@ -697,9 +697,9 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[20000]
-    qbt_nmbs = [9]
-    num_seds = [50] 
+    stpsi=[2000]
+    qbt_nmbs = [7]
+    num_seds = [100] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_jfr_"
         print(flnm)
