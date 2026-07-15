@@ -679,7 +679,7 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[20000]
+    stpsi=[100]
     qbt_nmbs = [9]
     num_seds = [100] 
     for _ in range(len(qbt_nmbs)):
@@ -897,7 +897,8 @@ def _(
             _, _, total_viol = get_purity_and_violation(params)
             return total_viol
 
-        import time
+        # Initialize JAX Solver with maxiter set to step_mes (e.g. 100)
+        solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11)
 
         # Generate initial states
         print(f"Generating {num_starts} initial states...")
@@ -910,63 +911,57 @@ def _(
                 psi_np = np.array(psi_init)
             p = np.concatenate([np.real(psi_np), np.imag(psi_np)])
             init_params_list.append(p)
-        init_params_batch = jnp.array(init_params_list, dtype=jnp.float64)
+        params_batch = jnp.array(init_params_list, dtype=jnp.float64)
 
-        # Vectorized functions for metrics and solver updates
+        # Vectorized functions
         vmapped_metrics = jax.vmap(get_purity_and_violation)
-        init_avg_p, init_max_p, init_viol = vmapped_metrics(init_params_batch)
-
-        # ------------------------------------------------------------
-        # 1-iteration dry run to estimate compile & solve execution time
-        # ------------------------------------------------------------
-        print("Performing a 1-iteration dry run to estimate optimization time...")
-        dry_solver = LBFGS(fun=objective, maxiter=1, tol=1e-11)
-        vmapped_dry_run = jax.vmap(dry_solver.run)
-        
-        # Warmup/Compile step (includes compilation overhead)
-        start_time = time.time()
-        _ = vmapped_dry_run(init_params_batch)
-        compile_and_run_time = time.time() - start_time
-        
-        # Pure execution step (compilation cached)
-        start_time = time.time()
-        _ = vmapped_dry_run(init_params_batch)
-        iter_exec_time = time.time() - start_time
-        
-        est_total_seconds = compile_and_run_time + (iter_exec_time * (num_loops - 1))
-        print(f"Compilation + 1 iter: {compile_and_run_time:.2f}s | Iteration rate: {iter_exec_time:.4f}s/iter")
-        print(f"Estimated optimization time for {num_loops} loops: {est_total_seconds:.2f} seconds ({est_total_seconds/60:.2f} minutes)")
-
-        # ------------------------------------------------------------
-        # Run monolithic parallel solver with progress tracking if possible
-        # ------------------------------------------------------------
-        solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-11)
         vmapped_run = jax.vmap(solver.run)
 
-        print(f"Running all {num_starts} trajectories concurrently (maxiter={num_loops}) using JAX vmap on GPU...")
+        # Trace history lists
+        traj_avg_p = [[] for _ in range(num_starts)]
+        traj_max_p = [[] for _ in range(num_starts)]
+        traj_viol = [[] for _ in range(num_starts)]
+
+        import time
         start_time = time.time()
-        res = vmapped_run(init_params_batch)
-        final_params_batch = res.params
-        elapsed = time.time() - start_time
-        print(f"Optimization completed in {elapsed:.2f} seconds.")
 
-        print("Computing final metrics in parallel...")
-        final_avg_p, final_max_p, final_viol = vmapped_metrics(final_params_batch)
+        # Compute initial metrics
+        avg_p, max_p, viol = vmapped_metrics(params_batch)
+        avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
+        for i in range(num_starts):
+            traj_avg_p[i].append(float(avg_p_cpu[i]))
+            traj_max_p[i].append(float(max_p_cpu[i]))
+            traj_viol[i].append(float(viol_cpu[i]))
+        print(f"  Start Step | Mean Violation: {float(np.mean(viol_cpu)):.2e}")
 
-        # Build trajectory lists containing only first and final values
-        traj_avg_p = [[float(init_avg_p[i]), float(final_avg_p[i])] for i in range(num_starts)]
-        traj_max_p = [[float(init_max_p[i]), float(final_max_p[i])] for i in range(num_starts)]
-        traj_viol = [[float(init_viol[i]), float(final_viol[i])] for i in range(num_starts)]
+        # Number of macro-steps (chunks of step_mes size)
+        num_chunks = max(1, num_loops // step_mes)
 
-        print(f"Final Average Violation: {float(jnp.mean(final_viol)):.2e}")
+        # Run chunk optimizations
+        for chunk_idx in range(1, num_chunks + 1):
+            # Run step_mes solver updates in parallel on GPU
+            res = vmapped_run(params_batch)
+            params_batch = res.params
+
+            # Compute and log metrics
+            avg_p, max_p, viol = vmapped_metrics(params_batch)
+            avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
+            for i in range(num_starts):
+                traj_avg_p[i].append(float(avg_p_cpu[i]))
+                traj_max_p[i].append(float(max_p_cpu[i]))
+                traj_viol[i].append(float(viol_cpu[i]))
+
+            elapsed = time.time() - start_time
+            est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
+            print(f"  Step {chunk_idx * step_mes:5d}/{num_loops} | Mean Violation: {float(np.mean(viol_cpu)):.2e} | Elapsed: {elapsed:.1f}s | Est. Remaining: {est_rem:.1f}s")
 
         # Assemble final trajectories
         trajectories = {
             "average_purity": traj_avg_p,
             "max_purity": traj_max_p,
-            "sre": [[0.0, 0.0] for _ in range(num_starts)],  # Dummy SRE values since SRE is CPU-bound
+            "sre": [[0.0] * len(traj_avg_p[0]) for _ in range(num_starts)],  # Dummy SRE values since SRE is CPU-bound
             "total_violation": traj_viol,
-            "final_states": [np.array(final_params_batch[i][:n_dim] + 1j * final_params_batch[i][n_dim:]) for i in range(num_starts)],
+            "final_states": [np.array(params_batch[i][:n_dim] + 1j * params_batch[i][n_dim:]) for i in range(num_starts)],
         }
 
         with open(filename, "wb") as f:
