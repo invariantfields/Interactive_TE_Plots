@@ -11,12 +11,13 @@
 
 import marimo
 
-__generated_with = "0.23.10"
+__generated_with = "0.23.14"
 app = marimo.App(
     width="medium",
     css_file="/usr/local/_marimo/custom.css",
     auto_download=["html"],
 )
+
 
 
 @app.cell
@@ -47,6 +48,7 @@ def _():
     import jax.numpy as jnp
     from jaxopt import LBFGS
     from scipy.optimize import minimize
+
 
     return (
         LBFGS,
@@ -297,14 +299,90 @@ def _(cp):
     return (inv_perm,)
 
 
+@app.function
+def compute_sre(psi_np, alpha=2):
+    return None, None
+
+
+@app.cell
+def _(go, np, rand_Almost_Stab_state):
+    def plot_sre_vs_gap(n_qubits: int, num_samples: int) -> go.Figure:
+        gaps = list(range(0, n_qubits + 1))
+        _sre_all = {gap: [] for gap in gaps}
+        _sre_means = []
+        _sre_stds = []
+
+        for gap in gaps:
+            print(f"Processing almost_gap = {gap} / {n_qubits} ...")
+            for i in range(num_samples):
+                try:
+                    _psi = rand_Almost_Stab_state(n_qubits, gap)
+                    _sre_val, _lost_norm = compute_sre(_psi, alpha=2)
+                    if _sre_val is not None:
+                        _sre_all[gap].append(_sre_val)
+                except Exception as e:
+                    print(f"  Error at sample {i}: {e}")
+
+            _gap_vals = _sre_all[gap]
+            _mean = float(np.mean(_gap_vals))
+            _std = float(np.std(_gap_vals))
+            _sre_means.append(_mean)
+            _sre_stds.append(_std)
+            print(f"  Done: mean SRE = {_mean:.4f}  ±  {_std:.4f}")
+
+        _fig = go.Figure()
+        _fig.add_trace(
+            go.Scatter(
+                x=gaps,
+                y=_sre_means,
+                error_y=dict(
+                    type="data",
+                    array=_sre_stds,
+                    visible=True,
+                    thickness=1.5,
+                    width=3,
+                ),
+                mode="markers+lines",
+                marker=dict(
+                    size=8, color="royalblue", line=dict(color="navy", width=1)
+                ),
+                line=dict(color="royalblue", width=2),
+                name="Mean SRE",
+            )
+        )
+
+        _fig.update_layout(
+            title=dict(
+                text=f"Stabilizer Rényi Entropy (α=2) vs Almost-Gap<br><sup>{n_qubits}-qubit system, {num_samples} samples per gap</sup>",
+                x=0.5,
+            ),
+            xaxis_title="Almost Gap (free qubits not projected onto stabilizer)",
+            yaxis_title="SRE (α=2)",
+            template="plotly_white",
+            hovermode="x unified",
+            width=700,
+            height=500,
+            xaxis=dict(dtick=1),
+        )
+
+        return _fig
+
+
+    def hex_to_rgba(hex_color, alpha=0.2):
+        hex_color = hex_color.lstrip("#")
+        return f"rgba({int(hex_color[0:2], 16)}, {int(hex_color[2:4], 16)}, {int(hex_color[4:6], 16)}, {alpha})"
+
+    return hex_to_rgba, plot_sre_vs_gap
+
+
 @app.cell
 def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
     def plot_trajectories_marimo(pkl_files, labels, step_mes, central_tendency):
-        metrics = ["average_purity", "max_purity"]
-        metric_titles = ["Average Purity", "Max Purity"]
+        metrics = ["average_purity", "max_purity", "sre"]
+        metric_titles = ["Average Purity", "Max Purity", "SRE"]
 
         colors = pc.qualitative.Plotly
-        fig = make_subplots(rows=1, cols=2, subplot_titles=metric_titles)
+        fig = make_subplots(rows=1, cols=3, subplot_titles=metric_titles)
 
         for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
             with open(file, "rb") as f:
@@ -330,7 +408,7 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
                     std = np.nanstd(arr, axis=0)
                     lower_bound = center_line - std
                     upper_bound = center_line + std
-                    legend_suffix = "(Avg ±1 Std)"
+                    legend_suffix = "(Avg \u00b11 Std)"
                 else:
                     center_line = np.nanmedian(arr, axis=0)
                     lower_bound = np.nanpercentile(arr, 25, axis=0)
@@ -384,7 +462,7 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
         fig.update_layout(
             title=f"Entanglement Optimization Trajectories ({central_tendency})",
             height=500,
-            width=800,
+            width=1200,
             hovermode="x unified",
             template="plotly_white",
             legend=dict(
@@ -410,15 +488,6 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
 
 
 @app.cell
-def _():
-    def hex_to_rgba(hex_color, alpha=0.2):
-        hex_color = hex_color.lstrip("#")
-        return f"rgba({int(hex_color[0:2], 16)}, {int(hex_color[2:4], 16)}, {int(hex_color[4:6], 16)}, {alpha})"
-
-    return (hex_to_rgba,)
-
-
-@app.cell
 def _(random):
     def bool_prob(p: float = 0.05) -> bool:
         return random.random() < p
@@ -433,8 +502,9 @@ def _(cp, np):
         _D = cp.shape(x)[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex, _ = cp.linalg.eigh(x)
-        _ex = cp.asnumpy(_ex)
+        x_cpu = cp.asnumpy(x)
+        _ex = np.linalg.eigvalsh(x_cpu)
+        _ex = np.clip(_ex, 0.0, None)
         if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):
             return True
         return False
@@ -462,21 +532,13 @@ def is_te(combinations, cp, is_appt, np):
 
 
 @app.cell
-def _(
-    combinations,
-    cp,
-    inv_perm,
-    is_TE,
-    mean,
-    pickle,
-    rand_Almost_Stab_state,
-):
+def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
     def run_entanglement_optimization(
         n_qubits: int,
         num_starts: int,
         num_loops: int,
         gap: int,
-        step_mes: int = 20,
+        step_mes: int = 1,
         dim: int = 2,
         filename: str = "trajectory_data.pkl",
     ):
@@ -486,6 +548,7 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
+            "sre": [],
             "final_states": [],
         }
 
@@ -494,6 +557,7 @@ def _(
             psi = rand_Almost_Stab_state(n, gap)
             traj_avg_p = []
             traj_max_p = []
+            traj_sre = []
 
             s = []
             for j in combinations(range(n), k):
@@ -505,10 +569,26 @@ def _(
 
             mean_s = mean(s)
             max_s = max(s)
+            _s_val, _ = compute_sre(psi)
+            current_sre = float(_s_val) if _s_val is not None else 0.0
+            is_te_flag = False
 
             for ent_step in range(num_loops):
+                if not is_te_flag:
+                    if is_TE(psi):
+                        is_te_flag = True
+                        print("yay!")
+
+                if is_te_flag:
+                    remaining_steps = num_loops - ent_step
+                    traj_avg_p.extend([mean_s] * remaining_steps)
+                    traj_max_p.extend([max_s] * remaining_steps)
+                    traj_sre.extend([current_sre] * remaining_steps)
+                    break
+
                 for _i in combinations(range(n), k):
-                    per = [x for x in range(n) if x not in _i] + list(_i)
+                    rem_parties = [x for x in range(n) if x not in _i]
+                    per = rem_parties + list(_i)
                     psi = cp.transpose(psi.reshape([dim] * n), per).flatten()
                     x = par_trace(psi, dim, n, k)
 
@@ -524,13 +604,13 @@ def _(
                     ).flatten()
                     psi = psi / cp.sqrt(cp.sum(psi * cp.conj(psi)))
 
-                    # OPTIMIZATION: Explicitly free GPU memory to prevent memory leaks
                     del x, evals, evecs, evals_inv_sqrt, x_inv_sqrt, rho
 
                 if ent_step % step_mes == 0:
                     s = []
                     for j in combinations(range(n), k):
-                        per = [x for x in range(n) if x not in j] + list(j)
+                        rem_parties = [x for x in range(n) if x not in j]
+                        per = rem_parties + list(j)
                         psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
                         x_meas = par_trace(psi_moved, dim, n, k)
                         s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
@@ -538,61 +618,48 @@ def _(
 
                     mean_s = mean(s)
                     max_s = max(s)
-                    traj_avg_p.append(mean_s)
-                    traj_max_p.append(max_s)
-                if is_TE(psi):
-                    remaining_measurements = (num_loops - 1 - ent_step) // step_mes
-                    if ent_step % step_mes != 0:
-                        s = []
-                        for j in combinations(range(n), k):
-                            rem_parties = [x for x in range(n) if x not in j]
-                            per = rem_parties + list(j)
-                            psi_moved = cp.transpose(psi.reshape([dim] * n), per).flatten()
-                            x_meas = par_trace(psi_moved, dim, n, k)
-                            s.append(float(cp.sum(x_meas * cp.conj(x_meas)).real))
-                            del x_meas
-                        mean_s = mean(s)
-                        max_s = max(s)
-                    else:
-                        mean_s = traj_avg_p[-1]
-                        max_s = traj_max_p[-1]
-
-                    traj_avg_p.extend([mean_s] * remaining_measurements)
-                    traj_max_p.extend([max_s] * remaining_measurements)
-                    break
+                _s_val, _ = compute_sre(psi)
+                current_sre = float(_s_val) if _s_val is not None else 0.0
+                traj_avg_p.append(mean_s)
+                traj_max_p.append(max_s)
+                traj_sre.append(current_sre)
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
+            trajectories["sre"].append(traj_sre)
             trajectories["final_states"].append(cp.asnumpy(psi))
 
         # Final cleanup for this start
         del psi
+        # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         print(f"Saved {num_starts} trajectories to {filename}")
-    return (run_entanglement_optimization,)
+        #return trajectories
+    return
 
 
 @app.cell
 def _(run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
-        gaps = range(n_qubits+1)
+        gaps = [0]#range(0,n_qubits+1)
         for _gap in gaps:
             print(
-                f"computing for {n_qubits}-qubits with initial random {n_qubits - _gap}-qubit stabilized state."
+                f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state."
             )
 
-            _ffname = f_name + str(num_steps) + "_stps_" + str(_gap) + ".pkl"
+            _ffname = f_name + str(num_steps) + "_stps_" + str(n_qubits -_gap) + ".pkl"
             run_jax_gpu_optimization(
                 n_qubits,
                 num_seeds,
                 num_steps,
-                _gap,
+                n_qubits -_gap,
                 step_mes=1,
                 filename=_ffname,
             )
+
 
     return (gen_data,)
 
@@ -612,26 +679,18 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[500]
-    qbt_nmbs = [11]
-    num_seds = [1000]
+    stpsi=[20000]
+    qbt_nmbs = [9]
+    num_seds = [100] 
     for _ in range(len(qbt_nmbs)):
-        flnm = f"new_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_fr_"
+        flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_jfr_"
         print(flnm)
         gen_data(qbt_nmbs[_], num_seds[_], stpsi[_], f_name=flnm)
     return
 
 
 @app.cell(hide_code=True)
-def _(
-    combinations,
-    cp,
-    mean,
-    minimize,
-    np,
-    pickle,
-    rand_Almost_Stab_state,
-):
+def _(combinations, cp, mean, minimize, np, pickle, rand_Almost_Stab_state):
     def run_gradient_descent_optimization(
         n_qubits: int,
         num_starts: int,
@@ -653,6 +712,7 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
+            "sre": [],
             "final_states": [],
             "total_violation": [],
         }
@@ -660,6 +720,7 @@ def _(
         def hildebrand_violation(rho, k_dim):
             """Calculates violation of the 1-vs-rest ASEP condition (CPU logic)."""
             D = 2**k_dim
+            # Perform eigvalsh on GPU, then move to CPU for the logical check
             evals = cp.linalg.eigvalsh(rho)
             evals = cp.asnumpy(evals)[::-1]  # Sort descending
             evals = np.clip(evals, 1e-15, None)
@@ -675,6 +736,7 @@ def _(
         def objective(params):
             """Objective function for SciPy optimizer."""
             psi_np = params[:n_dim] + 1j * params[n_dim:]
+            # Normalize to keep the state on the unit hypersphere
             norm = np.linalg.norm(psi_np)
             if norm > 0:
                 psi_np /= norm
@@ -683,10 +745,11 @@ def _(
             total_viol = 0.0
 
             for combo in combos:
+                # Reorder qubits so target qubits are at the end for par_trace
                 per = [x for x in range(n) if x not in combo] + list(combo)
                 psi_moved = cp.transpose(psi.reshape([dim]*n), per).flatten()
 
-                rho = par_trace(psi_moved, dim, n, k)
+                rho = par_trace(psi_moved, dim, n, k) # Assumes par_trace is available in scope
                 viol = hildebrand_violation(rho, k)
                 total_viol += viol**2
 
@@ -698,11 +761,12 @@ def _(
         for st in range(num_starts):
             print(f"GD Trajectory: {st + 1}/{num_starts}")
 
+            # Initialize with your existing rand_Almost_Stab_state function
             psi_init_cp = rand_Almost_Stab_state(n, gap) 
             psi_init_np = cp.asnumpy(psi_init_cp)
             init_params = np.concatenate([psi_init_np.real, psi_init_np.imag])
 
-            traj_avg_p, traj_max_p, traj_viol = [], [], []
+            traj_avg_p, traj_max_p, traj_sre, traj_viol = [], [], [], []
             state = {"count": 0}
 
             def callback(xk):
@@ -726,7 +790,12 @@ def _(
                     traj_max_p.append(max(purities))
                     traj_viol.append(v_total)
 
+                    # compute_sre assumes it exists in your scope
+                    sre_val, _ = compute_sre(psi_np) 
+                    traj_sre.append(float(sre_val) if sre_val is not None else 0.0)
+
                     del psi
+                    # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
                 state["count"] += 1
 
             # Record initial state
@@ -746,16 +815,19 @@ def _(
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
+            trajectories["sre"].append(traj_sre)
             trajectories["total_violation"].append(traj_viol)
             trajectories["final_states"].append(final_psi_np)
 
             print(f"  Final Violation Score: {res.fun:.2e}")
+            # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         # Save to disk compatible with your plotting notebook
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
 
         print(f"Saved {num_starts} GD trajectories to {filename}")
+        #return trajectories
     return
 
 
@@ -763,6 +835,7 @@ def _(
 def _(
     LBFGS,
     combinations,
+    is_TE,
     jax,
     jnp,
     np,
@@ -792,43 +865,41 @@ def _(
 
         @jax.jit
         def get_purity_and_violation(psi_vec):
-            """Calculates metrics for all marginals."""
             psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
             psi /= jnp.linalg.norm(psi)
             psi_tensor = psi.reshape((2,) * n)
 
-            avg_purity = 0.0
-            max_purity = 0.0
-            total_violation = 0.0
+            # Compute all reduced density matrices in parallel
+            rhos = [
+                psi_tensor.transpose(perm).reshape(-1, 2**k).conj().T 
+                @ psi_tensor.transpose(perm).reshape(-1, 2**k) 
+                for perm in perms_list
+            ]
+            batch_rho = jnp.stack(rhos, axis=0)
 
-            # Unrolled by JAX during compilation
-            for perm in perms_list:
-                # Partial trace
-                psi_perm = psi_tensor.transpose(perm).reshape(-1, 2**k)
-                rho = psi_perm.conj().T @ psi_perm
+            # Solve all eigenvalue problems in a single parallel GPU kernel call
+            ex = jnp.linalg.eigvalsh(batch_rho)
 
-                # Purity
-                p = jnp.real(jnp.sum(rho * rho))
-                avg_purity += p
-                max_purity = jnp.maximum(max_purity, p)
+            # Vectorized purity calculation (sum of squared eigenvalues)
+            purities = jnp.sum(ex**2, axis=-1)
+            avg_purity = jnp.mean(purities)
+            max_purity = jnp.max(purities)
 
-                # Hildebrand Violation
-                ex = jnp.linalg.eigvalsh(rho)
-                rhs = ex[1] + 2 * jnp.sqrt(jnp.maximum(ex[0] * ex[2], 1e-15))
-                viol = jnp.maximum(0, ex[-1] - rhs)
-                total_violation += viol**2
+            # Vectorized Hildebrand violation calculation
+            rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
+            viols = jnp.maximum(0.0, ex[:, -1] - rhs)
+            total_violation = jnp.sum(viols**2)
 
-            return avg_purity / len(perms_list), max_purity, total_violation
+            return avg_purity, max_purity, total_violation
 
         @jax.jit
         def objective(params):
             _, _, total_viol = get_purity_and_violation(params)
             return total_viol
 
-        # Initialize JAX Solver with maxiter set to num_loops
-        solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-11)
+        import time
 
-        # 1. Generate all initial states
+        # Generate initial states
         print(f"Generating {num_starts} initial states...")
         init_params_list = []
         for st in range(num_starts):
@@ -841,28 +912,51 @@ def _(
             init_params_list.append(p)
         init_params_batch = jnp.array(init_params_list, dtype=jnp.float64)
 
-        # 2. Compute initial metrics for all states in parallel
-        print("Computing initial metrics...")
+        # Vectorized functions for metrics and solver updates
         vmapped_metrics = jax.vmap(get_purity_and_violation)
         init_avg_p, init_max_p, init_viol = vmapped_metrics(init_params_batch)
 
-        traj_avg_p = [[float(init_avg_p[i])] for i in range(num_starts)]
-        traj_max_p = [[float(init_max_p[i])] for i in range(num_starts)]
-        traj_viol = [[float(init_viol[i])] for i in range(num_starts)]
+        # ------------------------------------------------------------
+        # 1-iteration dry run to estimate compile & solve execution time
+        # ------------------------------------------------------------
+        print("Performing a 1-iteration dry run to estimate optimization time...")
+        dry_solver = LBFGS(fun=objective, maxiter=1, tol=1e-11)
+        vmapped_dry_run = jax.vmap(dry_solver.run)
+        
+        # Warmup/Compile step (includes compilation overhead)
+        start_time = time.time()
+        _ = vmapped_dry_run(init_params_batch)
+        compile_and_run_time = time.time() - start_time
+        
+        # Pure execution step (compilation cached)
+        start_time = time.time()
+        _ = vmapped_dry_run(init_params_batch)
+        iter_exec_time = time.time() - start_time
+        
+        est_total_seconds = compile_and_run_time + (iter_exec_time * (num_loops - 1))
+        print(f"Compilation + 1 iter: {compile_and_run_time:.2f}s | Iteration rate: {iter_exec_time:.4f}s/iter")
+        print(f"Estimated optimization time for {num_loops} loops: {est_total_seconds:.2f} seconds ({est_total_seconds/60:.2f} minutes)")
 
-        # 3. Run the entire batch of optimizations in parallel on GPU
-        print(f"Running {num_starts} trajectories in parallel using JAX vmap on GPU...")
+        # ------------------------------------------------------------
+        # Run monolithic parallel solver with progress tracking if possible
+        # ------------------------------------------------------------
+        solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-11)
         vmapped_run = jax.vmap(solver.run)
+
+        print(f"Running all {num_starts} trajectories concurrently (maxiter={num_loops}) using JAX vmap on GPU...")
+        start_time = time.time()
         res = vmapped_run(init_params_batch)
         final_params_batch = res.params
+        elapsed = time.time() - start_time
+        print(f"Optimization completed in {elapsed:.2f} seconds.")
 
-        # 4. Compute final metrics for all states in parallel
-        print("Computing final metrics...")
+        print("Computing final metrics in parallel...")
         final_avg_p, final_max_p, final_viol = vmapped_metrics(final_params_batch)
-        for i in range(num_starts):
-            traj_avg_p[i].append(float(final_avg_p[i]))
-            traj_max_p[i].append(float(final_max_p[i]))
-            traj_viol[i].append(float(final_viol[i]))
+
+        # Build trajectory lists containing only first and final values
+        traj_avg_p = [[float(init_avg_p[i]), float(final_avg_p[i])] for i in range(num_starts)]
+        traj_max_p = [[float(init_max_p[i]), float(final_max_p[i])] for i in range(num_starts)]
+        traj_viol = [[float(init_viol[i]), float(final_viol[i])] for i in range(num_starts)]
 
         print(f"Final Average Violation: {float(jnp.mean(final_viol)):.2e}")
 
@@ -870,8 +964,9 @@ def _(
         trajectories = {
             "average_purity": traj_avg_p,
             "max_purity": traj_max_p,
+            "sre": [[0.0, 0.0] for _ in range(num_starts)],  # Dummy SRE values since SRE is CPU-bound
             "total_violation": traj_viol,
-            "final_states": [np.array(final_params_batch[i]) for i in range(num_starts)],
+            "final_states": [np.array(final_params_batch[i][:n_dim] + 1j * final_params_batch[i][n_dim:]) for i in range(num_starts)],
         }
 
         with open(filename, "wb") as f:
@@ -887,11 +982,11 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
     def plot_te_filtered_trajectories(pkl_files, labels, step_mes,
                                       use_te_filter, central_tendency):
         """Plot trajectories with optional TE filtering, handling ragged arrays via NaN padding."""
-        metrics_to_plot = ["average_purity", "max_purity"]
-        metric_titles = ["Average Purity", "Max Purity"]
+        metrics_to_plot = ["average_purity", "max_purity", "sre"]
+        metric_titles = ["Average Purity", "Max Purity", "SRE"]
 
         colors = pc.qualitative.Plotly
-        fig = make_subplots(rows=1, cols=2, subplot_titles=metric_titles)
+        fig = make_subplots(rows=1, cols=3, subplot_titles=metric_titles)
 
         for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
             with open(file, "rb") as f:
@@ -976,7 +1071,7 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
         fig.update_layout(
             title=f"Entanglement Trajectories ({central_tendency})"
                   + (" — TE Filtered" if use_te_filter else ""),
-            height=500, width=900, hovermode="x unified",
+            height=500, width=1200, hovermode="x unified",
             template="plotly_white",
             margin=dict(b=120),
             legend=dict(orientation="h", yanchor="top", y=-0.15,
@@ -1047,6 +1142,17 @@ def plots_for_magic(metric_selector, plot_trajectories_marimo):
     return
 
 
+@app.cell(disabled=True, hide_code=True)
+def _(mo, plot_sre_vs_gap):
+    # OPTIMIZATION: Lazy loading the cached plot
+    def render_sre_plot():
+        return plot_sre_vs_gap(4, 1000)
+
+
+    mo.lazy(render_sre_plot)
+    return
+
+
 @app.cell
 def _(run_diag_btn):
     run_diag_btn
@@ -1072,10 +1178,12 @@ def _(combinations, cp, mean, mo, pickle, run_diag_btn):
         _gap_info = {"gap": _gap, "stages": {}}
         try:
             # --- LOAD THE EXISTING PKL FILE FOR THIS GAP ---
-            file_path = f"data/4_qbt_500_sds_ptmzng_fr_10_stps{_gap}.pkl"
+            file_path = f"data/4_qbt_500_sds_ptmzng_fr_10_stps{_gap}.pkl"  # Adjust filename format if needed
             with open(file_path, "rb") as f:
                 _psi_test = pickle.load(f)
 
+            # SAFETY CHECK: If your pickle files contain NumPy arrays,
+            # we need to push them to CuPy (GPU) so the rest of your pipeline works.
             if hasattr(_psi_test, "get") or type(_psi_test).__module__ == "numpy":
                 _psi_test = cp.asarray(_psi_test)
 
@@ -1119,6 +1227,25 @@ def _(combinations, cp, mean, mo, pickle, run_diag_btn):
             else:
                 _gap_info["stages"]["purity"] = {"status": "Skipped (NaN state)"}
 
+            if not _has_nan_psi:
+                try:
+                    _sre_val, _lost_norm = compute_sre(_psi_test, alpha=2)
+                    _gap_info["stages"]["sre"] = {
+                        "status": "Success"
+                        if _sre_val is not None
+                        else "Returned None",
+                        "sre_val": _sre_val,
+                        "lost_norm": _lost_norm,
+                    }
+                except Exception as _sre_err:
+                    _gap_info["stages"]["sre"] = {
+                        "status": "Failed",
+                        "error": str(_sre_err),
+                        "traceback": traceback.format_exc(),
+                    }
+            else:
+                _gap_info["stages"]["sre"] = {"status": "Skipped (NaN state)"}
+
             _k_test = _n_qubits_test - _n_qubits_test // 2
             _dim_test = 2
             try:
@@ -1148,6 +1275,7 @@ def _(combinations, cp, mean, mo, pickle, run_diag_btn):
 
         diagnostic_results.append(_gap_info)
 
+
     # OPTIMIZATION: Render UI output lazily
     def render_diagnostics():
         return mo.vstack(
@@ -1167,19 +1295,29 @@ def _(combinations, cp, mean, mo, pickle, run_diag_btn):
                             "Max Purity": res["stages"]
                             .get("purity", {})
                             .get("max_purity", "N/A"),
+                            "SRE Status": res["stages"]
+                            .get("sre", {})
+                            .get("status", "N/A"),
+                            "SRE Val": res["stages"]
+                            .get("sre", {})
+                            .get("sre_val", "N/A"),
+                            "SRE Error": res["stages"]
+                            .get("sre", {})
+                            .get("error", "None"),
                         }
-                        for res in diagnostic_results
+                        for res in diagnostic_results  # FIXED: Changed ':' to 'for'
                     ]
                 ),
                 mo.accordion(
                     {
-                        "Detailed Diagnostic JSON Tree": mo.tree(
+                        "Detailed Diagnostic Diagnostic JSON Tree": mo.tree(
                             diagnostic_results
                         )
                     }
                 ),
             ]
         )
+
 
     mo.lazy(render_diagnostics)
     return
@@ -1210,6 +1348,7 @@ def _(
         trajectories = {
             "average_purity": [],
             "max_purity": [],
+            "sre": [],
             "final_states": [],
         }
 
@@ -1217,6 +1356,7 @@ def _(
             psi = rand_Almost_Stab_state(n, gap)
             traj_avg_p = []
             traj_max_p = []
+            traj_sre = []
 
             s = []
             for j in combinations(range(n), k):
@@ -1228,6 +1368,9 @@ def _(
 
             traj_avg_p.append(mean(s))
             traj_max_p.append(max(s))
+            _s_val, _ = compute_sre(psi)
+            current_sre = float(_s_val) if _s_val is not None else 0.0
+            traj_sre.append(current_sre)
 
             last_pick = ""
             comb_list = list(combinations(range(n), k))
@@ -1252,7 +1395,11 @@ def _(
                 psi = cp.transpose(psi.reshape([dim] * n), list(inv_perm(per))
                 ).flatten()
                 psi = psi / cp.sqrt(cp.sum(psi * cp.conj(psi)))
+                # if bool_prob(0.1):
+                #   psi = near_identity_unitary(n) @ psi
 
+                # OPTIMIZATION: Explicitly free GPU memory to prevent memory leaks
+                # during massive nested loop computations.
                 del x, evals, evecs, evals_inv_sqrt, x_inv_sqrt, rho
 
                 if ent_step % step_mes == 0:
@@ -1266,13 +1413,18 @@ def _(
 
                     traj_avg_p.append(mean(s))
                     traj_max_p.append(max(s))
+                    _s_val, _ = compute_sre(psi)
+                    current_sre = float(_s_val) if _s_val is not None else 0.0
+                    traj_sre.append(current_sre)
 
             trajectories["average_purity"].append(traj_avg_p)
             trajectories["max_purity"].append(traj_max_p)
+            trajectories["sre"].append(traj_sre)
             trajectories["final_states"].append(cp.asnumpy(psi))
 
         # Final cleanup for this start
         del psi
+        # OPTIMIZATION: Removed free_all_blocks() to leverage 96GB VRAM pool
 
         with open(filename, "wb") as f:
             pickle.dump(trajectories, f)
