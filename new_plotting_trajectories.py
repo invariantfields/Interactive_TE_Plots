@@ -28,7 +28,7 @@ def _():
 
 
 @app.cell
-def _(jl):
+def _(jl, mo):
     if jl is not None:
         jl.seval("using HadaMAG")
         jl.seval("using CUDA")
@@ -40,7 +40,10 @@ def _(jl):
             return (sre_result, lost_norm)
         end
         """)
-    return
+        status = mo.md("⚡ **Julia SRE Direct Bridge:** Initialized successfully (`HadaMAG` + `CUDA` backend)")
+    else:
+        status = mo.md("⚠️ **Julia SRE Direct Bridge:** Julia/JuliaCall not available (falling back to placeholders)")
+    return (status,)
 
 
 @app.cell
