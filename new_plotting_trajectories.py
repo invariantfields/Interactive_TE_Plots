@@ -35,8 +35,9 @@ def _(jl):
         jl.seval("using HadaMAG")
         jl.seval("using CUDA")
         jl.seval("disable_logging(Logging.Debug)")
-    
-        # Define exact SRE calculation once in Julia to avoid seval parser overhead in loops
+
+        # Define the SRE function once so compute_sre_exact can call it
+        # directly without seval parser overhead on every loop iteration
         jl.seval("""
         function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
             psi_jl = Vector{ComplexF64}(psi_np)
