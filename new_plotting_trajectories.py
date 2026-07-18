@@ -101,7 +101,7 @@ def _():
                 print(f"[cache] Could not remove disk cache: {_e}")
 
     # One global instance — loaded from disk once per kernel session
-    _plot_cache = globals().get("_plot_cache", _DiskCache(_CACHE_FILE))
+    plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
     return (
         GithubFileSystem,
         combinations,
@@ -112,6 +112,7 @@ def _():
         os,
         pc,
         pickle,
+        plot_cache,
     )
 
 
@@ -162,7 +163,7 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, re):
+def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -205,14 +206,14 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, re):
                 plot_type,
                 tuple(mtimes),
             )
-            if cache_key in _plot_cache:
+            if cache_key in plot_cache:
                 print("[cache] HIT — returning cached plot.")
-                return _plot_cache[cache_key]
+                return plot_cache[cache_key]
             print("[cache] MISS — computing plot…")
             fig = func(pkl_files, labels, step_mes, use_te_filter, central_tendency,
                        selected_metrics, plot_type, fs)
             if fig is not None:
-                _plot_cache[cache_key] = fig
+                plot_cache[cache_key] = fig
             return fig
         return wrapper
 
@@ -1031,6 +1032,7 @@ def _(
     metrics_to_plot,
     mo,
     plot_button,
+    plot_cache,
     plot_te_filtered_trajectories,
     plot_type_dropdown,
     re,
@@ -1038,7 +1040,7 @@ def _(
     te_filter_checkbox,
 ):
     if clear_cache_button.value:
-        _plot_cache.clear()
+        plot_cache.clear()
         mo.status.toast("🧹 Plot cache cleared successfully!")
 
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
