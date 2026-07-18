@@ -30,14 +30,10 @@ def _():
 @app.cell
 def _(jl):
     if jl is not None:
-        jl.seval("using Logging")
-        jl.seval("disable_logging(Logging.Error)")
         jl.seval("using HadaMAG")
         jl.seval("using CUDA")
-        jl.seval("disable_logging(Logging.Debug)")
 
-        # Define the SRE function once so compute_sre_exact can call it
-        # directly without seval parser overhead on every loop iteration
+        # Define the SRE function once — avoids seval parser overhead on every loop iteration
         jl.seval("""
         function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
             psi_jl = Vector{ComplexF64}(psi_np)
@@ -77,19 +73,18 @@ def _():
 
 
 @app.cell
-def _(np):
+def _(cp, np):
     def par_trace(psi, dim, n, n_parties):
         n_rem = n - n_parties
         psi_mat = psi.reshape(dim**n_rem, dim**n_parties)
         return psi_mat @ psi_mat.conj().T
 
-    def is_appt(x: np.ndarray) -> bool:
-        _purity = np.sum(x.real**2 + x.imag**2)
-        _D = x.shape[0]
+    def is_appt(x: np.array) -> bool:
+        _purity = cp.sum(x.real**2 + x.imag**2)
+        _D = cp.shape(x)[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex = np.linalg.eigvalsh(x)
-        _ex = np.clip(_ex, 0.0, None)
+        _ex, _ = np.linalg.eigh(x)
         if (_ex[-1] - _ex[1]) ** 2 <= 4 * _ex[0] * _ex[3]:
             return True
         return False
@@ -98,13 +93,16 @@ def _(np):
 
 
 @app.cell
-def _(combinations, is_appt, np, par_trace):
-    def is_TE(psi: np.ndarray, dim: int = 2) -> bool:
+def _(combinations, cp, is_appt, np, par_trace):
+    def is_TE(psi: np.array, dim: int = 2) -> bool:
         n = int(np.log2(len(psi)))
         k = n - n // 2
+        psi_cp= cp.asarray(psi)
         for _i in combinations(range(n), k):
             per = [x for x in range(n) if x not in _i] + list(_i)
-            psi_moved = np.transpose(psi.reshape([dim] * n), per).flatten()
+            psi_moved = cp.transpose(
+                psi_cp.reshape([dim] * n), per
+            ).flatten()
             _x = par_trace(psi_moved, dim, n, k)
             _x = (_x + _x.conj().T) / 2.0
             if not is_appt(_x):
