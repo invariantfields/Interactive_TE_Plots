@@ -43,7 +43,7 @@ def _(jl, mo):
         status = mo.md("⚡ **Julia SRE Direct Bridge:** Initialized successfully (`HadaMAG` + `CUDA` backend)")
     else:
         status = mo.md("⚠️ **Julia SRE Direct Bridge:** Julia/JuliaCall not available (falling back to placeholders)")
-    return (status,)
+    return
 
 
 @app.cell
@@ -62,7 +62,6 @@ def _():
     return (
         GithubFileSystem,
         combinations,
-        cp,
         go,
         make_subplots,
         mo,
@@ -120,14 +119,12 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
+def _(go, is_TE, jl, make_subplots, np, pc, pickle, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
             return 0.0, 0.0
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+
             try:
                 arr_np = np.asarray(psi_np)
                 norm_val = np.linalg.norm(arr_np)
@@ -182,7 +179,7 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
 
                 if use_te_filter:
                     final_states = data["final_states"]
-                    te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
+                    te_mask = np.array([is_TE(state) for state in final_states])
                     n_te = te_mask.sum()
                     if n_te == 0:
                         continue
@@ -323,7 +320,7 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
             # Filter by TE if checkbox is checked
             if use_te_filter:
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
+                te_mask = np.array([is_TE(state) for state in final_states])
                 n_te = te_mask.sum()
                 if n_te == 0:
                     continue
@@ -490,7 +487,7 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
+                te_mask = np.array([is_TE(state) for state in final_states])
                 is_correct_data = ("correct_data" in file) or ("more_data" in file)
 
                 init_sre_vals = []
@@ -714,7 +711,7 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
+                te_mask = np.array([is_TE(state) for state in final_states])
                 is_correct_data = "correct_data" in file
 
                 final_sre_vals = []
