@@ -124,7 +124,9 @@ def _(go, is_TE, jl, make_subplots, np, pc, pickle, re):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
             return 0.0, 0.0
-
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             try:
                 arr_np = np.asarray(psi_np)
                 norm_val = np.linalg.norm(arr_np)
