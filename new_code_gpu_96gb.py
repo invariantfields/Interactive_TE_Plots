@@ -19,7 +19,6 @@ app = marimo.App(
 )
 
 
-
 @app.cell
 def _():
 
@@ -63,6 +62,7 @@ def _():
         minimize,
         mo,
         np,
+        os,
         pc,
         pickle,
         random,
@@ -496,13 +496,16 @@ def _(random):
 
 
 @app.cell
-def _(cp, np):
-    def is_appt(x: np.array) -> bool:
-        _purity = cp.sum(x.real**2 + x.imag**2)
-        _D = cp.shape(x)[0]
+def _(np):
+    def is_appt(x) -> bool:
+        if hasattr(x, "get"):
+            x_cpu = x.get()
+        else:
+            x_cpu = np.asarray(x)
+        _purity = np.sum(x_cpu.real**2 + x_cpu.imag**2)
+        _D = x_cpu.shape[0]
         if _purity <= 1 / (_D - 1):
             return True
-        x_cpu = cp.asnumpy(x)
         _ex = np.linalg.eigvalsh(x_cpu)
         _ex = np.clip(_ex, 0.0, None)
         if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):
@@ -642,21 +645,24 @@ def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(run_jax_gpu_optimization):
+def _(os, run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
-        gaps = [0]#range(0,n_qubits+1)
+        gaps = range(0,n_qubits+1)
         for _gap in gaps:
+            _ffname = f_name + str(num_steps) + "_stps_" + str(n_qubits -_gap) + ".pkl"
+            if os.path.exists(_ffname):
+                print(f"Skipping gap {n_qubits - _gap}: file {_ffname} already exists.")
+                continue
+
             print(
                 f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state."
             )
-
-            _ffname = f_name + str(num_steps) + "_stps_" + str(n_qubits -_gap) + ".pkl"
             run_jax_gpu_optimization(
                 n_qubits,
                 num_seeds,
                 num_steps,
                 n_qubits -_gap,
-                step_mes=1,
+                step_mes=num_steps,
                 filename=_ffname,
             )
 
@@ -679,9 +685,9 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[100]
-    qbt_nmbs = [9]
-    num_seds = [100] 
+    stpsi=[700,1000]
+    qbt_nmbs = [7]
+    num_seds = [200, 1000] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_jfr_"
         print(flnm)
@@ -832,16 +838,7 @@ def _(combinations, cp, mean, minimize, np, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(
-    LBFGS,
-    combinations,
-    is_TE,
-    jax,
-    jnp,
-    np,
-    pickle,
-    rand_Almost_Stab_state,
-):
+def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
     jax.config.update("jax_enable_x64", True)
     def run_jax_gpu_optimization(
         n_qubits: int,

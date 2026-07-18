@@ -1,206 +1,461 @@
 {
   "version": "1",
   "metadata": {
-    "marimo_version": "0.23.10",
+    "marimo_version": "0.23.14",
     "script_metadata_hash": "9b359ca4c55be997cfcad0e728832177"
   },
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "e1502ef6f5aa5c8301c12e34ff9093c2",
-      "outputs": [],
+      "code_hash": "31e0204b2028f6718687fd8f535c4fd0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "MJUe",
       "code_hash": "53305e6d52848a7bfef6329ef95c46c3",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='MJUe-0' random-id='ba523d31-fba4-252e-04ab-cca32a268f7b'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='MJUe-1' random-id='98038676-dee7-9119-e030-5c910a492c37'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "vblA",
       "code_hash": "9648e8fb90cda03e1d8046cbabf1a6e3",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "bkHC",
       "code_hash": "6e474632e49ee0deaa955d50dc5f7a24",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "lEQa",
       "code_hash": "f9873c12b785efa8ba264313581c703c",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "PKri",
       "code_hash": "329d5f1f479783f6baa3f2529a918dda",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "Xref",
       "code_hash": "af2e18499bde8f31903fe4dd9f35f5bd",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "SFPL",
       "code_hash": "ed3bbb62781c07c643368800a10068cf",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "BYtC",
       "code_hash": "f2601d605470e3d05b02c67055d6b12a",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "RGSE",
       "code_hash": "a2a4b2df38bc41f26f6026d10b256242",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "Kclp",
       "code_hash": "d071bb96b4a2393f792f226a4ddc45f2",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "emfo",
       "code_hash": "a8364592d6f59e6ba2a4651b8cf09615",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "Hstk",
       "code_hash": "571a7bb0cd66fbe914ce1a5be35724de",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "nWHF",
-      "code_hash": "a7abf6b05cb5046795d2281ad2c2cbd6",
-      "outputs": [],
+      "code_hash": "379d1fda451d678039f9ed81c5a1fe1c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "iLit",
-      "code_hash": "572db3c5e1516027fe5c87a3fe0d9d9e",
-      "outputs": [],
+      "code_hash": "ed864357932c7fbf0d452b6936e3f900",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "ZHCJ",
-      "code_hash": "bd773d96c853817cebf4a004fd0d2ca9",
-      "outputs": [],
+      "code_hash": "ded106b0332d47024cbaec5c4c851082",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "ROlb",
-      "code_hash": "624fb19a559b455e088cea9787f15bbf",
-      "outputs": [],
+      "code_hash": "bd773d96c853817cebf4a004fd0d2ca9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "qnkX",
-      "code_hash": "4baa00903d9dd651370c0c2cd32a6284",
-      "outputs": [],
+      "code_hash": "0e620004fc7acb155941c1d8d0c6181e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "TqIu",
-      "code_hash": "476251f3f0cfba289e05cafdb857e8bc",
-      "outputs": [],
+      "code_hash": "a6d845880669cbcb3c4c23b9c4d15a29",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "Vxnm",
-      "code_hash": "4d617ac54872c2fe67b2ba6dace1c94e",
-      "outputs": [],
+      "code_hash": "7c8d55e719b3fc18b3c22f23e08c3d6e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "DnEU",
-      "code_hash": "7d157e24829d4454d3f71ea099931b84",
-      "outputs": [],
+      "code_hash": "13bcd3ee9966b7d3948991df09330d57",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "ulZA",
-      "code_hash": "9d1e42a4f2f9e33101cce4b3389a8db3",
-      "outputs": [],
+      "code_hash": "7d157e24829d4454d3f71ea099931b84",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='MJUe-0' random-id='ba523d31-fba4-252e-04ab-cca32a268f7b'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "ecfG",
-      "code_hash": "8ad8b708a01e5f23883eaa2315873cd2",
-      "outputs": [],
-      "console": []
+      "code_hash": "d00cf8423dc8ed6c5d62aa39257c612f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">\ud83d\udca1 <em>Click </em><em>Run Simulation</em><em> in the top cell to execute the heavy optimization step.</em></span></span>"
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\ncomputing for 7-qubits with initial random 4-qubit stabilized state.\nGenerating 200 initial states...\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "Jax plugin configuration error: Exception when calling jax_plugins.xla_cuda13.initialize()\nTraceback (most recent call last):\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 508, in discover_pjrt_plugins\n    plugin_module.initialize()\n    ~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax_plugins/xla_cuda13/__init__.py\", line 373, in initialize\n    c_api = xb.register_plugin(\n        'cuda', priority=500, library_path=str(path), options=options\n    )\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 650, in register_plugin\n    c_api = xla_client.load_pjrt_plugin_dynamically(plugin_name, library_path)\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jaxlib/xla_client.py\", line 115, in load_pjrt_plugin_dynamically\n    return _xla.load_pjrt_plugin(plugin_name, library_path, c_api=None)\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: ALREADY_EXISTS: PJRT_Api already exists for device type cuda\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "  Start Step | Mean Violation: 7.63e+00\n",
+          "mimetype": "text/plain"
+        }
+      ]
     },
     {
       "id": "Pvdt",
-      "code_hash": "1931cdcdd7afa189dd9137d82adb3305",
-      "outputs": [],
+      "code_hash": "6ab89c9a93238761ae0401952035e3f4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "ZBYS",
-      "code_hash": "cb27cc6da528c70b2d64088e398dbebf",
-      "outputs": [],
+      "code_hash": "ce75f67a85e4cdd2b860d54e813c14d9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "aLJB",
+      "code_hash": "1e60872a0f8450b5c744b739cb050408",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nHfw",
       "code_hash": "14e44a0b68dfab69a53c78f518601eb1",
       "outputs": [],
       "console": []
     },
     {
-      "id": "nHfw",
+      "id": "xXTn",
       "code_hash": "28ae364269443bd1ec95614ad702e19c",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='ZHCJ-0' random-id='813ac6fb-d516-f4f1-9aa6-b7773a12b679'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='55da9ea2-f496-95fa-13ff-2f0699006888'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+          }
+        }
+      ],
       "console": []
     },
     {
-      "id": "xXTn",
+      "id": "AjVT",
       "code_hash": "61ab8db6c83f6d3ef9d89136f79b8fbe",
       "outputs": [],
       "console": []
     },
     {
-      "id": "AjVT",
-      "code_hash": "a120bdb8fcec099bb8078c7052b80dc0",
-      "outputs": [],
-      "console": []
-    },
-    {
       "id": "pHFh",
-      "code_hash": "e000e4301b5c226cda77d228da769555",
+      "code_hash": "93231451c1ec207e35ae74744989b77e",
       "outputs": [],
       "console": []
     },
     {
       "id": "NCOB",
-      "code_hash": "a4d7ca0d0d0f15d6fe0fbc45dbcaa1eb",
-      "outputs": [],
+      "code_hash": "a120bdb8fcec099bb8078c7052b80dc0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='MJUe-1' random-id='98038676-dee7-9119-e030-5c910a492c37'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "aqbW",
-      "code_hash": "7ec521d08550f75731ef17e4a99adbd0",
-      "outputs": [],
+      "code_hash": "08312840d11bd187a68b188d260b18ce",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">\ud83d\udca1 <em>Click </em><em>Run Diagnostics</em><em> in the top cell to execute the diagnostic suite.</em></span></span>"
+          }
+        }
+      ],
       "console": []
     },
     {
       "id": "TRpd",
+      "code_hash": "602d71be834cc792d622bf6afbc0061f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TXez",
+      "code_hash": "7ec521d08550f75731ef17e4a99adbd0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dNNg",
       "code_hash": null,
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": []
     }
   ]

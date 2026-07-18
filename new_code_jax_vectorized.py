@@ -35,6 +35,14 @@ def _(jl):
     jl.seval("using HadaMAG")
     jl.seval("using CUDA")
     jl.seval("disable_logging(Logging.Debug)")
+    jl.seval("""
+    function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
+        psi_jl = Vector{ComplexF64}(psi_np)
+        psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
+        sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
+        return (sre_result, lost_norm)
+    end
+    """)
     return
 
 
@@ -81,6 +89,7 @@ def _():
         minimize,
         mo,
         np,
+        os,
         pc,
         pickle,
         random,
@@ -319,7 +328,25 @@ def _(cp):
 
 @app.function
 def compute_sre(psi_np, alpha=2):
-    return None, None
+    if jl is None:
+        return 0.0, 0.0
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        try:
+            arr_np = np.asarray(psi_np)
+            norm_val = np.linalg.norm(arr_np)
+            if norm_val > 1e-12:
+                arr_np = arr_np / norm_val
+            dim = len(arr_np)
+            n_qubits = int(np.log2(dim))
+            
+            # Call Julia pre-defined function directly
+            res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
+            return float(res[0]), float(res[1])
+        except Exception as e:
+            print(f"SRE Calculation Error: {e}")
+            return 0.0, 0.0
 
 
 @app.cell
@@ -660,15 +687,20 @@ def _(combinations, cp, inv_perm, is_TE, mean, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(run_jax_gpu_optimization):
+def _(os, run_jax_gpu_optimization):
     def gen_data(n_qubits: int, num_seeds: int, num_steps: int, f_name: str):
         gaps = range(0,n_qubits+1)
         for _gap in gaps:
             print(
                 f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state."
             )
-
+        
             _ffname = f_name + str(num_steps) + "_stps_" + str(n_qubits -_gap) + ".pkl"
+            if os.path.exists(_ffname):
+                print(f"Skipping gap {n_qubits - _gap}: file {_ffname} already exists.")
+                continue
+
+            print(f"computing for {n_qubits}-qubits with initial random {_gap}-qubit stabilized state.")
             run_jax_gpu_optimization(
                 n_qubits,
                 num_seeds,
@@ -697,9 +729,9 @@ def _(gen_data, mo, run_sim_btn):
             "💡 *Click **Run Simulation** in the top cell to execute the heavy optimization step.*"
         ),
     )
-    stpsi=[2000]
+    stpsi=[700]
     qbt_nmbs = [7]
-    num_seds = [100] 
+    num_seds = [200] 
     for _ in range(len(qbt_nmbs)):
         flnm = f"correct_data/{qbt_nmbs[_]}_qbt_{num_seds[_]}_sds_ptmzng_jfr_"
         print(flnm)
@@ -924,7 +956,7 @@ def _(
         }
 
         # Initialize JAX Solver with maxiter set to num_loops
-        solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-11)
+        solver = LBFGS(fun=objective, maxiter=num_loops, tol=1e-6)
 
         for st in range(num_starts):
             print(f"JAX GPU Trajectory: {st + 1}/{num_starts}")
@@ -937,7 +969,7 @@ def _(
             else:
                 psi_np = np.array(psi_init)
 
-            # Check if initial state is already TE
+            # Check if initial state is  TE
             if is_TE(psi_np):
                 print("  Initial state is already TE! Skipping optimization.")
                 avg_p, max_p, _ = get_purity_and_violation(np.concatenate([psi_np.real, psi_np.imag]))
