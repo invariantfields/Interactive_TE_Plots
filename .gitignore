@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Marimo session state (local-only)
+__marimo__/session/
+
+# _plot_cache.pkl is intentionally tracked so collaborators
+# benefit from pre-computed plots after a git pull.
+# To regenerate: click "🧹 Clear Plot Cache" in the notebook.

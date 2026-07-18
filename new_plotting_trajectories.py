@@ -61,10 +61,55 @@ def _():
     import os
     from fsspec.implementations.github import GithubFileSystem
 
-    # Persistent plot cache — invalidated automatically when file mtimes change
+    _CACHE_FILE = "_plot_cache.pkl"
+
+    class _DiskCache(dict):
+        """Dict subclass that auto-persists to disk on every write.
+
+        - Loads from ``_CACHE_FILE`` on first startup so cached plots
+          survive notebook restarts and ``git pull``s by collaborators.
+        - Saves atomically after every new entry (``__setitem__``).
+        - ``clear()`` also removes the on-disk file.
+        """
+
+        def __init__(self, path: str):
+            super().__init__()
+            self._path = path
+            self._load()
+
+        def _load(self):
+            if os.path.exists(self._path):
+                try:
+                    with open(self._path, "rb") as _f:
+                        self.update(pickle.load(_f))
+                    print(f"[cache] Loaded {len(self)} entries from {self._path}")
+                except Exception as _e:
+                    print(f"[cache] Could not load disk cache: {_e}. Starting fresh.")
+
+        def _save(self):
+            try:
+                with open(self._path, "wb") as _f:
+                    pickle.dump(dict(self), _f)
+            except Exception as _e:
+                print(f"[cache] Could not save to disk: {_e}")
+
+        def __setitem__(self, key, value):
+            super().__setitem__(key, value)
+            self._save()
+
+        def clear(self):
+            super().clear()
+            try:
+                if os.path.exists(self._path):
+                    os.remove(self._path)
+                    print(f"[cache] Removed disk cache file {self._path}")
+            except Exception as _e:
+                print(f"[cache] Could not remove disk cache: {_e}")
+
+    # One global instance — loaded from disk once per kernel session
     global _plot_cache
     if "_plot_cache" not in globals():
-        _plot_cache = {}
+        _plot_cache = _DiskCache(_CACHE_FILE)
 
     return (
         GithubFileSystem,
