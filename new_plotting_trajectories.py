@@ -32,8 +32,6 @@ def _(jl):
     if jl is not None:
         jl.seval("using HadaMAG")
         jl.seval("using CUDA")
-
-        # Define the SRE function once — avoids seval parser overhead on every loop iteration
         jl.seval("""
         function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
             psi_jl = Vector{ComplexF64}(psi_np)
@@ -73,18 +71,20 @@ def _():
 
 
 @app.cell
-def _(cp, np):
+def _(np):
     def par_trace(psi, dim, n, n_parties):
         n_rem = n - n_parties
         psi_mat = psi.reshape(dim**n_rem, dim**n_parties)
         return psi_mat @ psi_mat.conj().T
 
-    def is_appt(x: np.array) -> bool:
-        _purity = cp.sum(x.real**2 + x.imag**2)
-        _D = cp.shape(x)[0]
+    def is_appt(x: np.ndarray) -> bool:
+        # Pure NumPy — GPU overhead dominates for dim=128 (7 qubits)
+        _purity = np.sum(x.real**2 + x.imag**2)
+        _D = x.shape[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex, _ = np.linalg.eigh(x)
+        _ex = np.linalg.eigvalsh(x)
+        _ex = np.clip(_ex, 0.0, None)
         if (_ex[-1] - _ex[1]) ** 2 <= 4 * _ex[0] * _ex[3]:
             return True
         return False
@@ -93,16 +93,14 @@ def _(cp, np):
 
 
 @app.cell
-def _(combinations, cp, is_appt, np, par_trace):
-    def is_TE(psi: np.array, dim: int = 2) -> bool:
+def _(combinations, is_appt, np, par_trace):
+    def is_TE(psi: np.ndarray, dim: int = 2) -> bool:
+        # Pure NumPy — avoids 17500+ GPU<->CPU transfers per plot for dim=128
         n = int(np.log2(len(psi)))
         k = n - n // 2
-        psi_cp= cp.asarray(psi)
         for _i in combinations(range(n), k):
             per = [x for x in range(n) if x not in _i] + list(_i)
-            psi_moved = cp.transpose(
-                psi_cp.reshape([dim] * n), per
-            ).flatten()
+            psi_moved = np.transpose(psi.reshape([dim] * n), per).flatten()
             _x = par_trace(psi_moved, dim, n, k)
             _x = (_x + _x.conj().T) / 2.0
             if not is_appt(_x):
@@ -124,6 +122,9 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
             return 0.0, 0.0
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             try:
                 arr_np = np.asarray(psi_np)
                 norm_val = np.linalg.norm(arr_np)
@@ -131,16 +132,10 @@ def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
                     arr_np = arr_np / norm_val
                 dim = len(arr_np)
                 n_qubits = int(np.log2(dim))
-                jl.psi_python = arr_np
-                jl.alpha = alpha
-                jl.n_qubits = n_qubits
-                jl.dim = dim
-                jl.seval("""
-                    psi_jl = Vector{ComplexF64}(psi_python)
-                    psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, n_qubits, dim)
-                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-                """)
-                return float(jl.sre_result), float(jl.lost_norm)
+
+                # Call pre-defined Julia function directly — no seval parser overhead per iteration
+                res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
+                return float(res[0]), float(res[1])
             except Exception as e:
                 print(f"SRE Exact Calculation Error: {e}")
                 return 0.0, 0.0
@@ -1013,7 +1008,6 @@ def _(os, pickle):
                 print(f"Error unpacking {filename}: {e}")
 
         print(f"\nSuccessfully unpacked all files into directory: {destination_dir}")
-
 
     return (unpack_pkl_file,)
 
