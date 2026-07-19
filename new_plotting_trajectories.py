@@ -915,7 +915,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
     if data_source.value == "Local":
         available_files = []
-        for data_dir in ["more_data/", "new_data/", "data/"]:
+        for data_dir in ["correct_data/", "new_data/", "data/"]:
             if os.path.exists(data_dir):
                 available_files.extend(
                     [os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")]
