@@ -20,7 +20,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "[cache] Loaded 2 entries from _plot_cache.pkl\n",
+          "text": "[cache] Loaded 26 entries from _plot_cache.pkl\n",
           "mimetype": "text/plain"
         }
       ]
@@ -32,7 +32,7 @@
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='MJUe-0' random-id='49ca93b7-062a-d638-8d9d-f6d7b18ca3df'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='MJUe-1' random-id='53e9bf08-c7c5-3133-e730-336869235324'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='MJUe-0' random-id='26c0ca2f-7d19-bb5a-af4e-f264b299b4e0'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='MJUe-1' random-id='29e60c3b-acf2-d499-228a-7abef296c7ec'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
           }
         }
       ],
@@ -292,7 +292,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='MJUe-0' random-id='49ca93b7-062a-d638-8d9d-f6d7b18ca3df'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='MJUe-0' random-id='26c0ca2f-7d19-bb5a-af4e-f264b299b4e0'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
@@ -313,7 +313,19 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\nSkipping gap 2: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_2.pkl already exists.\nSkipping gap 1: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_1.pkl already exists.\nSkipping gap 0: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_0.pkl already exists.\ncorrect_data/7_qbt_1000_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_6.pkl already exists.\ncomputing for 7-qubits with initial random 2-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 9.62e+00\n",
+          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\nSkipping gap 2: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_2.pkl already exists.\nSkipping gap 1: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_1.pkl already exists.\nSkipping gap 0: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_0.pkl already exists.\ncorrect_data/7_qbt_1000_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_6.pkl already exists.\ncomputing for 7-qubits with initial random 2-qubit stabilized state.\nGenerating 1000 initial states...\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "Jax plugin configuration error: Exception when calling jax_plugins.xla_cuda13.initialize()\nTraceback (most recent call last):\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 508, in discover_pjrt_plugins\n    plugin_module.initialize()\n    ~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax_plugins/xla_cuda13/__init__.py\", line 373, in initialize\n    c_api = xb.register_plugin(\n        'cuda', priority=500, library_path=str(path), options=options\n    )\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 650, in register_plugin\n    c_api = xla_client.load_pjrt_plugin_dynamically(plugin_name, library_path)\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jaxlib/xla_client.py\", line 115, in load_pjrt_plugin_dynamically\n    return _xla.load_pjrt_plugin(plugin_name, library_path, c_api=None)\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: ALREADY_EXISTS: PJRT_Api already exists for device type cuda\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "  Start Step | Mean Violation: 9.58e+00\n",
           "mimetype": "text/plain"
         }
       ]
@@ -359,18 +371,18 @@
     },
     {
       "id": "nHfw",
-      "code_hash": "a85879dc6d2a6d26e71fc9e277b666db",
+      "code_hash": "51fec566d768c73ca83ac5b88468c460",
       "outputs": [],
       "console": []
     },
     {
       "id": "xXTn",
-      "code_hash": "3663277b61fc7d95b43dce9859ef250b",
+      "code_hash": "fa091c6d99ea5a3681a128e3d490377b",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='ZHCJ-0' random-id='7ecb81f4-54d5-2a42-5be6-f509d1635d49'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='eaf515b7-4548-2771-6f82-08f342bc36c9'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='xXTn-0' random-id='15375380-b17c-9d3b-84c9-fe5f0c984262'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83e\uddf9 Clear Plot Cache&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='ZHCJ-0' random-id='7c278062-d916-1225-7160-a35189d2d0b6'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='98a47c4d-f2aa-ec30-afe9-1c8258ba6025'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='xXTn-0' random-id='3b9c14d8-3293-ffd3-e44b-f2b11ba4adfd'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83e\uddf9 Clear Plot Cache&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
           }
         }
       ],
@@ -378,7 +390,7 @@
     },
     {
       "id": "AjVT",
-      "code_hash": "babef9b0cdd46be7eb67d79ae192cfd4",
+      "code_hash": "4d3ee55a9475fb434d9198bae1f43290",
       "outputs": [],
       "console": []
     },
@@ -395,7 +407,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='MJUe-1' random-id='53e9bf08-c7c5-3133-e730-336869235324'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='MJUe-1' random-id='29e60c3b-acf2-d499-228a-7abef296c7ec'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],

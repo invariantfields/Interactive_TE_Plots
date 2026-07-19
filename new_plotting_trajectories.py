@@ -780,7 +780,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
             fig.update_layout(
                 title=f"SRE (Magic) Comparison of Initial vs Final States ({central_tendency})",
-                xaxis_title="Experiment Gap",
+                xaxis_title="Stabilizer gap",
                 yaxis_title="SRE Value",
                 barmode="group",
                 height=500,
@@ -1311,7 +1311,7 @@ def _(is_TE, np, pickle, plt, re):
                 ax.set_facecolor('white')
                 ax.set_xticks(x)
                 ax.set_xticklabels(x_labels, fontsize=9)
-                ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+                ax.set_xlabel(r"$\text{Stabilizer gap } (k)$", fontsize=11)
                 if col_idx == 0:
                     ax.set_ylabel(r"$\text{Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
@@ -1419,7 +1419,7 @@ def _(is_TE, np, pickle, plt, re):
 
             ax.set_xticks(x)
             ax.set_xticklabels(x_labels, fontsize=9)
-            ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+            ax.set_xlabel(r"$\text{Stabilizer gap } (k)$", fontsize=11)
             ax.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
             ax.set_title(r"$\text{SRE (Magic): Initial vs Final TE/non-TE States}$", fontsize=13)
             ax.spines["top"].set_visible(True)
