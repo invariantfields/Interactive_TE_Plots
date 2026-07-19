@@ -16,7 +16,14 @@
           }
         }
       ],
-      "console": []
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "[cache] Loaded 2 entries from _plot_cache.pkl\n",
+          "mimetype": "text/plain"
+        }
+      ]
     },
     {
       "id": "MJUe",
@@ -25,7 +32,7 @@
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='MJUe-0' random-id='927cbe39-d2c2-41c0-b1ef-24b9fccae7a3'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='MJUe-1' random-id='fa8b9b36-6e1d-deda-8cb7-344585b01648'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"control-panel\">Control Panel</h3>\n<span class=\"paragraph\">Use these buttons to trigger expensive computations manually.\n<marimo-ui-element object-id='MJUe-0' random-id='49ca93b7-062a-d638-8d9d-f6d7b18ca3df'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element> <marimo-ui-element object-id='MJUe-1' random-id='53e9bf08-c7c5-3133-e730-336869235324'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></span></span>"
           }
         }
       ],
@@ -285,7 +292,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='MJUe-0' random-id='927cbe39-d2c2-41c0-b1ef-24b9fccae7a3'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='MJUe-0' random-id='49ca93b7-062a-d638-8d9d-f6d7b18ca3df'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Simulation&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
@@ -306,7 +313,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\nSkipping gap 2: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_2.pkl already exists.\nSkipping gap 1: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_1.pkl already exists.\nSkipping gap 0: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_0.pkl already exists.\ncorrect_data/7_qbt_1000_sds_ptmzng_jfr_\ncomputing for 7-qubits with initial random 0-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 1.16e+00\n  Step  1000/1000 | Mean Violation: 8.21e-26 | Elapsed: 43.2s | Est. Remaining: 0.0s\ncomputing for 7-qubits with initial random 1-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 5.06e+00\n  Step  1000/1000 | Mean Violation: 9.40e-01 | Elapsed: 716.9s | Est. Remaining: 0.0s\ncomputing for 7-qubits with initial random 2-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 9.60e+00\n",
+          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\nSkipping gap 2: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_2.pkl already exists.\nSkipping gap 1: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_1.pkl already exists.\nSkipping gap 0: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_0.pkl already exists.\ncorrect_data/7_qbt_1000_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_1000_sds_ptmzng_jfr_1000_stps_6.pkl already exists.\ncomputing for 7-qubits with initial random 2-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 9.62e+00\n",
           "mimetype": "text/plain"
         }
       ]
@@ -363,7 +370,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='ZHCJ-0' random-id='97ff1db7-387d-220f-563e-6f18fe522df5'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='526fb04c-b7e6-57d1-e509-04ae304a37c8'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: center;align-items: normal;flex-wrap: nowrap;gap: 2rem'><marimo-ui-element object-id='ZHCJ-0' random-id='7ecb81f4-54d5-2a42-5be6-f509d1635d49'><marimo-checkbox data-initial-value='true' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83d\udd2c Filter by TE (only trajectories with TE final states)&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='eaf515b7-4548-2771-6f82-08f342bc36c9'><marimo-radio data-initial-value='&quot;Average&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e&#92;u003cstrong&#92;u003eSelect Central Tendency:&#92;u003c/strong&#92;u003e &#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Average&quot;,&quot;Median&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='xXTn-0' random-id='15375380-b17c-9d3b-84c9-fe5f0c984262'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\ud83e\uddf9 Clear Plot Cache&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
           }
         }
       ],
@@ -388,7 +395,7 @@
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='MJUe-1' random-id='fa8b9b36-6e1d-deda-8cb7-344585b01648'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='MJUe-1' random-id='53e9bf08-c7c5-3133-e730-336869235324'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003e\u25b6 Run Diagnostics&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;neutral&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element>"
           }
         }
       ],
