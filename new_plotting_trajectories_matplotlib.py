@@ -285,7 +285,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
                 # Derive SRE initial state gap value
                 derived_init_sre = 0.0
-                _gap_match = re.search(r'gap(\d+)', label)
+                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                if not _gap_match and file:
+                    _gap_match = re.search(r'_stps_(\d+)', file)
                 if _gap_match:
                     derived_init_sre = float(_gap_match.group(1))
 
@@ -428,7 +430,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
             # Derive SRE initial state gap value
             derived_init_sre = 0.0
-            _gap_match = re.search(r'gap(\d+)', label)
+            _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+            if not _gap_match and file:
+                _gap_match = re.search(r'_stps_(\d+)', file)
             if _gap_match:
                 derived_init_sre = float(_gap_match.group(1))
 
@@ -600,7 +604,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 # Since rand_Almost_Stab_state(n, gap) has stabilizer group of size 2^(n - gap)
                 # the initial state has SRE exactly equal to the gap value (for alpha=2).
                 derived_init_sre = 0.0
-                _gap_match = re.search(r'gap(\d+)', label)
+                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                if not _gap_match and file:
+                    _gap_match = re.search(r'_stps_(\d+)', file)
                 if _gap_match:
                     derived_init_sre = float(_gap_match.group(1))
 
@@ -819,7 +825,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 final_sre_vals = []
                 # Derive SRE initial state gap value
                 derived_init_sre = 0.0
-                _gap_match = re.search(r'gap(\d+)', label)
+                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                if not _gap_match and file:
+                    _gap_match = re.search(r'_stps_(\d+)', file)
                 if _gap_match:
                     derived_init_sre = float(_gap_match.group(1))
 
@@ -1117,12 +1125,6 @@ def _(os, pickle):
 
         print(f"\nSuccessfully unpacked all files into directory: {destination_dir}")
 
-    return (unpack_pkl_file,)
-
-
-@app.cell
-def _(unpack_pkl_file):
-    unpack_pkl_file("co.pkl","correct_data/")
     return
 
 
@@ -1233,11 +1235,12 @@ def _(is_TE, np, pickle, plt, re):
                     init_vals = []
                     final_vals = []
 
-                    # Gap match
                     derived_init_sre = 0.0
-                    _match = re.search(r'gap(\d+)', label)
-                    if _match:
-                        derived_init_sre = float(_match.group(1))
+                    _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                    if not _gap_match and file:
+                        _gap_match = re.search(r'_stps_(\d+)', file)
+                    if _gap_match:
+                        derived_init_sre = float(_gap_match.group(1))
 
                     for j, keep in enumerate(te_mask):
                         if not keep:
@@ -1414,7 +1417,7 @@ def _(
 
     matplotlib_plot = _plot_fig
     matplotlib_plot
-    return (matplotlib_plot,)
+    return
 
 
 @app.cell
