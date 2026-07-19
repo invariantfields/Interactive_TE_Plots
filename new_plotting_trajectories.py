@@ -1389,20 +1389,20 @@ def _(
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
-    selected_group_files = grouped_files[group_selector.value]
+    _selected_group_files = grouped_files[group_selector.value]
 
     # Deriving labels representing the gaps from the filenames
-    labels = []
-    for _f in selected_group_files:
+    _labels = []
+    for _f in _selected_group_files:
         _match = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
         if _match:
-            labels.append(f"k = {_match.group(1)}")
+            _labels.append(f"k = {_match.group(1)}")
         else:
-            labels.append(_f.split("/")[-1].replace(".pkl", ""))
+            _labels.append(_f.split("/")[-1].replace(".pkl", ""))
 
-    plot_fig = plot_te_filtered_trajectories_matplotlib(
-        pkl_files=selected_group_files,
-        labels=labels,
+    _plot_fig = plot_te_filtered_trajectories_matplotlib(
+        pkl_files=_selected_group_files,
+        labels=_labels,
         step_mes=step_mes_input.value,
         use_te_filter=te_filter_checkbox.value,
         central_tendency=metric_selector.value,
@@ -1412,7 +1412,7 @@ def _(
     )
     
     # Render static Matplotlib LaTeX figure directly in Marimo
-    return (mo.as_html(plot_fig),)
+    return (mo.as_html(_plot_fig),)
 
 
 if __name__ == "__main__":
