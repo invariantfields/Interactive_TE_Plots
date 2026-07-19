@@ -1019,7 +1019,10 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
     # Run button to prevent heavy computations on every click
     plot_button = mo.ui.run_button(label="🚀 Generate Plot")
-    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", value=False)
+    def clear_cache_callback(_):
+        plot_cache.clear()
+        mo.status.toast("🧹 Plot cache cleared successfully!")
+    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", on_click=clear_cache_callback)
 
     mo.vstack([
         group_selector,
@@ -1060,9 +1063,7 @@ def _(
     step_mes_input,
     te_filter_checkbox,
 ):
-    if clear_cache_button.value:
-        plot_cache.clear()
-        mo.status.toast("🧹 Plot cache cleared successfully!")
+
 
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 

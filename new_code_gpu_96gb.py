@@ -1178,9 +1178,7 @@ def _(
     plot_te_filtered_trajectories,
     te_filter_checkbox,
 ):
-    if clear_cache_button.value:
-        plot_cache.clear()
-        mo.status.toast("🧹 Plot cache cleared successfully!")
+
 
     # Reactive call — re-runs when checkbox or radio changes
     plot_te_filtered_trajectories(
@@ -1216,8 +1214,11 @@ def _(
 
 
 @app.cell
-def _(metric_selector, mo, te_filter_checkbox):
-    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", value=False)
+def _(metric_selector, mo, plot_cache, te_filter_checkbox):
+    def clear_cache_callback(_):
+        plot_cache.clear()
+        mo.status.toast("🧹 Plot cache cleared successfully!")
+    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", on_click=clear_cache_callback)
     mo.hstack([te_filter_checkbox, metric_selector, clear_cache_button], justify="center", gap=2)
     return (clear_cache_button,)
 
