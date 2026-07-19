@@ -1205,7 +1205,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
         # 2. BAR CHART — Initial (Magic) vs Final with error bars + All Combined
         elif plot_type == "Bar Chart":
             n_plots = len(selected_metrics)
-            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), squeeze=False)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 5.0), squeeze=False, facecolor='white')
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
@@ -1296,6 +1296,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3)
                 ax.bar_label(b_final, labels=[f"n={n}" for n in final_counts], fontsize=7, padding=3)
 
+                ax.set_facecolor('white')
                 ax.set_xticks(x)
                 ax.set_xticklabels(x_labels, fontsize=9)
                 ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
@@ -1305,15 +1306,16 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-                ax.legend(frameon=True, fontsize=9, loc="best")
+                ax.legend(frameon=True, fontsize=9, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
                 ax.margins(y=0.15)
 
-            fig.tight_layout()
+            fig.subplots_adjust(bottom=0.22)
             return fig
 
         # 3. TE vs non-TE SRE — 3 bar groups: Initial (Magic), TE, non-TE + All Combined
         elif plot_type == "TE vs non-TE SRE":
-            fig, ax = plt.subplots(figsize=(8, 4.5))
+            fig, ax = plt.subplots(figsize=(8, 5.2), facecolor='white')
+            ax.set_facecolor('white')
 
             x_labels = []
             init_centers = []
@@ -1410,10 +1412,10 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             ax.spines["right"].set_visible(True)
             ax.tick_params(direction="in", top=True, right=True, which="both")
             ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-            ax.legend(frameon=True, fontsize=9, loc="upper left")
+            ax.legend(frameon=True, fontsize=9, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=3)
             ax.margins(y=0.15)
 
-            fig.tight_layout()
+            fig.subplots_adjust(bottom=0.25)
             return fig
 
         # 4. HISTOGRAM SRE
