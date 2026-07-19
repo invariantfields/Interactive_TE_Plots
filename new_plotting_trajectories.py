@@ -1127,13 +1127,13 @@ def _(unpack_pkl_file):
 
 
 @app.cell
-def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
+def _(is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
         if not selected_metrics:
             return None
-            
+
         import matplotlib
         matplotlib.rcParams.update({
             "font.family": "serif",
@@ -1141,13 +1141,13 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             "mathtext.fontset": "cm",
             "axes.formatter.use_mathtext": True
         })
-        
+
         metric_map = {
             "average_purity": "Average Purity",
             "max_purity": "Max Purity",
             "sre": "SRE"
         }
-        
+
         loaded_data = []
         for file, label in zip(pkl_files, labels):
             if not file or not label:
@@ -1162,7 +1162,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 loaded_data.append((data, label, file))
             except Exception as e:
                 print(f"Error loading {file}: {e}")
-                
+
         if not loaded_data:
             return None
 
@@ -1170,27 +1170,27 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
-            
+
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
-                
+
                 for data, label, file in loaded_data:
                     if use_te_filter:
                         te_mask = np.array([is_TE(state) for state in data["final_states"]])
                         trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
                     else:
                         trajs = data[metric]
-                        
+
                     if not trajs:
                         continue
-                        
+
                     steps = np.arange(len(trajs[0])) * step_mes
                     center = np.mean(trajs, axis=0) if central_tendency == "Average" else np.median(trajs, axis=0)
-                    
+
                     val_k = label.split("=")[-1].strip()
                     ax.plot(steps, center, label=f"$k={val_k}$", linewidth=1.5)
-                
+
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
                 if col_idx == 0:
                     ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
@@ -1200,7 +1200,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
                 if col_idx == 0:
                     ax.legend(frameon=True, fontsize=9, loc="best")
-            
+
             fig.tight_layout()
             return fig
 
@@ -1208,37 +1208,37 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
         elif plot_type == "Bar Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), squeeze=False)
-            
+
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
-                
+
                 x_labels = []
                 init_means = []
                 final_means = []
-                
+
                 for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
-                    
+
                     if use_te_filter:
                         te_mask = np.array([is_TE(state) for state in data["final_states"]])
                         trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
                     else:
                         te_mask = np.ones(len(data["final_states"]), dtype=bool)
                         trajs = data[metric]
-                        
+
                     if not trajs:
                         continue
-                        
+
                     init_vals = []
                     final_vals = []
-                    
+
                     # Gap match
                     derived_init_sre = 0.0
                     _match = re.search(r'gap(\d+)', label)
                     if _match:
                         derived_init_sre = float(_match.group(1))
-                    
+
                     for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
@@ -1250,10 +1250,10 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                         else:
                             init_vals.append(data[metric][j][0])
                             final_vals.append(data[metric][j][-1])
-                            
+
                     if not init_vals:
                         continue
-                        
+
                     x_labels.append(f"$k={label.split('=')[-1].strip()}$")
                     if central_tendency == "Average":
                         init_means.append(np.mean(init_vals))
@@ -1261,13 +1261,13 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                     else:
                         init_means.append(np.median(init_vals))
                         final_means.append(np.median(final_vals))
-                
+
                 x = np.arange(len(x_labels))
                 width = 0.35
-                
+
                 ax.bar(x - width/2, init_means, width, label="Initial State", color="#1f77b4", edgecolor="black", linewidth=0.5)
                 ax.bar(x + width/2, final_means, width, label="Final State", color="#ff7f0e", edgecolor="black", linewidth=0.5)
-                
+
                 ax.set_xticks(x)
                 ax.set_xticklabels(x_labels)
                 ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
@@ -1279,35 +1279,35 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
                 if col_idx == 0:
                     ax.legend(frameon=True, fontsize=9, loc="best")
-                    
+
             fig.tight_layout()
             return fig
 
         # 3. TE vs non-TE SRE BAR CHART
         elif plot_type == "TE vs non-TE SRE":
             fig, ax = plt.subplots(figsize=(6, 4.5))
-            
+
             x_labels = []
             te_means = []
             non_te_means = []
-            
+
             for data, label, file in loaded_data:
                 is_correct_data = ("correct_data" in file) or ("more_data" in file)
                 te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                
+
                 te_vals = []
                 non_te_vals = []
-                
+
                 for j, is_te_state in enumerate(te_mask):
                     sre_val = data["sre"][j][-1]
                     if is_te_state:
                         te_vals.append(sre_val)
                     else:
                         non_te_vals.append(sre_val)
-                        
+
                 if not te_vals and not non_te_vals:
                     continue
-                    
+
                 x_labels.append(f"$k={label.split('=')[-1].strip()}$")
                 if central_tendency == "Average":
                     te_means.append(np.mean(te_vals) if te_vals else 0.0)
@@ -1315,13 +1315,13 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 else:
                     te_means.append(np.median(te_vals) if te_vals else 0.0)
                     non_te_means.append(np.median(non_te_vals) if non_te_vals else 0.0)
-            
+
             x = np.arange(len(x_labels))
             width = 0.35
-            
+
             ax.bar(x - width/2, te_means, width, label="TE Final States", color="forestgreen", edgecolor="black", linewidth=0.5)
             ax.bar(x + width/2, non_te_means, width, label="non-TE Final States", color="crimson", edgecolor="black", linewidth=0.5)
-            
+
             ax.set_xticks(x)
             ax.set_xticklabels(x_labels)
             ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
@@ -1332,30 +1332,30 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             ax.tick_params(direction="in", top=True, right=True, which="both")
             ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
             ax.legend(frameon=True, fontsize=9, loc="best")
-            
+
             fig.tight_layout()
             return fig
 
         # 4. HISTOGRAM SRE
         elif plot_type == "Histogram SRE":
             fig, ax = plt.subplots(figsize=(6, 4.5))
-            
+
             for data, label, file in loaded_data:
                 is_correct_data = "correct_data" in file
                 if not is_correct_data:
                     continue
-                    
+
                 if use_te_filter:
                     te_mask = np.array([is_TE(state) for state in data["final_states"]])
                     vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
                 else:
                     vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
-                    
+
                 if not vals:
                     continue
-                    
+
                 ax.hist(vals, bins=25, alpha=0.5, label=f"$k={label.split('=')[-1].strip()}$", edgecolor="black", linewidth=0.5)
-                
+
             ax.set_xlabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
             ax.set_ylabel(r"$\text{Count}$", fontsize=11)
             ax.set_title(r"$\text{Histogram of Final State SRE Values}$", fontsize=13)
@@ -1364,16 +1364,17 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             ax.tick_params(direction="in", top=True, right=True, which="both")
             ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
             ax.legend(frameon=True, fontsize=9, loc="best")
-            
+
             fig.tight_layout()
             return fig
-            
+
         return None
+
+    return (plot_te_filtered_trajectories_matplotlib,)
 
 
 @app.cell
 def _(
-    clear_cache_button,
     fs,
     group_selector,
     grouped_files,
@@ -1410,9 +1411,9 @@ def _(
         plot_type=plot_type_dropdown.value,
         fs=fs,
     )
-    
-    # Render static Matplotlib LaTeX figure directly in Marimo
-    return (mo.as_html(_plot_fig),)
+
+    matplotlib_plot = _plot_fig
+    return (matplotlib_plot,)
 
 
 if __name__ == "__main__":
