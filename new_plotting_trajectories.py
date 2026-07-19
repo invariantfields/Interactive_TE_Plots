@@ -179,10 +179,11 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
             # Call pre-defined Julia function directly — no seval parser overhead per iteration
             res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
-            return float(res[0]), float(res[1])
+            val = float(res[0])
+            return val if val != 0.0 else 1e-15, float(res[1])
         except Exception as e:
             print(f"SRE Exact Calculation Error: {e}")
-            return 0.0, 0.0
+            return 1e-15, 0.0
 
     print("compute_sre_exact reloaded OK")
 
@@ -290,7 +291,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             init_sre = data["sre"][j][0]
                             final_sre = data["sre"][j][-1]
 
-                            if init_sre == 0.0:
+                            if init_sre == 0.0 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
                                 data["sre"][j][0] = derived_init_sre
                                 data_changed = True
@@ -428,7 +429,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                         init_sre = data["sre"][j][0]
                         final_sre = data["sre"][j][-1]
 
-                        if init_sre == 0.0:
+                        if init_sre == 0.0 and derived_init_sre != 0.0:
                             init_sre = derived_init_sre
                             data["sre"][j][0] = derived_init_sre
                             data_changed = True
@@ -593,7 +594,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     sre_val = data["sre"][j][-1]
 
                     # Update SRE initial states in file
-                    if init_sre == 0.0:
+                    if init_sre == 0.0 and derived_init_sre != 0.0:
                         init_sre = derived_init_sre
                         data["sre"][j][0] = derived_init_sre
                         data_changed = True
