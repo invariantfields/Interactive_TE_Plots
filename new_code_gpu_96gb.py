@@ -47,7 +47,48 @@ def _():
     import jax.numpy as jnp
     from jaxopt import LBFGS
     from scipy.optimize import minimize
+    import warnings
 
+    warnings.filterwarnings("ignore")
+
+    _CACHE_FILE = "_plot_cache.pkl"
+
+    class _DiskCache(dict):
+        def __init__(self, path: str):
+            super().__init__()
+            self._path = path
+            self._load()
+
+        def _load(self):
+            if os.path.exists(self._path):
+                try:
+                    with open(self._path, "rb") as _f:
+                        self.update(pickle.load(_f))
+                    print(f"[cache] Loaded {len(self)} entries from {self._path}")
+                except Exception as _e:
+                    print(f"[cache] Could not load disk cache: {_e}. Starting fresh.")
+
+        def _save(self):
+            try:
+                with open(self._path, "wb") as _f:
+                    pickle.dump(dict(self), _f)
+            except Exception as _e:
+                print(f"[cache] Could not save to disk: {_e}")
+
+        def __setitem__(self, key, value):
+            super().__setitem__(key, value)
+            self._save()
+
+        def clear(self):
+            super().clear()
+            try:
+                if os.path.exists(self._path):
+                    os.remove(self._path)
+                    print(f"[cache] Removed disk cache file {self._path}")
+            except Exception as _e:
+                print(f"[cache] Could not remove disk cache: {_e}")
+
+    plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
 
     return (
         LBFGS,
@@ -65,6 +106,7 @@ def _():
         os,
         pc,
         pickle,
+        plot_cache,
         random,
         reduce,
     )
@@ -517,12 +559,13 @@ def _(np):
 
 @app.cell
 def is_te(combinations, cp, is_appt, np):
-    def is_TE(psi: np.array, dim: int = 2) -> bool:
+    def is_TE(psi, dim: int = 2) -> bool:
+        xp = cp.get_array_module(psi)
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
             per = [x for x in range(n) if x not in _i] + list(_i)
-            psi_moved = cp.transpose(
+            psi_moved = xp.transpose(
                 psi.reshape([dim] * n), per
             ).flatten()
             _x = par_trace(psi_moved, dim, n, k)
@@ -970,7 +1013,35 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
+def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, os, pc, pickle, plot_cache):
+    def cache_plot(func):
+        """Decorator: cache plotting results keyed on params + file modification times."""
+        def wrapper(pkl_files, labels, step_mes, use_te_filter, central_tendency):
+            mtimes = []
+            for f in (pkl_files or []):
+                if f and os.path.exists(f):
+                    mtimes.append(os.path.getmtime(f))
+                else:
+                    mtimes.append(0.0)
+            cache_key = (
+                tuple(pkl_files) if pkl_files else (),
+                tuple(labels) if labels else (),
+                step_mes,
+                use_te_filter,
+                central_tendency,
+                tuple(mtimes),
+            )
+            if cache_key in plot_cache:
+                print("[cache] HIT — returning cached plot.")
+                return plot_cache[cache_key]
+            print("[cache] MISS — computing plot…")
+            fig = func(pkl_files, labels, step_mes, use_te_filter, central_tendency)
+            if fig is not None:
+                plot_cache[cache_key] = fig
+            return fig
+        return wrapper
+
+    @cache_plot
     def plot_te_filtered_trajectories(pkl_files, labels, step_mes,
                                       use_te_filter, central_tendency):
         """Plot trajectories with optional TE filtering, handling ragged arrays via NaN padding."""
@@ -988,7 +1059,7 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
             if use_te_filter:
                 final_states = data["final_states"]
                 te_mask = [
-                    bool(is_TE(cp.asarray(state.full() if hasattr(state, "full") else np.asarray(state)))) 
+                    bool(is_TE(state.full() if hasattr(state, "full") else np.asarray(state))) 
                     for state in final_states
                 ]
                 n_te = sum(te_mask)
@@ -1076,7 +1147,18 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
 
 
 @app.cell(disabled=True)
-def _(metric_selector, plot_te_filtered_trajectories, te_filter_checkbox):
+def _(
+    clear_cache_button,
+    metric_selector,
+    mo,
+    plot_cache,
+    plot_te_filtered_trajectories,
+    te_filter_checkbox,
+):
+    if clear_cache_button.value:
+        plot_cache.clear()
+        mo.status.toast("🧹 Plot cache cleared successfully!")
+
     # Reactive call — re-runs when checkbox or radio changes
     plot_te_filtered_trajectories(
         pkl_files=[
@@ -1112,8 +1194,9 @@ def _(metric_selector, plot_te_filtered_trajectories, te_filter_checkbox):
 
 @app.cell
 def _(metric_selector, mo, te_filter_checkbox):
-    mo.hstack([te_filter_checkbox, metric_selector], justify="center", gap=2)
-    return
+    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", value=False)
+    mo.hstack([te_filter_checkbox, metric_selector, clear_cache_button], justify="center", gap=2)
+    return (clear_cache_button,)
 
 
 @app.cell(disabled=True)
