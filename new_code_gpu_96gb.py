@@ -402,6 +402,7 @@ def _(go, np, rand_Almost_Stab_state):
             hovermode="x unified",
             width=700,
             height=500,
+            font=dict(family="Computer Modern"),
             xaxis=dict(dtick=1),
         )
 
@@ -508,6 +509,7 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
             legend=dict(
                 orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5
             ),
+            font=dict(family="Computer Modern"),
         )
 
         fig.update_xaxes(title_text="Optimization Steps")
@@ -1130,7 +1132,8 @@ def _(go, hex_to_rgba, is_TE, make_subplots, np, os, pc, pickle, plot_cache):
             template="plotly_white",
             margin=dict(b=120),
             legend=dict(orientation="h", yanchor="top", y=-0.15,
-                        xanchor="center", x=0.5)
+                        xanchor="center", x=0.5),
+            font=dict(family="Computer Modern"),
         )
         fig.update_xaxes(title_text="Optimization Steps")
         return fig

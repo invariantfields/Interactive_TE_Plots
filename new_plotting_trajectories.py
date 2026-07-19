@@ -363,6 +363,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 width=400 * len(selected_metrics),
                 template="plotly_white",
                 margin=dict(b=120),
+                font=dict(family="Computer Modern"),
                 legend=dict(
                     orientation="h",
                     yanchor="top",
@@ -763,6 +764,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 width=700,
                 template="plotly_white",
                 margin=dict(b=120),
+                font=dict(family="Computer Modern"),
                 legend=dict(
                     orientation="h",
                     yanchor="top",
@@ -848,6 +850,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 height=500,
                 width=800,
                 template="plotly_white",
+                font=dict(family="Computer Modern"),
                 margin=dict(b=120),
                 legend=dict(
                     orientation="h",
@@ -867,6 +870,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
             hovermode="x unified",
             template="plotly_white",
             margin=dict(b=120),
+            font=dict(family="Computer Modern"),
             legend=dict(
                 orientation="h",
                 yanchor="top",
