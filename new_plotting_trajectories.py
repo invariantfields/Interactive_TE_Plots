@@ -1214,8 +1214,10 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 x_labels = []
                 init_means = []
                 init_errs = []
+                init_counts = []
                 final_means = []
                 final_errs = []
+                final_counts = []
                 global_init_vals = []
                 global_final_vals = []
 
@@ -1263,6 +1265,8 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                         final_means.append(np.median(final_vals))
                     init_errs.append(np.std(init_vals) if len(init_vals) > 1 else 0.0)
                     final_errs.append(np.std(final_vals) if len(final_vals) > 1 else 0.0)
+                    init_counts.append(len(init_vals))
+                    final_counts.append(len(final_vals))
 
                 # All Combined summary bar
                 if global_init_vals:
@@ -1275,17 +1279,22 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                         final_means.append(np.median(global_final_vals))
                     init_errs.append(np.std(global_init_vals) if len(global_init_vals) > 1 else 0.0)
                     final_errs.append(np.std(global_final_vals) if len(global_final_vals) > 1 else 0.0)
+                    init_counts.append(len(global_init_vals))
+                    final_counts.append(len(global_final_vals))
 
                 x = np.arange(len(x_labels))
                 width = 0.35
                 ekw = dict(elinewidth=0.8, capthick=0.8)
 
-                ax.bar(x - width/2, init_means, width, yerr=init_errs, capsize=3,
+                b_init = ax.bar(x - width/2, init_means, width, yerr=init_errs, capsize=3,
                        label=r"$\text{Initial State (Magic)}$", color="mediumseagreen",
                        edgecolor="black", linewidth=0.5, error_kw=ekw)
-                ax.bar(x + width/2, final_means, width, yerr=final_errs, capsize=3,
+                b_final = ax.bar(x + width/2, final_means, width, yerr=final_errs, capsize=3,
                        label=r"$\text{Final State}$", color="#ff7f0e",
                        edgecolor="black", linewidth=0.5, error_kw=ekw)
+
+                ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3)
+                ax.bar_label(b_final, labels=[f"n={n}" for n in final_counts], fontsize=7, padding=3)
 
                 ax.set_xticks(x)
                 ax.set_xticklabels(x_labels, fontsize=9)
@@ -1297,6 +1306,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ax.tick_params(direction="in", top=True, right=True, which="both")
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
                 ax.legend(frameon=True, fontsize=9, loc="best")
+                ax.margins(y=0.15)
 
             fig.tight_layout()
             return fig
@@ -1308,10 +1318,13 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             x_labels = []
             init_centers = []
             init_errs = []
+            init_counts = []
             te_centers = []
             te_errs = []
+            te_counts = []
             non_te_centers = []
             non_te_errs = []
+            non_te_counts = []
             global_init = []
             global_te = []
             global_non_te = []
@@ -1356,9 +1369,9 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ic, ie = _stat(init_vals)
                 tc, te_e = _stat(te_vals)
                 nc, ne = _stat(non_te_vals)
-                init_centers.append(ic); init_errs.append(ie)
-                te_centers.append(tc); te_errs.append(te_e)
-                non_te_centers.append(nc); non_te_errs.append(ne)
+                init_centers.append(ic); init_errs.append(ie); init_counts.append(len(init_vals))
+                te_centers.append(tc); te_errs.append(te_e); te_counts.append(len(te_vals))
+                non_te_centers.append(nc); non_te_errs.append(ne); non_te_counts.append(len(non_te_vals))
 
             # All Combined
             if global_te or global_non_te:
@@ -1366,23 +1379,27 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
                 ic = np.mean(global_init) if central_tendency == "Average" else np.median(global_init)
                 tc = np.mean(global_te) if central_tendency == "Average" else np.median(global_te)
                 nc = np.mean(global_non_te) if central_tendency == "Average" else np.median(global_non_te)
-                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0)
-                te_centers.append(tc); te_errs.append(np.std(global_te) if global_te else 0.0)
-                non_te_centers.append(nc); non_te_errs.append(np.std(global_non_te) if global_non_te else 0.0)
+                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0); init_counts.append(len(global_init))
+                te_centers.append(tc); te_errs.append(np.std(global_te) if global_te else 0.0); te_counts.append(len(global_te))
+                non_te_centers.append(nc); non_te_errs.append(np.std(global_non_te) if global_non_te else 0.0); non_te_counts.append(len(global_non_te))
 
             x = np.arange(len(x_labels))
             width = 0.25
             ekw = dict(elinewidth=0.8, capthick=0.8)
 
-            ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
+            b_init = ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
                    label=r"$\text{Initial (Magic)}$", color="mediumseagreen",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
-            ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
+            b_te = ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
                    label=r"$\text{Final TE States}$", color="royalblue",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
-            ax.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
+            b_non_te = ax.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
                    label=r"$\text{Final non-TE States}$", color="crimson",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
+
+            ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3)
+            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3)
+            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3)
 
             ax.set_xticks(x)
             ax.set_xticklabels(x_labels, fontsize=9)
@@ -1394,6 +1411,7 @@ def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
             ax.tick_params(direction="in", top=True, right=True, which="both")
             ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
             ax.legend(frameon=True, fontsize=9, loc="upper left")
+            ax.margins(y=0.15)
 
             fig.tight_layout()
             return fig
