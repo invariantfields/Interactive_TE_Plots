@@ -925,7 +925,7 @@ def _(mo):
 
 
 @app.cell
-def _(GithubFileSystem, data_source, mo, os, refresh_button):
+def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     import re
 
     # We use refresh_button.value as a dependency to trigger re-scanning
@@ -1032,7 +1032,6 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
     return (
-        clear_cache_button,
         fs,
         group_selector,
         grouped_files,
@@ -1048,7 +1047,6 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
 @app.cell
 def _(
-    clear_cache_button,
     fs,
     group_selector,
     grouped_files,
@@ -1056,15 +1054,12 @@ def _(
     metrics_to_plot,
     mo,
     plot_button,
-    plot_cache,
     plot_te_filtered_trajectories,
     plot_type_dropdown,
     re,
     step_mes_input,
     te_filter_checkbox,
 ):
-
-
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
     selected_group_files = grouped_files[group_selector.value]
@@ -1074,7 +1069,7 @@ def _(
     for _f in selected_group_files:
         _match = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
         if _match:
-            labels.append(f"$k = {_match.group(1)}$")
+            labels.append(f"k = {_match.group(1)}")
         else:
             labels.append(_f.split("/")[-1].replace(".pkl", ""))
 
