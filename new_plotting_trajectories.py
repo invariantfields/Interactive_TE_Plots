@@ -168,7 +168,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
-            return 0.0, 0.0
+            return 1e-15, 0.0
         try:
             arr_np = np.asarray(psi_np)
             norm_val = np.linalg.norm(arr_np)
