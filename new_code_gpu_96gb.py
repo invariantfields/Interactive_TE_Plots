@@ -21,7 +21,6 @@ app = marimo.App(
 
 @app.cell
 def _():
-
     import marimo as mo
     import sys
     import os
@@ -89,7 +88,6 @@ def _():
                 print(f"[cache] Could not remove disk cache: {_e}")
 
     plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
-
     return (
         LBFGS,
         combinations,
@@ -538,19 +536,16 @@ def _(random):
 
 
 @app.cell
-def _(np):
+def _(np, cp):
     def is_appt(x) -> bool:
-        if hasattr(x, "get"):
-            x_cpu = x.get()
-        else:
-            x_cpu = np.asarray(x)
-        _purity = np.sum(x_cpu.real**2 + x_cpu.imag**2)
-        _D = x_cpu.shape[0]
+        xp = cp.get_array_module(x)
+        _purity = xp.sum(x.real**2 + x.imag**2)
+        _D = x.shape[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex = np.linalg.eigvalsh(x_cpu)
-        _ex = np.clip(_ex, 0.0, None)
-        if _ex[-1] <= _ex[1] + 2 * np.sqrt(_ex[0] * _ex[2]):
+        _ex = xp.linalg.eigvalsh(x)
+        _ex = xp.clip(_ex, 0.0, None)
+        if _ex[-1] <= _ex[1] + 2 * xp.sqrt(_ex[0] * _ex[2]):
             return True
         return False
 
@@ -565,9 +560,7 @@ def is_te(combinations, cp, is_appt, np):
         k = n - n // 2
         for _i in combinations(range(n), k):
             per = [x for x in range(n) if x not in _i] + list(_i)
-            psi_moved = xp.transpose(
-                psi.reshape([dim] * n), per
-            ).flatten()
+            psi_moved = xp.transpose(psi.reshape([dim] * n), per).flatten()
             _x = par_trace(psi_moved, dim, n, k)
             _x = (_x + _x.conj().T) / 2.0
             if not is_appt(_x):
@@ -708,7 +701,6 @@ def _(os, run_jax_gpu_optimization):
                 step_mes=num_steps,
                 filename=_ffname,
             )
-
 
     return (gen_data,)
 
@@ -1013,7 +1005,7 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state):
 
 
 @app.cell
-def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, os, pc, pickle, plot_cache):
+def _(go, hex_to_rgba, is_TE, make_subplots, np, os, pc, pickle, plot_cache):
     def cache_plot(func):
         """Decorator: cache plotting results keyed on params + file modification times."""
         def wrapper(pkl_files, labels, step_mes, use_te_filter, central_tendency):

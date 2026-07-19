@@ -105,6 +105,7 @@ def _():
     return (
         GithubFileSystem,
         combinations,
+        cp,
         go,
         make_subplots,
         mo,
@@ -117,20 +118,20 @@ def _():
 
 
 @app.cell
-def _(np):
+def _(cp):
     def par_trace(psi, dim, n, n_parties):
         n_rem = n - n_parties
         psi_mat = psi.reshape(dim**n_rem, dim**n_parties)
         return psi_mat @ psi_mat.conj().T
 
-    def is_appt(x: np.ndarray) -> bool:
-        # Pure NumPy — GPU overhead dominates for dim=128 (7 qubits)
-        _purity = np.sum(x.real**2 + x.imag**2)
+    def is_appt(x) -> bool:
+        xp = cp.get_array_module(x)
+        _purity = xp.sum(x.real**2 + x.imag**2)
         _D = x.shape[0]
         if _purity <= 1 / (_D - 1):
             return True
-        _ex = np.linalg.eigvalsh(x)
-        _ex = np.clip(_ex, 0.0, None)
+        _ex = xp.linalg.eigvalsh(x)
+        _ex = xp.clip(_ex, 0.0, None)
         if (_ex[-1] - _ex[1]) ** 2 <= 4 * _ex[0] * _ex[3]:
             return True
         return False
@@ -139,14 +140,14 @@ def _(np):
 
 
 @app.cell
-def _(combinations, is_appt, np, par_trace):
-    def is_TE(psi: np.ndarray, dim: int = 2) -> bool:
-        # Pure NumPy — avoids 17500+ GPU<->CPU transfers per plot for dim=128
+def _(combinations, cp, is_appt, np, par_trace):
+    def is_TE(psi, dim: int = 2) -> bool:
+        xp = cp.get_array_module(psi)
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
             per = [x for x in range(n) if x not in _i] + list(_i)
-            psi_moved = np.transpose(psi.reshape([dim] * n), per).flatten()
+            psi_moved = xp.transpose(psi.reshape([dim] * n), per).flatten()
             _x = par_trace(psi_moved, dim, n, k)
             _x = (_x + _x.conj().T) / 2.0
             if not is_appt(_x):
@@ -915,7 +916,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
     if data_source.value == "Local":
         available_files = []
-        for data_dir in ["more_data/", "new_data/", "data/"]:
+        for data_dir in ["correct_data/", "new_data/", "data/"]:
             if os.path.exists(data_dir):
                 available_files.extend(
                     [os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")]
