@@ -59,6 +59,7 @@ def _():
     import os
     from fsspec.implementations.github import GithubFileSystem
     import warnings
+    import matplotlib.pyplot as plt
 
     # Suppress all warnings globally to avoid logging overhead in loops
     warnings.filterwarnings("ignore")
@@ -114,6 +115,7 @@ def _():
         pc,
         pickle,
         plot_cache,
+        plt,
     )
 
 
@@ -1125,13 +1127,293 @@ def _(unpack_pkl_file):
 
 
 @app.cell
-def _():
-    return
+def _(is_TE, np, pickle, plt, re):
+    def plot_te_filtered_trajectories_matplotlib(
+        pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
+    ):
+        if not selected_metrics:
+            return None
+
+        import matplotlib
+        matplotlib.rcParams.update({
+            "font.family": "serif",
+            "font.serif": ["Computer Modern", "DejaVu Serif"],
+            "mathtext.fontset": "cm",
+            "axes.formatter.use_mathtext": True
+        })
+
+        metric_map = {
+            "average_purity": "Average Purity",
+            "max_purity": "Max Purity",
+            "sre": "SRE"
+        }
+
+        loaded_data = []
+        for file, label in zip(pkl_files, labels):
+            if not file or not label:
+                continue
+            try:
+                if fs:
+                    with fs.open(file, "rb") as f:
+                        data = pickle.load(f)
+                else:
+                    with open(file, "rb") as f:
+                        data = pickle.load(f)
+                loaded_data.append((data, label, file))
+            except Exception as e:
+                print(f"Error loading {file}: {e}")
+
+        if not loaded_data:
+            return None
+
+        # 1. LINE CHART
+        if plot_type == "Line Chart":
+            n_plots = len(selected_metrics)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+
+            for col_idx, metric in enumerate(selected_metrics):
+                ax = axes[0, col_idx]
+                ax.set_title(metric_map[metric], fontsize=13)
+
+                for data, label, file in loaded_data:
+                    if use_te_filter:
+                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                    else:
+                        trajs = data[metric]
+
+                    if not trajs:
+                        continue
+
+                    steps = np.arange(len(trajs[0])) * step_mes
+                    center = np.mean(trajs, axis=0) if central_tendency == "Average" else np.median(trajs, axis=0)
+
+                    val_k = label.split("=")[-1].strip()
+                    ax.plot(steps, center, label=f"$k={val_k}$", linewidth=1.5)
+
+                ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
+                if col_idx == 0:
+                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                ax.spines["top"].set_visible(True)
+                ax.spines["right"].set_visible(True)
+                ax.tick_params(direction="in", top=True, right=True, which="both")
+                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+                if col_idx == 0:
+                    ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        # 2. BAR CHART
+        elif plot_type == "Bar Chart":
+            n_plots = len(selected_metrics)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), squeeze=False)
+
+            for col_idx, metric in enumerate(selected_metrics):
+                ax = axes[0, col_idx]
+                ax.set_title(metric_map[metric], fontsize=13)
+
+                x_labels = []
+                init_means = []
+                final_means = []
+
+                for data, label, file in loaded_data:
+                    is_correct_data = "correct_data" in file
+
+                    if use_te_filter:
+                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                    else:
+                        te_mask = np.ones(len(data["final_states"]), dtype=bool)
+                        trajs = data[metric]
+
+                    if not trajs:
+                        continue
+
+                    init_vals = []
+                    final_vals = []
+
+                    # Gap match
+                    derived_init_sre = 0.0
+                    _match = re.search(r'gap(\d+)', label)
+                    if _match:
+                        derived_init_sre = float(_match.group(1))
+
+                    for j, keep in enumerate(te_mask):
+                        if not keep:
+                            continue
+                        if metric == "sre" and is_correct_data:
+                            init_sre = data["sre"][j][0]
+                            final_sre = data["sre"][j][-1]
+                            init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
+                            final_vals.append(final_sre)
+                        else:
+                            init_vals.append(data[metric][j][0])
+                            final_vals.append(data[metric][j][-1])
+
+                    if not init_vals:
+                        continue
+
+                    x_labels.append(f"$k={label.split('=')[-1].strip()}$")
+                    if central_tendency == "Average":
+                        init_means.append(np.mean(init_vals))
+                        final_means.append(np.mean(final_vals))
+                    else:
+                        init_means.append(np.median(init_vals))
+                        final_means.append(np.median(final_vals))
+
+                x = np.arange(len(x_labels))
+                width = 0.35
+
+                ax.bar(x - width/2, init_means, width, label="Initial State", color="#1f77b4", edgecolor="black", linewidth=0.5)
+                ax.bar(x + width/2, final_means, width, label="Final State", color="#ff7f0e", edgecolor="black", linewidth=0.5)
+
+                ax.set_xticks(x)
+                ax.set_xticklabels(x_labels)
+                ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+                if col_idx == 0:
+                    ax.set_ylabel(r"$\text{Value}$", fontsize=11)
+                ax.spines["top"].set_visible(True)
+                ax.spines["right"].set_visible(True)
+                ax.tick_params(direction="in", top=True, right=True, which="both")
+                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+                if col_idx == 0:
+                    ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        # 3. TE vs non-TE SRE BAR CHART
+        elif plot_type == "TE vs non-TE SRE":
+            fig, ax = plt.subplots(figsize=(6, 4.5))
+
+            x_labels = []
+            te_means = []
+            non_te_means = []
+
+            for data, label, file in loaded_data:
+                is_correct_data = ("correct_data" in file) or ("more_data" in file)
+                te_mask = np.array([is_TE(state) for state in data["final_states"]])
+
+                te_vals = []
+                non_te_vals = []
+
+                for j, is_te_state in enumerate(te_mask):
+                    sre_val = data["sre"][j][-1]
+                    if is_te_state:
+                        te_vals.append(sre_val)
+                    else:
+                        non_te_vals.append(sre_val)
+
+                if not te_vals and not non_te_vals:
+                    continue
+
+                x_labels.append(f"$k={label.split('=')[-1].strip()}$")
+                if central_tendency == "Average":
+                    te_means.append(np.mean(te_vals) if te_vals else 0.0)
+                    non_te_means.append(np.mean(non_te_vals) if non_te_vals else 0.0)
+                else:
+                    te_means.append(np.median(te_vals) if te_vals else 0.0)
+                    non_te_means.append(np.median(non_te_vals) if non_te_vals else 0.0)
+
+            x = np.arange(len(x_labels))
+            width = 0.35
+
+            ax.bar(x - width/2, te_means, width, label="TE Final States", color="forestgreen", edgecolor="black", linewidth=0.5)
+            ax.bar(x + width/2, non_te_means, width, label="non-TE Final States", color="crimson", edgecolor="black", linewidth=0.5)
+
+            ax.set_xticks(x)
+            ax.set_xticklabels(x_labels)
+            ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+            ax.set_ylabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
+            ax.set_title(r"$\text{SRE: TE vs non-TE Final States}$", fontsize=13)
+            ax.spines["top"].set_visible(True)
+            ax.spines["right"].set_visible(True)
+            ax.tick_params(direction="in", top=True, right=True, which="both")
+            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+            ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        # 4. HISTOGRAM SRE
+        elif plot_type == "Histogram SRE":
+            fig, ax = plt.subplots(figsize=(6, 4.5))
+
+            for data, label, file in loaded_data:
+                is_correct_data = "correct_data" in file
+                if not is_correct_data:
+                    continue
+
+                if use_te_filter:
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
+                else:
+                    vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
+
+                if not vals:
+                    continue
+
+                ax.hist(vals, bins=25, alpha=0.5, label=f"$k={label.split('=')[-1].strip()}$", edgecolor="black", linewidth=0.5)
+
+            ax.set_xlabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
+            ax.set_ylabel(r"$\text{Count}$", fontsize=11)
+            ax.set_title(r"$\text{Histogram of Final State SRE Values}$", fontsize=13)
+            ax.spines["top"].set_visible(True)
+            ax.spines["right"].set_visible(True)
+            ax.tick_params(direction="in", top=True, right=True, which="both")
+            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+            ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        return None
+
+    return (plot_te_filtered_trajectories_matplotlib,)
 
 
 @app.cell
-def _():
-    return
+def _(
+    fs,
+    group_selector,
+    grouped_files,
+    metric_selector,
+    metrics_to_plot,
+    mo,
+    plot_button,
+    plot_te_filtered_trajectories_matplotlib,
+    plot_type_dropdown,
+    re,
+    step_mes_input,
+    te_filter_checkbox,
+):
+    mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
+
+    _selected_group_files = grouped_files[group_selector.value]
+
+    # Deriving labels representing the gaps from the filenames
+    _labels = []
+    for _f in _selected_group_files:
+        _match = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
+        if _match:
+            _labels.append(f"k = {_match.group(1)}")
+        else:
+            _labels.append(_f.split("/")[-1].replace(".pkl", ""))
+
+    _plot_fig = plot_te_filtered_trajectories_matplotlib(
+        pkl_files=_selected_group_files,
+        labels=_labels,
+        step_mes=step_mes_input.value,
+        use_te_filter=te_filter_checkbox.value,
+        central_tendency=metric_selector.value,
+        selected_metrics=metrics_to_plot.value,
+        plot_type=plot_type_dropdown.value,
+        fs=fs,
+    )
+
+    matplotlib_plot = _plot_fig
+    return (matplotlib_plot,)
 
 
 if __name__ == "__main__":
