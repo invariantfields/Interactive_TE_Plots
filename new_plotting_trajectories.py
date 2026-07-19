@@ -28,21 +28,10 @@ def _():
 
 
 @app.cell
-def _(jl, mo):
+def _(jl):
     if jl is not None:
         jl.seval("using HadaMAG")
         jl.seval("using CUDA")
-        jl.seval("""
-        function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
-            psi_jl = Vector{ComplexF64}(psi_np)
-            psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-            return (sre_result, lost_norm)
-        end
-        """)
-        status = mo.md("⚡ **Julia SRE Direct Bridge:** Initialized successfully (`HadaMAG` + `CUDA` backend)")
-    else:
-        status = mo.md("⚠️ **Julia SRE Direct Bridge:** Julia/JuliaCall not available (falling back to placeholders)")
     return
 
 
@@ -58,53 +47,11 @@ def _():
     from itertools import combinations
     import os
     from fsspec.implementations.github import GithubFileSystem
-    import warnings
 
-    # Suppress all warnings globally to avoid logging overhead in loops
-    warnings.filterwarnings("ignore")
-
-    _CACHE_FILE = "_plot_cache.pkl"
-
-    class _DiskCache(dict):
-        def __init__(self, path: str):
-            super().__init__()
-            self._path = path
-            self._load()
-
-        def _load(self):
-            if os.path.exists(self._path):
-                try:
-                    with open(self._path, "rb") as _f:
-                        self.update(pickle.load(_f))
-                    print(f"[cache] Loaded {len(self)} entries from {self._path}")
-                except Exception as _e:
-                    print(f"[cache] Could not load disk cache: {_e}. Starting fresh.")
-
-        def _save(self):
-            try:
-                with open(self._path, "wb") as _f:
-                    pickle.dump(dict(self), _f)
-            except Exception as _e:
-                print(f"[cache] Could not save to disk: {_e}")
-
-        def __setitem__(self, key, value):
-            super().__setitem__(key, value)
-            self._save()
-
-        def clear(self):
-            super().clear()
-            try:
-                if os.path.exists(self._path):
-                    os.remove(self._path)
-                    print(f"[cache] Removed disk cache file {self._path}")
-            except Exception as _e:
-                print(f"[cache] Could not remove disk cache: {_e}")
-
-    # One global instance — loaded from disk once per kernel session
-    plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
     return (
         GithubFileSystem,
         combinations,
+        cp,
         go,
         make_subplots,
         mo,
@@ -112,7 +59,6 @@ def _():
         os,
         pc,
         pickle,
-        plot_cache,
     )
 
 
@@ -163,61 +109,29 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
+def _(cp, go, is_TE, jl, make_subplots, np, pc, pickle, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
             return 0.0, 0.0
-        try:
-            arr_np = np.asarray(psi_np)
-            norm_val = np.linalg.norm(arr_np)
-            if norm_val > 1e-12:
-                arr_np = arr_np / norm_val
-            dim = len(arr_np)
-            n_qubits = int(np.log2(dim))
 
-            # Call pre-defined Julia function directly — no seval parser overhead per iteration
-            res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
-            return float(res[0]), float(res[1])
-        except Exception as e:
-            print(f"SRE Exact Calculation Error: {e}")
-            return 0.0, 0.0
+            try:
+                arr_np = np.asarray(psi_np)
+                norm_val = np.linalg.norm(arr_np)
+                if norm_val > 1e-12:
+                    arr_np = arr_np / norm_val
+                dim = len(arr_np)
+                n_qubits = int(np.log2(dim))
+
+                # Call pre-defined Julia function directly — no seval parser overhead per iteration
+                res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
+                return float(res[0]), float(res[1])
+            except Exception as e:
+                print(f"SRE Exact Calculation Error: {e}")
+                return 0.0, 0.0
 
     print("compute_sre_exact reloaded OK")
 
-    def cache_plot(func):
-        """Decorator: cache plotting results keyed on params + file modification times."""
-        def wrapper(pkl_files, labels, step_mes, use_te_filter, central_tendency,
-                    selected_metrics, plot_type="Line Chart", fs=None):
-            mtimes = []
-            if not fs:
-                for f in (pkl_files or []):
-                    if f and os.path.exists(f):
-                        mtimes.append(os.path.getmtime(f))
-                    else:
-                        mtimes.append(0.0)
-            cache_key = (
-                tuple(pkl_files) if pkl_files else (),
-                tuple(labels) if labels else (),
-                step_mes,
-                use_te_filter,
-                central_tendency,
-                tuple(selected_metrics) if selected_metrics else (),
-                plot_type,
-                tuple(mtimes),
-            )
-            if cache_key in plot_cache:
-                print("[cache] HIT — returning cached plot.")
-                return plot_cache[cache_key]
-            print("[cache] MISS — computing plot…")
-            fig = func(pkl_files, labels, step_mes, use_te_filter, central_tendency,
-                       selected_metrics, plot_type, fs)
-            if fig is not None:
-                plot_cache[cache_key] = fig
-            return fig
-        return wrapper
-
-    @cache_plot
     def plot_te_filtered_trajectories(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -255,7 +169,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
                 if use_te_filter:
                     final_states = data["final_states"]
-                    te_mask = np.array([is_TE(state) for state in final_states])
+                    te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
                     n_te = te_mask.sum()
                     if n_te == 0:
                         continue
@@ -305,6 +219,17 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             init_vals.append(traj[0])
                             final_vals.append(traj[-1])
 
+                    # Store back to pickle
+                    if data_changed and not fs:
+                        try:
+                            with open(file, "wb") as f:
+                                pickle.dump(data, f)
+                        except Exception as e:
+                            print(f"Error saving updated SRE back to {file}: {e}")
+
+                    if not init_vals:
+                        continue
+
                     # Average or Median of Initial vs Final
                     if central_tendency == "Average":
                         init_center = np.mean(init_vals)
@@ -347,14 +272,6 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                         row=1, col=col
                     )
 
-            # Store back to pickle (once per file, after all metrics processed)
-            if data_changed and not fs:
-                try:
-                    with open(file, "wb") as f:
-                        pickle.dump(data, f)
-                except Exception as e:
-                    print(f"Error saving updated SRE back to {file}: {e}")
-
             fig.update_layout(
                 title=f"Comparison: Initial vs Final States ({central_tendency})",
                 height=500,
@@ -393,7 +310,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
             # Filter by TE if checkbox is checked
             if use_te_filter:
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
+                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
                 n_te = te_mask.sum()
                 if n_te == 0:
                     continue
@@ -515,14 +432,6 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     row=1,
                     col=col,
                 )
-
-            # Store back to pickle (once per file, after all metrics processed)
-            if data_changed and not fs:
-                try:
-                    with open(file, "wb") as f:
-                        pickle.dump(data, f)
-                except Exception as e:
-                    print(f"Error saving updated SRE back to {file}: {e}")
         # ------------------------------------------------------------
         # TE vs non-TE SRE BAR CHART COMPARISON
         # ------------------------------------------------------------
@@ -568,7 +477,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
+                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
                 is_correct_data = ("correct_data" in file) or ("more_data" in file)
 
                 init_sre_vals = []
@@ -792,7 +701,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
+                te_mask = np.array([is_TE(cp.asarray(state)) for state in final_states])
                 is_correct_data = "correct_data" in file
 
                 final_sre_vals = []
@@ -998,17 +907,15 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
     # Run button to prevent heavy computations on every click
     plot_button = mo.ui.run_button(label="🚀 Generate Plot")
-    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", value=False)
 
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
         mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
-        mo.hstack([plot_button, clear_cache_button], gap=2)
+        plot_button
     ])
     return (
-        clear_cache_button,
         fs,
         group_selector,
         grouped_files,
@@ -1024,7 +931,6 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
 
 @app.cell
 def _(
-    clear_cache_button,
     fs,
     group_selector,
     grouped_files,
@@ -1032,17 +938,12 @@ def _(
     metrics_to_plot,
     mo,
     plot_button,
-    plot_cache,
     plot_te_filtered_trajectories,
     plot_type_dropdown,
     re,
     step_mes_input,
     te_filter_checkbox,
 ):
-    if clear_cache_button.value:
-        plot_cache.clear()
-        mo.status.toast("🧹 Plot cache cleared successfully!")
-
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
     selected_group_files = grouped_files[group_selector.value]
@@ -1097,6 +998,7 @@ def _(os, pickle):
                 print(f"Error unpacking {filename}: {e}")
 
         print(f"\nSuccessfully unpacked all files into directory: {destination_dir}")
+
 
     return (unpack_pkl_file,)
 

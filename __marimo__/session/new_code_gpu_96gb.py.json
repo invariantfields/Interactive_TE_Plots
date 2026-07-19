@@ -7,7 +7,7 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "31e0204b2028f6718687fd8f535c4fd0",
+      "code_hash": "c0e466824b4f2288a720a482ba3e581e",
       "outputs": [
         {
           "type": "data",
@@ -241,7 +241,7 @@
     },
     {
       "id": "TqIu",
-      "code_hash": "a6d845880669cbcb3c4c23b9c4d15a29",
+      "code_hash": "e245a85111c94ceba57188848afdb486",
       "outputs": [
         {
           "type": "data",
@@ -293,7 +293,7 @@
     },
     {
       "id": "ecfG",
-      "code_hash": "d00cf8423dc8ed6c5d62aa39257c612f",
+      "code_hash": "a5e4d7c3802becd4d354cc3d99a45c82",
       "outputs": [
         {
           "type": "data",
@@ -306,19 +306,7 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\ncomputing for 7-qubits with initial random 5-qubit stabilized state.\nGenerating 200 initial states...\n",
-          "mimetype": "text/plain"
-        },
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "Jax plugin configuration error: Exception when calling jax_plugins.xla_cuda12.initialize()\nTraceback (most recent call last):\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 508, in discover_pjrt_plugins\n    plugin_module.initialize()\n    ~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax_plugins/xla_cuda12/__init__.py\", line 373, in initialize\n    c_api = xb.register_plugin(\n        'cuda', priority=500, library_path=str(path), options=options\n    )\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jax/_src/xla_bridge.py\", line 650, in register_plugin\n    c_api = xla_client.load_pjrt_plugin_dynamically(plugin_name, library_path)\n  File \"/home/naga/marimo/lib/python3.14/site-packages/jaxlib/xla_client.py\", line 115, in load_pjrt_plugin_dynamically\n    return _xla.load_pjrt_plugin(plugin_name, library_path, c_api=None)\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\njax.errors.JaxRuntimeError: ALREADY_EXISTS: PJRT_Api already exists for device type cuda\n",
-          "mimetype": "text/plain"
-        },
-        {
-          "type": "stream",
-          "name": "stdout",
-          "text": "  Start Step | Mean Violation: 5.53e+00\n",
+          "text": "correct_data/7_qbt_200_sds_ptmzng_jfr_\nSkipping gap 7: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_7.pkl already exists.\nSkipping gap 6: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_6.pkl already exists.\nSkipping gap 5: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_5.pkl already exists.\nSkipping gap 4: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_4.pkl already exists.\nSkipping gap 3: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_3.pkl already exists.\nSkipping gap 2: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_2.pkl already exists.\nSkipping gap 1: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_1.pkl already exists.\nSkipping gap 0: file correct_data/7_qbt_200_sds_ptmzng_jfr_700_stps_0.pkl already exists.\ncorrect_data/7_qbt_1000_sds_ptmzng_jfr_\ncomputing for 7-qubits with initial random 0-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 1.16e+00\n  Step  1000/1000 | Mean Violation: 8.21e-26 | Elapsed: 43.2s | Est. Remaining: 0.0s\ncomputing for 7-qubits with initial random 1-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 5.06e+00\n  Step  1000/1000 | Mean Violation: 9.40e-01 | Elapsed: 716.9s | Est. Remaining: 0.0s\ncomputing for 7-qubits with initial random 2-qubit stabilized state.\nGenerating 1000 initial states...\n  Start Step | Mean Violation: 9.60e+00\n",
           "mimetype": "text/plain"
         }
       ]
@@ -351,7 +339,7 @@
     },
     {
       "id": "aLJB",
-      "code_hash": "1e60872a0f8450b5c744b739cb050408",
+      "code_hash": "d84df71aeca40c1f2b3d058e0982f7b9",
       "outputs": [
         {
           "type": "data",
@@ -364,13 +352,13 @@
     },
     {
       "id": "nHfw",
-      "code_hash": "14e44a0b68dfab69a53c78f518601eb1",
+      "code_hash": "01623d2b4f619058d9b3095023589da5",
       "outputs": [],
       "console": []
     },
     {
       "id": "xXTn",
-      "code_hash": "28ae364269443bd1ec95614ad702e19c",
+      "code_hash": "3663277b61fc7d95b43dce9859ef250b",
       "outputs": [
         {
           "type": "data",
