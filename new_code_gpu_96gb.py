@@ -405,7 +405,16 @@ def _(go, np, rand_Almost_Stab_state):
             font=dict(family="Computer Modern"),
             xaxis=dict(dtick=1),
         )
-
+        _fig.update_xaxes(
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
+        _fig.update_yaxes(
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
         return _fig
 
 
@@ -512,8 +521,17 @@ def plot_filtered(go, hex_to_rgba, make_subplots, mo, np, pc, pickle):
             font=dict(family="Computer Modern"),
         )
 
-        fig.update_xaxes(title_text="Optimization Steps")
-
+        fig.update_xaxes(
+            title_text="Optimization Steps",
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
+        fig.update_yaxes(
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
         return fig
 
     te_filter_checkbox = mo.ui.checkbox(
@@ -1135,7 +1153,17 @@ def _(go, hex_to_rgba, is_TE, make_subplots, np, os, pc, pickle, plot_cache):
                         xanchor="center", x=0.5),
             font=dict(family="Computer Modern"),
         )
-        fig.update_xaxes(title_text="Optimization Steps")
+        fig.update_xaxes(
+            title_text="Optimization Steps",
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
+        fig.update_yaxes(
+            showline=True, linewidth=1, linecolor="black", mirror=True,
+            ticks="inside", tickwidth=1, tickcolor="black",
+            gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+        )
         return fig
 
     return (plot_te_filtered_trajectories,)
@@ -1169,16 +1197,16 @@ def _(
             "data/9_qbt_640_sds_ptmzng_fr_15_stps00.pkl",
         ],
         labels=[
-            "gap9",
-            "gap8",
-            "gap7",
-            "gap6",
-            "gap5",
-            "gap4",
-            "gap3",
-            "gap2",
-            "gap1",
-            "gap0",
+            "$k=9$",
+            "$k=8$",
+            "$k=7$",
+            "$k=6$",
+            "$k=5$",
+            "$k=4$",
+            "$k=3$",
+            "$k=2$",
+            "$k=1$",
+            "$k=0$",
         ],
         step_mes=1,
         use_te_filter=te_filter_checkbox.value,
@@ -1205,7 +1233,7 @@ def plots_for_magic(metric_selector, plot_trajectories_marimo):
             "data/4_qbt_500_sds_ptmzng_fr_10_stps3.pkl",
             "data/4_qbt_500_sds_ptmzng_fr_10_stps4.pkl",
         ],
-        labels=["gap0", "gap1", "gap2", "gap3", "gap4"],
+        labels=["$k=0$", "$k=1$", "$k=2$", "$k=3$", "$k=4$"],
         step_mes=1,
         central_tendency=metric_selector.value,
     )

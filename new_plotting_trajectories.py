@@ -224,6 +224,21 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
         """Plot trajectories with optional TE filtering and bar chart modes."""
+        def finalize_arxiv_style(fig):
+            if fig is None:
+                return fig
+            fig.update_xaxes(
+                showline=True, linewidth=1, linecolor="black", mirror=True,
+                ticks="inside", tickwidth=1, tickcolor="black",
+                gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+            )
+            fig.update_yaxes(
+                showline=True, linewidth=1, linecolor="black", mirror=True,
+                ticks="inside", tickwidth=1, tickcolor="black",
+                gridcolor="#e0e0e0", gridwidth=0.5, zeroline=False
+            )
+            return fig
+
         if not selected_metrics:
             return None
 
@@ -372,7 +387,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     x=0.5,
                 ),
             )
-            return fig
+            return finalize_arxiv_style(fig)
 
         # ------------------------------------------------------------
         # STANDARD LINE CHART TRAJECTORIES
@@ -773,7 +788,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     x=0.5,
                 ),
             )
-            return fig
+            return finalize_arxiv_style(fig)
 
         # ------------------------------------------------------------
         # HISTOGRAM OF SRE VALUES
@@ -860,7 +875,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     x=0.5,
                 ),
             )
-            return fig
+            return finalize_arxiv_style(fig)
 
         fig.update_layout(
             title=f"Entanglement Trajectories ({central_tendency})"
@@ -880,7 +895,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
             ),
         )
         fig.update_xaxes(title_text="Steps")
-        return fig
+        return finalize_arxiv_style(fig)
 
     return (plot_te_filtered_trajectories,)
 
@@ -1058,7 +1073,7 @@ def _(
     for _f in selected_group_files:
         _match = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
         if _match:
-            labels.append(f"gap{_match.group(1)}")
+            labels.append(f"$k = {_match.group(1)}$")
         else:
             labels.append(_f.split("/")[-1].replace(".pkl", ""))
 
