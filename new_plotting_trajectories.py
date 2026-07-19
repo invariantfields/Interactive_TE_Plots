@@ -59,6 +59,7 @@ def _():
     import os
     from fsspec.implementations.github import GithubFileSystem
     import warnings
+    import matplotlib.pyplot as plt
 
     # Suppress all warnings globally to avoid logging overhead in loops
     warnings.filterwarnings("ignore")
@@ -114,6 +115,7 @@ def _():
         pc,
         pickle,
         plot_cache,
+        plt,
     )
 
 
@@ -1125,13 +1127,355 @@ def _(unpack_pkl_file):
 
 
 @app.cell
-def _():
-    return
+def _(plt, np, os, pickle, re, is_TE, compute_sre_exact):
+    def plot_te_filtered_trajectories_matplotlib(
+        pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
+    ):
+        if not selected_metrics:
+            return None
+
+        import matplotlib
+        matplotlib.rcParams.update({
+            "font.family": "serif",
+            "font.serif": ["Computer Modern", "DejaVu Serif"],
+            "mathtext.fontset": "cm",
+            "axes.formatter.use_mathtext": True
+        })
+
+        metric_map = {
+            "average_purity": "Average Purity",
+            "max_purity": "Max Purity",
+            "sre": "SRE"
+        }
+
+        loaded_data = []
+        for file, label in zip(pkl_files, labels):
+            if not file or not label:
+                continue
+            try:
+                if fs:
+                    with fs.open(file, "rb") as f:
+                        data = pickle.load(f)
+                else:
+                    with open(file, "rb") as f:
+                        data = pickle.load(f)
+                loaded_data.append((data, label, file))
+            except Exception as e:
+                print(f"Error loading {file}: {e}")
+
+        if not loaded_data:
+            return None
+
+        # 1. LINE CHART
+        if plot_type == "Line Chart":
+            n_plots = len(selected_metrics)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+
+            for col_idx, metric in enumerate(selected_metrics):
+                ax = axes[0, col_idx]
+                ax.set_title(metric_map[metric], fontsize=13)
+
+                for data, label, file in loaded_data:
+                    if use_te_filter:
+                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                    else:
+                        trajs = data[metric]
+
+                    if not trajs:
+                        continue
+
+                    steps = np.arange(len(trajs[0])) * step_mes
+                    center = np.mean(trajs, axis=0) if central_tendency == "Average" else np.median(trajs, axis=0)
+                    val_k = label.split("=")[-1].strip()
+                    ax.plot(steps, center, label=f"$k={val_k}$", linewidth=1.5)
+
+                ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
+                if col_idx == 0:
+                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                ax.spines["top"].set_visible(True)
+                ax.spines["right"].set_visible(True)
+                ax.tick_params(direction="in", top=True, right=True, which="both")
+                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+                ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        # 2. BAR CHART — Initial (Magic) vs Final with error bars + All Combined
+        elif plot_type == "Bar Chart":
+            n_plots = len(selected_metrics)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), squeeze=False)
+
+            for col_idx, metric in enumerate(selected_metrics):
+                ax = axes[0, col_idx]
+                ax.set_title(metric_map[metric], fontsize=13)
+
+                x_labels = []
+                init_means = []
+                init_errs = []
+                final_means = []
+                final_errs = []
+                global_init_vals = []
+                global_final_vals = []
+
+                for data, label, file in loaded_data:
+                    is_correct_data = "correct_data" in file or "more_data" in file
+
+                    if use_te_filter:
+                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    else:
+                        te_mask = np.ones(len(data["final_states"]), dtype=bool)
+
+                    init_vals = []
+                    final_vals = []
+
+                    derived_init_sre = 0.0
+                    _gap_match = re.search(r'gap(\d+)', label)
+                    if _gap_match:
+                        derived_init_sre = float(_gap_match.group(1))
+
+                    for j, keep in enumerate(te_mask):
+                        if not keep:
+                            continue
+                        if metric == "sre" and is_correct_data:
+                            init_sre = data["sre"][j][0]
+                            final_sre = data["sre"][j][-1]
+                            init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
+                            final_vals.append(final_sre)
+                        else:
+                            init_vals.append(data[metric][j][0])
+                            final_vals.append(data[metric][j][-1])
+
+                    if not init_vals:
+                        continue
+
+                    val_k = label.split("=")[-1].strip()
+                    x_labels.append(f"$k={val_k}$")
+                    global_init_vals.extend(init_vals)
+                    global_final_vals.extend(final_vals)
+
+                    if central_tendency == "Average":
+                        init_means.append(np.mean(init_vals))
+                        final_means.append(np.mean(final_vals))
+                    else:
+                        init_means.append(np.median(init_vals))
+                        final_means.append(np.median(final_vals))
+                    init_errs.append(np.std(init_vals) if len(init_vals) > 1 else 0.0)
+                    final_errs.append(np.std(final_vals) if len(final_vals) > 1 else 0.0)
+
+                # All Combined summary bar
+                if global_init_vals:
+                    x_labels.append(r"$\mathrm{All\ Combined}$")
+                    if central_tendency == "Average":
+                        init_means.append(np.mean(global_init_vals))
+                        final_means.append(np.mean(global_final_vals))
+                    else:
+                        init_means.append(np.median(global_init_vals))
+                        final_means.append(np.median(global_final_vals))
+                    init_errs.append(np.std(global_init_vals) if len(global_init_vals) > 1 else 0.0)
+                    final_errs.append(np.std(global_final_vals) if len(global_final_vals) > 1 else 0.0)
+
+                x = np.arange(len(x_labels))
+                width = 0.35
+                ekw = dict(elinewidth=0.8, capthick=0.8)
+
+                ax.bar(x - width/2, init_means, width, yerr=init_errs, capsize=3,
+                       label=r"$\text{Initial State (Magic)}$", color="mediumseagreen",
+                       edgecolor="black", linewidth=0.5, error_kw=ekw)
+                ax.bar(x + width/2, final_means, width, yerr=final_errs, capsize=3,
+                       label=r"$\text{Final State}$", color="#ff7f0e",
+                       edgecolor="black", linewidth=0.5, error_kw=ekw)
+
+                ax.set_xticks(x)
+                ax.set_xticklabels(x_labels, fontsize=9)
+                ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+                if col_idx == 0:
+                    ax.set_ylabel(r"$\text{Value}$", fontsize=11)
+                ax.spines["top"].set_visible(True)
+                ax.spines["right"].set_visible(True)
+                ax.tick_params(direction="in", top=True, right=True, which="both")
+                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+                ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        # 3. TE vs non-TE SRE — 3 bar groups: Initial (Magic), TE, non-TE + All Combined
+        elif plot_type == "TE vs non-TE SRE":
+            fig, ax = plt.subplots(figsize=(8, 4.5))
+
+            x_labels = []
+            init_centers = []
+            init_errs = []
+            te_centers = []
+            te_errs = []
+            non_te_centers = []
+            non_te_errs = []
+            global_init = []
+            global_te = []
+            global_non_te = []
+
+            for data, label, file in loaded_data:
+                te_mask = np.array([is_TE(state) for state in data["final_states"]])
+
+                derived_init_sre = 0.0
+                _gap_match = re.search(r'gap(\d+)', label)
+                if _gap_match:
+                    derived_init_sre = float(_gap_match.group(1))
+
+                init_vals = []
+                te_vals = []
+                non_te_vals = []
+
+                for j, is_te_state in enumerate(te_mask):
+                    init_sre = data["sre"][j][0]
+                    final_sre = data["sre"][j][-1]
+                    init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
+                    if is_te_state:
+                        te_vals.append(final_sre)
+                    else:
+                        non_te_vals.append(final_sre)
+
+                if not te_vals and not non_te_vals:
+                    continue
+
+                val_k = label.split("=")[-1].strip()
+                x_labels.append(f"$k={val_k}$")
+                global_init.extend(init_vals)
+                global_te.extend(te_vals)
+                global_non_te.extend(non_te_vals)
+
+                def _stat(vals):
+                    if not vals:
+                        return 0.0, 0.0
+                    c = np.mean(vals) if central_tendency == "Average" else np.median(vals)
+                    e = np.std(vals) if len(vals) > 1 else 0.0
+                    return c, e
+
+                ic, ie = _stat(init_vals)
+                tc, te_e = _stat(te_vals)
+                nc, ne = _stat(non_te_vals)
+                init_centers.append(ic); init_errs.append(ie)
+                te_centers.append(tc); te_errs.append(te_e)
+                non_te_centers.append(nc); non_te_errs.append(ne)
+
+            # All Combined
+            if global_te or global_non_te:
+                x_labels.append(r"$\mathrm{All\ Combined}$")
+                ic = np.mean(global_init) if central_tendency == "Average" else np.median(global_init)
+                tc = np.mean(global_te) if central_tendency == "Average" else np.median(global_te)
+                nc = np.mean(global_non_te) if central_tendency == "Average" else np.median(global_non_te)
+                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0)
+                te_centers.append(tc); te_errs.append(np.std(global_te) if global_te else 0.0)
+                non_te_centers.append(nc); non_te_errs.append(np.std(global_non_te) if global_non_te else 0.0)
+
+            x = np.arange(len(x_labels))
+            width = 0.25
+            ekw = dict(elinewidth=0.8, capthick=0.8)
+
+            ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
+                   label=r"$\text{Initial (Magic)}$", color="mediumseagreen",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+            ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
+                   label=r"$\text{Final TE States}$", color="royalblue",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+            ax.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
+                   label=r"$\text{Final non-TE States}$", color="crimson",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+
+            ax.set_xticks(x)
+            ax.set_xticklabels(x_labels, fontsize=9)
+            ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+            ax.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
+            ax.set_title(r"$\text{SRE (Magic): Initial vs Final TE/non-TE States}$", fontsize=13)
+            ax.spines["top"].set_visible(True)
+            ax.spines["right"].set_visible(True)
+            ax.tick_params(direction="in", top=True, right=True, which="both")
+            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+            ax.legend(frameon=True, fontsize=9, loc="upper left")
+
+            fig.tight_layout()
+            return fig
+
+        # 4. HISTOGRAM SRE
+        elif plot_type == "Histogram SRE":
+            fig, ax = plt.subplots(figsize=(6, 4.5))
+
+            for data, label, file in loaded_data:
+                is_correct_data = "correct_data" in file
+                if not is_correct_data:
+                    continue
+
+                if use_te_filter:
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
+                else:
+                    vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
+
+                if not vals:
+                    continue
+
+                val_k = label.split("=")[-1].strip()
+                ax.hist(vals, bins=25, alpha=0.5, label=f"$k={val_k}$", edgecolor="black", linewidth=0.5)
+
+            ax.set_xlabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
+            ax.set_ylabel(r"$\text{Count}$", fontsize=11)
+            ax.set_title(r"$\text{Histogram of Final State SRE Values}$", fontsize=13)
+            ax.spines["top"].set_visible(True)
+            ax.spines["right"].set_visible(True)
+            ax.tick_params(direction="in", top=True, right=True, which="both")
+            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
+            ax.legend(frameon=True, fontsize=9, loc="best")
+
+            fig.tight_layout()
+            return fig
+
+        return None
+
+    return (plot_te_filtered_trajectories_matplotlib,)
 
 
 @app.cell
-def _():
-    return
+def _(
+    fs,
+    group_selector,
+    grouped_files,
+    metric_selector,
+    metrics_to_plot,
+    mo,
+    plot_button,
+    plot_te_filtered_trajectories_matplotlib,
+    plot_type_dropdown,
+    re,
+    step_mes_input,
+    te_filter_checkbox,
+):
+    mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
+
+    _mpl_files = grouped_files[group_selector.value]
+    _mpl_labels = []
+    for _f in _mpl_files:
+        _m = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
+        if _m:
+            _mpl_labels.append(f"k = {_m.group(1)}")
+        else:
+            _mpl_labels.append(_f.split("/")[-1].replace(".pkl", ""))
+
+    _mpl_fig = plot_te_filtered_trajectories_matplotlib(
+        pkl_files=_mpl_files,
+        labels=_mpl_labels,
+        step_mes=step_mes_input.value,
+        use_te_filter=te_filter_checkbox.value,
+        central_tendency=metric_selector.value,
+        selected_metrics=metrics_to_plot.value,
+        plot_type=plot_type_dropdown.value,
+        fs=fs,
+    )
+
+    matplotlib_plot = _mpl_fig
+    matplotlib_plot
+    return (matplotlib_plot,)
 
 
 if __name__ == "__main__":
