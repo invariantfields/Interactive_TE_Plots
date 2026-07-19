@@ -1413,6 +1413,7 @@ def _(
     )
 
     matplotlib_plot = _plot_fig
+    matplotlib_plot
     return (matplotlib_plot,)
 
 
