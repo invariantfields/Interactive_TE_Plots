@@ -122,17 +122,23 @@ def _(cp, go, is_TE, make_subplots, np, pc, pickle):
                 print(f"Error loading {file}: {e}")
                 continue
 
-            # Filter by TE if checkbox is checked
-            if use_te_filter:
-                final_states = data["final_states"]
-                te_mask = np.array(
-                    [is_TE(cp.asarray(state)) for state in final_states]
-                )
-                n_te = te_mask.sum()
-                if n_te == 0:
+            # Filter by state type if requested (TE / Non-TE / All)
+            final_states = data["final_states"]
+            te_flags = np.array([is_TE(cp.asarray(state)) for state in final_states])
+            if use_te_filter == "TE States" or use_te_filter is True:
+                te_mask = te_flags
+                n_kept = te_mask.sum()
+                if n_kept == 0:
                     print(f"⚠️ {label}: No TE states, skipping.")
                     continue
-                prefix = f"TE-only (n={n_te}) "
+                prefix = f"TE-only (n={n_kept}) "
+            elif use_te_filter == "Non-TE States":
+                te_mask = ~te_flags
+                n_kept = te_mask.sum()
+                if n_kept == 0:
+                    print(f"⚠️ {label}: No non-TE states, skipping.")
+                    continue
+                prefix = f"Non-TE-only (n={n_kept}) "
             else:
                 n_total = len(data["final_states"])
                 te_mask = np.ones(n_total, dtype=bool)
@@ -327,6 +333,12 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         label="**Metrics to Plot:**"
     )
 
+    te_filter_dropdown = mo.ui.dropdown(
+        options=["All States", "TE States", "Non-TE States"],
+        value="TE States",
+        label="**State Filter:**",
+    )
+
     step_mes_input = mo.ui.number(
         start=1, stop=1000, step=1, value=1, label="Steps per measurement"
     )
@@ -337,7 +349,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         plot_button
     ])
@@ -350,7 +362,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         plot_button,
         re,
         step_mes_input,
-        te_filter_checkbox,
+        te_filter_dropdown,
     )
 
 
@@ -366,7 +378,7 @@ def _(
     plot_te_filtered_trajectories,
     re,
     step_mes_input,
-    te_filter_checkbox,
+    te_filter_dropdown,
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
@@ -385,7 +397,7 @@ def _(
         pkl_files=selected_group_files,
         labels=labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         fs=fs,

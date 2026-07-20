@@ -1015,18 +1015,26 @@ def _(cp, go, hex_to_rgba, is_TE, make_subplots, np, pc, pickle):
             with open(file, "rb") as f:
                 data = pickle.load(f)
 
-            # --- 1. Calculate TE Mask ---
-            if use_te_filter:
-                final_states = data["final_states"]
-                te_mask = [
-                    bool(is_TE(cp.asarray(state.full() if hasattr(state, "full") else np.asarray(state)))) 
-                    for state in final_states
-                ]
-                n_te = sum(te_mask)
-                if n_te == 0:
+            # --- 1. Calculate State Mask ---
+            final_states = data["final_states"]
+            te_flags = [
+                bool(is_TE(cp.asarray(state.full() if hasattr(state, "full") else np.asarray(state)))) 
+                for state in final_states
+            ]
+            if use_te_filter == "TE States" or use_te_filter is True:
+                te_mask = te_flags
+                n_kept = sum(te_mask)
+                if n_kept == 0:
                     print(f"⚠️ {label}: No TE states, skipping.")
                     continue
-                prefix = f"TE-only (n={n_te}) "
+                prefix = f"TE-only (n={n_kept}) "
+            elif use_te_filter == "Non-TE States":
+                te_mask = [not f for f in te_flags]
+                n_kept = sum(te_mask)
+                if n_kept == 0:
+                    print(f"⚠️ {label}: No non-TE states, skipping.")
+                    continue
+                prefix = f"Non-TE-only (n={n_kept}) "
             else:
                 n_total = len(data["final_states"])
                 te_mask = [True] * n_total
