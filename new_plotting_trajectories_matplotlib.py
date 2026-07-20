@@ -166,7 +166,19 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
+def _(
+    go,
+    is_TE,
+    jl,
+    make_subplots,
+    np,
+    opt_len,
+    os,
+    pc,
+    pickle,
+    plot_cache,
+    re,
+):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -1237,7 +1249,12 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                                 final_sre = computed_final
 
                             if len(traj) > 2:
-                                trajs.append(list(traj))
+                                t_copy = list(traj)
+                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
+                                    t_copy[0] = derived_init_sre
+                                if t_copy[-1] == 0.0 and is_correct_data:
+                                    t_copy[-1] = computed_final
+                                trajs.append(t_copy)
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
@@ -1246,18 +1263,22 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if not trajs:
                         continue
 
-                    steps = np.arange(len(trajs[0])) * step_mes
-                    arr = np.array(trajs)
+                    max_len = max(len(t) for t in trajs)
+                    arr = np.full((len(trajs), max_len), np.nan)
+                    for j, t in enumerate(trajs):
+                        arr[j, :len(t)] = t
+
+                    steps = np.arange(max_len) * step_mes
 
                     if central_tendency == "Average":
-                        center = np.mean(arr, axis=0)
-                        std = np.std(arr, axis=0)
+                        center = np.nanmean(arr, axis=0)
+                        std = np.nanstd(arr, axis=0)
                         lower_bound = center - std
                         upper_bound = center + std
                     else:
-                        center = np.median(arr, axis=0)
-                        lower_bound = np.percentile(arr, 25, axis=0)
-                        upper_bound = np.percentile(arr, 75, axis=0)
+                        center = np.nanmedian(arr, axis=0)
+                        lower_bound = np.nanpercentile(arr, 25, axis=0)
+                        upper_bound = np.nanpercentile(arr, 75, axis=0)
 
                     color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
