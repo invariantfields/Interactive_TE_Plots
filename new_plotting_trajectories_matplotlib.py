@@ -987,8 +987,10 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
-    te_filter_checkbox = mo.ui.checkbox(
-        value=True, label="🔬 Filter by TE (only trajectories with TE final states)"
+    te_filter_dropdown = mo.ui.dropdown(
+        options=["All States", "TE States", "Non-TE States"],
+        value="TE States",
+        label="**State Filter:**",
     )
 
     metric_selector = mo.ui.radio(
@@ -1025,7 +1027,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
@@ -1039,7 +1041,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         plot_type_dropdown,
         re,
         step_mes_input,
-        te_filter_checkbox,
+        te_filter_dropdown,
     )
 
 
@@ -1056,7 +1058,7 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
-    te_filter_checkbox,
+    te_filter_dropdown,
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
@@ -1075,7 +1077,7 @@ def _(
         pkl_files=selected_group_files,
         labels=labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,
@@ -1527,7 +1529,7 @@ def _(
         pkl_files=_mpl_files,
         labels=_mpl_labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,

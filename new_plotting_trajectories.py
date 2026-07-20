@@ -166,7 +166,19 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
+def _(
+    get_state_mask,
+    go,
+    is_TE,
+    jl,
+    make_subplots,
+    np,
+    os,
+    pc,
+    pickle,
+    plot_cache,
+    re,
+):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -895,7 +907,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
         fig.update_xaxes(title_text="Steps")
         return finalize_arxiv_style(fig)
 
-    return (plot_te_filtered_trajectories,)
+    return compute_sre_exact, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -987,8 +999,10 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
-    te_filter_checkbox = mo.ui.checkbox(
-        value=True, label="🔬 Filter by TE (only trajectories with TE final states)"
+    te_filter_dropdown = mo.ui.dropdown(
+        options=["All States", "TE States", "Non-TE States"],
+        value="TE States",
+        label="**State Filter:**",
     )
 
     metric_selector = mo.ui.radio(
@@ -1025,10 +1039,13 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
+
+
+
     return (
         fs,
         group_selector,
@@ -1039,7 +1056,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         plot_type_dropdown,
         re,
         step_mes_input,
-        te_filter_checkbox,
+        te_filter_dropdown,
     )
 
 
@@ -1056,7 +1073,7 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
-    te_filter_checkbox,
+    te_filter_dropdown,
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
@@ -1075,13 +1092,16 @@ def _(
         pkl_files=selected_group_files,
         labels=labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,
         fs=fs,
     )
     plot
+
+
+
     return
 
 
@@ -1117,7 +1137,17 @@ def _(os, pickle):
 
 
 @app.cell
-def _(is_TE, np, pickle, plt, re):
+def _(
+    colors,
+    compute_sre_exact,
+    data_idx,
+    get_state_mask,
+    is_TE,
+    np,
+    pickle,
+    plt,
+    re,
+):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1510,7 +1540,7 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
-    te_filter_checkbox,
+    te_filter_dropdown,
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
@@ -1527,7 +1557,7 @@ def _(
         pkl_files=_mpl_files,
         labels=_mpl_labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,
@@ -1536,6 +1566,9 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
+
+
+
     return
 
 
