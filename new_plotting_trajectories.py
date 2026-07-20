@@ -225,7 +225,17 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def plot_te_filtered_trajectories(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
-        """Plot trajectories with optional TE filtering and bar chart modes."""
+        """Plot trajectories with optional state filtering (TE / non-TE / all) and bar chart modes."""
+        def get_state_mask(final_states, filter_opt):
+            te_flags = np.array([is_TE(state) for state in final_states])
+            if filter_opt == "TE States" or filter_opt is True:
+                return te_flags, f"TE-only (n={te_flags.sum()}) "
+            elif filter_opt == "Non-TE States":
+                non_te = ~te_flags
+                return non_te, f"Non-TE-only (n={non_te.sum()}) "
+            else:
+                return np.ones(len(final_states), dtype=bool), ""
+
         def finalize_arxiv_style(fig):
             if fig is None:
                 return fig
@@ -272,14 +282,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     print(f"Error loading {file}: {e}")
                     continue
 
-                if use_te_filter:
-                    final_states = data["final_states"]
-                    te_mask = np.array([is_TE(state) for state in final_states])
-                    n_te = te_mask.sum()
-                    if n_te == 0:
-                        continue
-                else:
-                    te_mask = np.ones(len(data["final_states"]), dtype=bool)
+                te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+                if te_mask.sum() == 0:
+                    continue
 
                 base_color = colors[file_idx % len(colors)]
 
@@ -412,18 +417,10 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 print(f"Error loading {file}: {e}")
                 continue
 
-            # Filter by TE if checkbox is checked
-            if use_te_filter:
-                final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
-                n_te = te_mask.sum()
-                if n_te == 0:
-                    continue
-                prefix = f"TE-only (n={n_te}) "
-            else:
-                n_total = len(data["final_states"])
-                te_mask = np.ones(n_total, dtype=bool)
-                prefix = ""
+            # Filter by state type if requested (TE / Non-TE / All)
+            te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+            if te_mask.sum() == 0:
+                continue
 
             base_color = colors[file_idx % len(colors)]
             fill_color = hex_to_rgba(base_color, alpha=0.2)
@@ -831,7 +828,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
+                te_mask, prefix = get_state_mask(final_states, use_te_filter)
                 is_correct_data = "correct_data" in file
 
                 final_sre_vals = []
@@ -845,7 +842,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
                 data_changed = False
                 for j, state in enumerate(final_states):
-                    if use_te_filter and not te_mask[j]:
+                    if not te_mask[j]:
                         continue
 
                     sre_val = data["sre"][j][-1]
@@ -901,7 +898,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
         fig.update_layout(
             title=f"Entanglement Trajectories ({central_tendency})"
-            + (" — TE Filtered" if use_te_filter else ""),
+            + (f" — {use_te_filter}" if use_te_filter in ["TE States", "Non-TE States"] or use_te_filter is True else ""),
             height=500,
             width=400 * len(selected_metrics),
             hovermode="x unified",
@@ -1019,8 +1016,10 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
-    te_filter_checkbox = mo.ui.checkbox(
-        value=True, label="🔬 Filter by TE (only trajectories with TE final states)"
+    te_filter_dropdown = mo.ui.dropdown(
+        options=["All States", "TE States", "Non-TE States"],
+        value="TE States",
+        label="**State Filter:**",
     )
 
     metric_selector = mo.ui.radio(
@@ -1057,7 +1056,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
@@ -1071,7 +1070,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         plot_type_dropdown,
         re,
         step_mes_input,
-        te_filter_checkbox,
+        te_filter_dropdown,
     )
 
 
@@ -1107,7 +1106,7 @@ def _(
         pkl_files=selected_group_files,
         labels=labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,
@@ -1215,9 +1214,11 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    if use_te_filter:
-                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    if use_te_filter == "TE States" or use_te_filter is True:
                         indices = [j for j, keep in enumerate(te_mask) if keep]
+                    elif use_te_filter == "Non-TE States":
+                        indices = [j for j, keep in enumerate(te_mask) if not keep]
                     else:
                         indices = list(range(len(data["final_states"])))
 
@@ -1304,10 +1305,13 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file or "more_data" in file
 
-                    if use_te_filter:
-                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    if use_te_filter == "TE States" or use_te_filter is True:
+                        filter_mask = te_mask
+                    elif use_te_filter == "Non-TE States":
+                        filter_mask = ~te_mask
                     else:
-                        te_mask = np.ones(len(data["final_states"]), dtype=bool)
+                        filter_mask = np.ones(len(data["final_states"]), dtype=bool)
 
                     init_vals = []
                     final_vals = []
@@ -1319,7 +1323,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    for j, keep in enumerate(te_mask):
+                    for j, keep in enumerate(filter_mask):
                         if not keep:
                             continue
                         if metric == "sre" and is_correct_data:
@@ -1511,9 +1515,11 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 if not is_correct_data:
                     continue
 
-                if use_te_filter:
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                if use_te_filter == "TE States" or use_te_filter is True:
                     vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
+                elif use_te_filter == "Non-TE States":
+                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if not keep]
                 else:
                     vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
 
@@ -1578,7 +1584,7 @@ def _(
         pkl_files=_mpl_files,
         labels=_mpl_labels,
         step_mes=step_mes_input.value,
-        use_te_filter=te_filter_checkbox.value,
+        use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
         selected_metrics=metrics_to_plot.value,
         plot_type=plot_type_dropdown.value,

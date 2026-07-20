@@ -1017,8 +1017,10 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
-    te_filter_checkbox = mo.ui.checkbox(
-        value=True, label="🔬 Filter by TE (only trajectories with TE final states)"
+    te_filter_dropdown = mo.ui.dropdown(
+        options=["All States", "TE States", "Non-TE States"],
+        value="TE States",
+        label="**State Filter:**",
     )
 
     metric_selector = mo.ui.radio(
@@ -1055,7 +1057,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
@@ -1069,7 +1071,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         plot_type_dropdown,
         re,
         step_mes_input,
-        te_filter_checkbox,
+        te_filter_dropdown,
     )
 
 
@@ -1208,9 +1210,11 @@ def _(is_TE, np, pickle, plt, re):
                     data_changed = False
                     trajs = []
 
-                    if use_te_filter:
-                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    if use_te_filter == "TE States" or use_te_filter is True:
                         indices = [j for j, keep in enumerate(te_mask) if keep]
+                    elif use_te_filter == "Non-TE States":
+                        indices = [j for j, keep in enumerate(te_mask) if not keep]
                     else:
                         indices = list(range(len(data["final_states"])))
 
@@ -1302,14 +1306,6 @@ def _(is_TE, np, pickle, plt, re):
                 for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
 
-                    if use_te_filter:
-                        te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
-                    else:
-                        te_mask = np.ones(len(data["final_states"]), dtype=bool)
-                        trajs = data[metric]
-
-                    if not trajs:
                         continue
 
                     init_vals = []
@@ -1322,7 +1318,7 @@ def _(is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    for j, keep in enumerate(te_mask):
+                    for j, keep in enumerate(filter_mask):
                         if not keep:
                             continue
                         if metric == "sre" and is_correct_data:
@@ -1428,9 +1424,11 @@ def _(is_TE, np, pickle, plt, re):
                 if not is_correct_data:
                     continue
 
-                if use_te_filter:
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                if use_te_filter == "TE States" or use_te_filter is True:
                     vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
+                elif use_te_filter == "Non-TE States":
+                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if not keep]
                 else:
                     vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
 
