@@ -922,6 +922,7 @@ def _(
                     x=0.5,
                 ),
             )
+            return finalize_arxiv_style(fig)
 
 
     return compute_sre_exact, plot_te_filtered_trajectories
