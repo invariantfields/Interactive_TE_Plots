@@ -1305,7 +1305,6 @@ def _(is_TE, np, pickle, plt, re):
                        label=r"$\text{Final State}$", color="#ff7f0e",
                        edgecolor="black", linewidth=0.5, error_kw=ekw)
 
-                ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
                 ax.bar_label(b_final, labels=[f"n={n}" for n in final_counts], fontsize=7, padding=3, color="black")
 
                 ax.set_facecolor('white')
@@ -1413,7 +1412,6 @@ def _(is_TE, np, pickle, plt, re):
                    label=r"$\text{Final non-TE States}$", color="crimson",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
 
-            ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
             ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3, color="black")
             ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3, color="black")
 
