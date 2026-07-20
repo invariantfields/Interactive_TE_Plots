@@ -1110,8 +1110,6 @@ def _(
     )
     plot
 
-
-
     return
 
 
@@ -1575,8 +1573,6 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-
-
 
     return
 
