@@ -190,7 +190,6 @@ def run_jax_gpu_optimization(
     jl.seval("using Logging")
     jl.seval("disable_logging(Logging.Error)")
     jl.seval("using HadaMAG")
-    jl.seval("using CUDA")
     jl.seval("using LinearAlgebra: norm")
     jl.seval("""
     function jl_compute_sre_batch(psi_batch_np, alpha, n_qubits, dim, num_starts)
@@ -203,7 +202,7 @@ def run_jax_gpu_optimization(
                 psi_jl ./= nrm
             end
             psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
+            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CPU, progress=false)
             results[i] = sre_result
         end
         return results
