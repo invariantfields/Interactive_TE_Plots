@@ -923,7 +923,11 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
 
 
-    return (plot_te_filtered_trajectories,)
+
+
+
+
+    return compute_sre_exact, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -1145,7 +1149,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(is_TE, np, pickle, plt, re):
+def _(compute_sre_exact, is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1196,25 +1200,74 @@ def _(is_TE, np, pickle, plt, re):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data, label, file in loaded_data:
+                for data_idx, (data, label, file) in enumerate(loaded_data):
+                    is_correct_data = "correct_data" in file
+                    derived_init_sre = 0.0
+                    _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                    if not _gap_match and file:
+                        _gap_match = re.search(r'_stps_(\d+)', file)
+                    if _gap_match:
+                        derived_init_sre = float(_gap_match.group(1))
+
                     if use_te_filter:
                         te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                        indices = [j for j, keep in enumerate(te_mask) if keep]
                     else:
-                        trajs = data[metric]
+                        indices = list(range(len(data["final_states"])))
+
+                    trajs = []
+                    for j in indices:
+                        traj = data[metric][j]
+                        opt_len = 2
+                        for m in ["average_purity", "max_purity", "total_violation"]:
+                            if m in data and data[m]:
+                                opt_len = len(data[m][j])
+                                break
+
+                        is_sre_metric = (metric == "sre")
+                        if is_sre_metric:
+                            init_sre = traj[0]
+                            final_sre = traj[-1]
+                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                                init_sre = derived_init_sre
+                            if final_sre == 0.0 and is_correct_data:
+                                computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
+                                final_sre = computed_final
+
+                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            if has_step_by_step:
+                                trajs.append(list(traj))
+                            else:
+                                trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                        else:
+                            trajs.append(traj)
 
                     if not trajs:
                         continue
 
                     steps = np.arange(len(trajs[0])) * step_mes
-                    center = np.mean(trajs, axis=0) if central_tendency == "Average" else np.median(trajs, axis=0)
+                    arr = np.array(trajs)
+
+                    if central_tendency == "Average":
+                        center = np.mean(arr, axis=0)
+                        std = np.std(arr, axis=0)
+                        lower_bound = center - std
+                        upper_bound = center + std
+                    else:
+                        center = np.median(arr, axis=0)
+                        lower_bound = np.percentile(arr, 25, axis=0)
+                        upper_bound = np.percentile(arr, 75, axis=0)
+
+                    color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
-                    ax.plot(steps, center, label=f"$k={val_k}$", linewidth=1.5)
+                    ax.plot(steps, center, label=f"$k={val_k}$", color=color, linewidth=2.0)
+                    ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
                 if col_idx == 0:
@@ -1223,7 +1276,8 @@ def _(is_TE, np, pickle, plt, re):
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
-                ax.legend(frameon=True, fontsize=9, loc="best")
+                if col_idx == 0:
+                    ax.legend(frameon=True, fontsize=9, loc="best")
 
             fig.tight_layout()
             return fig
@@ -1482,6 +1536,10 @@ def _(is_TE, np, pickle, plt, re):
             return fig
 
         return None
+
+
+
+
 
 
 

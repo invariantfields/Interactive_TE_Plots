@@ -1190,12 +1190,13 @@ def _(is_TE, np, pickle, plt, re):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data, label, file in loaded_data:
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1255,9 +1256,22 @@ def _(is_TE, np, pickle, plt, re):
                         continue
 
                     steps = np.arange(len(trajs[0])) * step_mes
-                    center = np.mean(trajs, axis=0) if central_tendency == "Average" else np.median(trajs, axis=0)
+                    arr = np.array(trajs)
+
+                    if central_tendency == "Average":
+                        center = np.mean(arr, axis=0)
+                        std = np.std(arr, axis=0)
+                        lower_bound = center - std
+                        upper_bound = center + std
+                    else:
+                        center = np.median(arr, axis=0)
+                        lower_bound = np.percentile(arr, 25, axis=0)
+                        upper_bound = np.percentile(arr, 75, axis=0)
+
+                    color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
-                    ax.plot(steps, center, label=f"$k={val_k}$", linewidth=1.5)
+                    ax.plot(steps, center, label=f"$k={val_k}$", color=color, linewidth=2.0)
+                    ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
                 if col_idx == 0:
