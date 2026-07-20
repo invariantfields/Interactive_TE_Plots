@@ -445,8 +445,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                         continue
                     if metric == "sre" and is_correct_data:
                         final_state = data["final_states"][j]
-                        init_sre = data["sre"][j][0]
-                        final_sre = data["sre"][j][-1]
+                        traj = data["sre"][j]
+                        init_sre = traj[0]
+                        final_sre = traj[-1]
 
                         if init_sre == 0.0 and derived_init_sre != 0.0:
                             init_sre = derived_init_sre
@@ -457,7 +458,18 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             final_sre = computed_final
                             data["sre"][j][-1] = computed_final
                             data_changed = True
-                        filtered_trajs.append([init_sre, final_sre])
+
+                        opt_len = 2
+                        for m in ["average_purity", "max_purity", "total_violation"]:
+                            if m in data and data[m]:
+                                opt_len = len(data[m][j])
+                                break
+
+                        has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
+                        if has_step_by_step:
+                            filtered_trajs.append(list(traj))
+                        else:
+                            filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                     else:
                         filtered_trajs.append(data[metric][j])
 
