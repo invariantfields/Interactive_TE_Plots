@@ -225,17 +225,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def plot_te_filtered_trajectories(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
-        """Plot trajectories with optional state filtering (TE / non-TE / all) and bar chart modes."""
-        def get_state_mask(final_states, filter_opt):
-            te_flags = np.array([is_TE(state) for state in final_states])
-            if filter_opt == "TE States" or filter_opt is True:
-                return te_flags, f"TE-only (n={te_flags.sum()}) "
-            elif filter_opt == "Non-TE States":
-                non_te = ~te_flags
-                return non_te, f"Non-TE-only (n={non_te.sum()}) "
-            else:
-                return np.ones(len(final_states), dtype=bool), ""
-
+        """Plot trajectories with optional TE filtering and bar chart modes."""
         def finalize_arxiv_style(fig):
             if fig is None:
                 return fig
@@ -443,35 +433,23 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 for j, keep in enumerate(te_mask):
                     if not keep:
                         continue
-                    traj = data[metric][j]
-                    opt_len = 2
-                    for m in ["average_purity", "max_purity", "total_violation"]:
-                        if m in data and data[m]:
-                            opt_len = len(data[m][j])
-                            break
+                    if metric == "sre" and is_correct_data:
+                        final_state = data["final_states"][j]
+                        init_sre = data["sre"][j][0]
+                        final_sre = data["sre"][j][-1]
 
-                    is_sre_metric = (metric == "sre")
-                    if is_sre_metric:
-                        init_sre = traj[0]
-                        final_sre = traj[-1]
                         if init_sre == 0.0 and derived_init_sre != 0.0:
                             init_sre = derived_init_sre
-                            if is_correct_data:
-                                data["sre"][j][0] = derived_init_sre
-                                data_changed = True
-                        if final_sre == 0.0 and is_correct_data:
-                            computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
+                            data["sre"][j][0] = derived_init_sre
+                            data_changed = True
+                        if final_sre == 0.0:
+                            computed_final, _ = compute_sre_exact(final_state, alpha=2)
                             final_sre = computed_final
                             data["sre"][j][-1] = computed_final
                             data_changed = True
-
-                        has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
-                        if has_step_by_step:
-                            filtered_trajs.append(list(traj))
-                        else:
-                            filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                        filtered_trajs.append([init_sre, final_sre])
                     else:
-                        filtered_trajs.append(traj)
+                        filtered_trajs.append(data[metric][j])
 
                 # Store back to pickle
                 if data_changed and not fs:
@@ -828,7 +806,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     continue
 
                 final_states = data["final_states"]
-                te_mask, prefix = get_state_mask(final_states, use_te_filter)
+                te_mask = np.array([is_TE(state) for state in final_states])
                 is_correct_data = "correct_data" in file
 
                 final_sre_vals = []
@@ -840,6 +818,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 if _gap_match:
                     derived_init_sre = float(_gap_match.group(1))
 
+                te_mask, _ = get_state_mask(final_states, use_te_filter)
                 data_changed = False
                 for j, state in enumerate(final_states):
                     if not te_mask[j]:
@@ -898,7 +877,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
         fig.update_layout(
             title=f"Entanglement Trajectories ({central_tendency})"
-            + (f" — {use_te_filter}" if use_te_filter in ["TE States", "Non-TE States"] or use_te_filter is True else ""),
+            + (" — TE Filtered" if use_te_filter else ""),
             height=500,
             width=400 * len(selected_metrics),
             hovermode="x unified",
@@ -916,19 +895,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
         fig.update_xaxes(title_text="Steps")
         return finalize_arxiv_style(fig)
 
-
-
-
-
-
-
-
-
-
-
-
-
-    return compute_sre_exact, plot_te_filtered_trajectories
+    return (plot_te_filtered_trajectories,)
 
 
 @app.cell
@@ -1150,7 +1117,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(compute_sre_exact, is_TE, np, pickle, plt, re):
+def _(is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1201,13 +1168,12 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
-            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1216,13 +1182,8 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                    if use_te_filter == "TE States" or use_te_filter is True:
-                        indices = [j for j, keep in enumerate(te_mask) if keep]
-                    elif use_te_filter == "Non-TE States":
-                        indices = [j for j, keep in enumerate(te_mask) if not keep]
-                    else:
-                        indices = list(range(len(data["final_states"])))
+                    te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+                    indices = [j for j, keep in enumerate(te_mask) if keep]
 
                     trajs = []
                     for j in indices:
@@ -1279,8 +1240,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
-                if col_idx == 0:
-                    ax.legend(frameon=True, fontsize=9, loc="best")
+                ax.legend(frameon=True, fontsize=9, loc="best")
 
             fig.tight_layout()
             return fig
@@ -1307,13 +1267,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file or "more_data" in file
 
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                    if use_te_filter == "TE States" or use_te_filter is True:
-                        filter_mask = te_mask
-                    elif use_te_filter == "Non-TE States":
-                        filter_mask = ~te_mask
-                    else:
-                        filter_mask = np.ones(len(data["final_states"]), dtype=bool)
+                    te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
 
                     init_vals = []
                     final_vals = []
@@ -1325,7 +1279,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    for j, keep in enumerate(filter_mask):
+                    for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
                         if metric == "sre" and is_correct_data:
@@ -1517,13 +1471,8 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 if not is_correct_data:
                     continue
 
-                te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                if use_te_filter == "TE States" or use_te_filter is True:
-                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
-                elif use_te_filter == "Non-TE States":
-                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if not keep]
-                else:
-                    vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
+                te_mask, _ = get_state_mask(data["final_states"], use_te_filter)
+                vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
 
                 if not vals:
                     continue
@@ -1544,18 +1493,6 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
             return fig
 
         return None
-
-
-
-
-
-
-
-
-
-
-
-
 
     return (plot_te_filtered_trajectories_matplotlib,)
 

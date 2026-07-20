@@ -272,14 +272,9 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                     print(f"Error loading {file}: {e}")
                     continue
 
-                if use_te_filter:
-                    final_states = data["final_states"]
-                    te_mask = np.array([is_TE(state) for state in final_states])
-                    n_te = te_mask.sum()
-                    if n_te == 0:
-                        continue
-                else:
-                    te_mask = np.ones(len(data["final_states"]), dtype=bool)
+                te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+                if te_mask.sum() == 0:
+                    continue
 
                 base_color = colors[file_idx % len(colors)]
 
@@ -412,18 +407,10 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 print(f"Error loading {file}: {e}")
                 continue
 
-            # Filter by TE if checkbox is checked
-            if use_te_filter:
-                final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
-                n_te = te_mask.sum()
-                if n_te == 0:
-                    continue
-                prefix = f"TE-only (n={n_te}) "
-            else:
-                n_total = len(data["final_states"])
-                te_mask = np.ones(n_total, dtype=bool)
-                prefix = ""
+            # Filter by state type if requested (TE / Non-TE / All)
+            te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+            if te_mask.sum() == 0:
+                continue
 
             base_color = colors[file_idx % len(colors)]
             fill_color = hex_to_rgba(base_color, alpha=0.2)
@@ -460,25 +447,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             final_sre = computed_final
                             data["sre"][j][-1] = computed_final
                             data_changed = True
-
-                        # Support full step-by-step SRE trajectories or interpolate endpoints for old data
-                        sre_traj = data["sre"][j]
-                        opt_len = 2
-                        for m in ["average_purity", "max_purity", "total_violation"]:
-                            if m in data and data[m]:
-                                opt_len = len(data[m][0])
-                                break
-
-                        has_step_by_step = False
-                        if len(sre_traj) == opt_len:
-                            if opt_len > 2 and any(v != 0.0 for v in sre_traj[1:-1]):
-                                has_step_by_step = True
-
-                        if has_step_by_step:
-                            filtered_trajs.append(list(sre_traj))
-                        else:
-                            # Draw a straight line from start to end by linear interpolation
-                            filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                        filtered_trajs.append([init_sre, final_sre])
                     else:
                         filtered_trajs.append(data[metric][j])
 
@@ -798,7 +767,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
 
             fig.update_layout(
                 title=f"SRE (Magic) Comparison of Initial vs Final States ({central_tendency})",
-                xaxis_title="Experiment Gap",
+                xaxis_title="Stabilizer gap",
                 yaxis_title="SRE Value",
                 barmode="group",
                 height=500,
@@ -849,9 +818,10 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                 if _gap_match:
                     derived_init_sre = float(_gap_match.group(1))
 
+                te_mask, _ = get_state_mask(final_states, use_te_filter)
                 data_changed = False
                 for j, state in enumerate(final_states):
-                    if use_te_filter and not te_mask[j]:
+                    if not te_mask[j]:
                         continue
 
                     sre_val = data["sre"][j][-1]
@@ -1017,10 +987,8 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
-    te_filter_dropdown = mo.ui.dropdown(
-        options=["All States", "TE States", "Non-TE States"],
-        value="TE States",
-        label="**State Filter:**",
+    te_filter_checkbox = mo.ui.checkbox(
+        value=True, label="🔬 Filter by TE (only trajectories with TE final states)"
     )
 
     metric_selector = mo.ui.radio(
@@ -1057,7 +1025,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     mo.vstack([
         group_selector,
         mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
+        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_checkbox, metric_selector, step_mes_input], justify="start", gap=2),
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
@@ -1071,7 +1039,7 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         plot_type_dropdown,
         re,
         step_mes_input,
-        te_filter_dropdown,
+        te_filter_checkbox,
     )
 
 
@@ -1161,7 +1129,15 @@ def _(is_TE, np, pickle, plt, re):
             "font.family": "serif",
             "font.serif": ["Computer Modern", "DejaVu Serif"],
             "mathtext.fontset": "cm",
-            "axes.formatter.use_mathtext": True
+            "axes.formatter.use_mathtext": True,
+            "text.color": "black",
+            "axes.labelcolor": "black",
+            "axes.edgecolor": "black",
+            "xtick.color": "black",
+            "ytick.color": "black",
+            "figure.facecolor": "white",
+            "axes.facecolor": "white",
+            "savefig.facecolor": "white"
         })
 
         metric_map = {
@@ -1192,13 +1168,12 @@ def _(is_TE, np, pickle, plt, re):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
-            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1207,17 +1182,10 @@ def _(is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    data_changed = False
+                    te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+                    indices = [j for j, keep in enumerate(te_mask) if keep]
+
                     trajs = []
-
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                    if use_te_filter == "TE States" or use_te_filter is True:
-                        indices = [j for j, keep in enumerate(te_mask) if keep]
-                    elif use_te_filter == "Non-TE States":
-                        indices = [j for j, keep in enumerate(te_mask) if not keep]
-                    else:
-                        indices = list(range(len(data["final_states"])))
-
                     for j in indices:
                         traj = data[metric][j]
                         opt_len = 2
@@ -1232,14 +1200,9 @@ def _(is_TE, np, pickle, plt, re):
                             final_sre = traj[-1]
                             if init_sre == 0.0 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
-                                if is_correct_data:
-                                    data["sre"][j][0] = derived_init_sre
-                                    data_changed = True
                             if final_sre == 0.0 and is_correct_data:
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
-                                data["sre"][j][-1] = computed_final
-                                data_changed = True
 
                             has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
                             if has_step_by_step:
@@ -1248,13 +1211,6 @@ def _(is_TE, np, pickle, plt, re):
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
                             trajs.append(traj)
-
-                    if data_changed and not fs:
-                        try:
-                            with open(file, "wb") as f:
-                                pickle.dump(data, f)
-                        except Exception as e:
-                            print(f"Error saving updated SRE back to {file}: {e}")
 
                     if not trajs:
                         continue
@@ -1284,16 +1240,15 @@ def _(is_TE, np, pickle, plt, re):
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
                 ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
-                if col_idx == 0:
-                    ax.legend(frameon=True, fontsize=9, loc="best")
+                ax.legend(frameon=True, fontsize=9, loc="best")
 
             fig.tight_layout()
             return fig
 
-        # 2. BAR CHART
+        # 2. BAR CHART — Initial (Magic) vs Final with error bars + All Combined
         elif plot_type == "Bar Chart":
             n_plots = len(selected_metrics)
-            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), squeeze=False)
+            fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 5.0), squeeze=False, facecolor='white')
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
@@ -1301,16 +1256,18 @@ def _(is_TE, np, pickle, plt, re):
 
                 x_labels = []
                 init_means = []
+                init_errs = []
+                init_counts = []
                 final_means = []
+                final_errs = []
+                final_counts = []
+                global_init_vals = []
+                global_final_vals = []
+
                 for data, label, file in loaded_data:
-                    is_correct_data = "correct_data" in file
-                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                    if use_te_filter == "TE States" or use_te_filter is True:
-                        filter_mask = te_mask
-                    elif use_te_filter == "Non-TE States":
-                        filter_mask = ~te_mask
-                    else:
-                        filter_mask = np.ones(len(data["final_states"]), dtype=bool)
+                    is_correct_data = "correct_data" in file or "more_data" in file
+
+                    te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
 
                     init_vals = []
                     final_vals = []
@@ -1322,7 +1279,7 @@ def _(is_TE, np, pickle, plt, re):
                     if _gap_match:
                         derived_init_sre = float(_gap_match.group(1))
 
-                    for j, keep in enumerate(filter_mask):
+                    for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
                         if metric == "sre" and is_correct_data:
@@ -1337,86 +1294,172 @@ def _(is_TE, np, pickle, plt, re):
                     if not init_vals:
                         continue
 
-                    x_labels.append(f"$k={label.split('=')[-1].strip()}$")
+                    val_k = label.split("=")[-1].strip()
+                    x_labels.append(f"$k={val_k}$")
+                    global_init_vals.extend(init_vals)
+                    global_final_vals.extend(final_vals)
+
                     if central_tendency == "Average":
                         init_means.append(np.mean(init_vals))
                         final_means.append(np.mean(final_vals))
                     else:
                         init_means.append(np.median(init_vals))
                         final_means.append(np.median(final_vals))
+                    init_errs.append(np.std(init_vals) if len(init_vals) > 1 else 0.0)
+                    final_errs.append(np.std(final_vals) if len(final_vals) > 1 else 0.0)
+                    init_counts.append(len(init_vals))
+                    final_counts.append(len(final_vals))
+
+                # All Combined summary bar
+                if global_init_vals:
+                    x_labels.append(r"$\mathrm{All\ Combined}$")
+                    if central_tendency == "Average":
+                        init_means.append(np.mean(global_init_vals))
+                        final_means.append(np.mean(global_final_vals))
+                    else:
+                        init_means.append(np.median(global_init_vals))
+                        final_means.append(np.median(global_final_vals))
+                    init_errs.append(np.std(global_init_vals) if len(global_init_vals) > 1 else 0.0)
+                    final_errs.append(np.std(global_final_vals) if len(global_final_vals) > 1 else 0.0)
+                    init_counts.append(len(global_init_vals))
+                    final_counts.append(len(global_final_vals))
 
                 x = np.arange(len(x_labels))
                 width = 0.35
+                ekw = dict(elinewidth=0.8, capthick=0.8)
 
-                ax.bar(x - width/2, init_means, width, label="Initial State", color="#1f77b4", edgecolor="black", linewidth=0.5)
-                ax.bar(x + width/2, final_means, width, label="Final State", color="#ff7f0e", edgecolor="black", linewidth=0.5)
+                b_init = ax.bar(x - width/2, init_means, width, yerr=init_errs, capsize=3,
+                       label=r"$\text{Initial State (Magic)}$", color="mediumseagreen",
+                       edgecolor="black", linewidth=0.5, error_kw=ekw)
+                b_final = ax.bar(x + width/2, final_means, width, yerr=final_errs, capsize=3,
+                       label=r"$\text{Final State}$", color="#ff7f0e",
+                       edgecolor="black", linewidth=0.5, error_kw=ekw)
 
+                ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
+                ax.bar_label(b_final, labels=[f"n={n}" for n in final_counts], fontsize=7, padding=3, color="black")
+
+                ax.set_facecolor('white')
                 ax.set_xticks(x)
-                ax.set_xticklabels(x_labels)
-                ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
+                ax.set_xticklabels(x_labels, fontsize=9)
+                ax.set_xlabel(r"$\text{Stabilizer gap } (k)$", fontsize=11)
                 if col_idx == 0:
                     ax.set_ylabel(r"$\text{Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
-                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
-                if col_idx == 0:
-                    ax.legend(frameon=True, fontsize=9, loc="best")
+                ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+                ax.legend(frameon=True, fontsize=9, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
+                ax.margins(y=0.15)
 
-            fig.tight_layout()
+            fig.subplots_adjust(bottom=0.22)
             return fig
 
-        # 3. TE vs non-TE SRE BAR CHART
+        # 3. TE vs non-TE SRE — 3 bar groups: Initial (Magic), TE, non-TE + All Combined
         elif plot_type == "TE vs non-TE SRE":
-            fig, ax = plt.subplots(figsize=(6, 4.5))
+            fig, ax = plt.subplots(figsize=(8, 5.2), facecolor='white')
+            ax.set_facecolor('white')
 
             x_labels = []
-            te_means = []
-            non_te_means = []
+            init_centers = []
+            init_errs = []
+            init_counts = []
+            te_centers = []
+            te_errs = []
+            te_counts = []
+            non_te_centers = []
+            non_te_errs = []
+            non_te_counts = []
+            global_init = []
+            global_te = []
+            global_non_te = []
 
             for data, label, file in loaded_data:
-                is_correct_data = ("correct_data" in file) or ("more_data" in file)
                 te_mask = np.array([is_TE(state) for state in data["final_states"]])
 
+                derived_init_sre = 0.0
+                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                if not _gap_match and file:
+                    _gap_match = re.search(r'_stps_(\d+)', file)
+                if _gap_match:
+                    derived_init_sre = float(_gap_match.group(1))
+
+                init_vals = []
                 te_vals = []
                 non_te_vals = []
 
                 for j, is_te_state in enumerate(te_mask):
-                    sre_val = data["sre"][j][-1]
+                    init_sre = data["sre"][j][0]
+                    final_sre = data["sre"][j][-1]
+                    init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
                     if is_te_state:
-                        te_vals.append(sre_val)
+                        te_vals.append(final_sre)
                     else:
-                        non_te_vals.append(sre_val)
+                        non_te_vals.append(final_sre)
 
                 if not te_vals and not non_te_vals:
                     continue
 
-                x_labels.append(f"$k={label.split('=')[-1].strip()}$")
-                if central_tendency == "Average":
-                    te_means.append(np.mean(te_vals) if te_vals else 0.0)
-                    non_te_means.append(np.mean(non_te_vals) if non_te_vals else 0.0)
-                else:
-                    te_means.append(np.median(te_vals) if te_vals else 0.0)
-                    non_te_means.append(np.median(non_te_vals) if non_te_vals else 0.0)
+                val_k = label.split("=")[-1].strip()
+                x_labels.append(f"$k={val_k}$")
+                global_init.extend(init_vals)
+                global_te.extend(te_vals)
+                global_non_te.extend(non_te_vals)
+
+                def _stat(vals):
+                    if not vals:
+                        return 0.0, 0.0
+                    c = np.mean(vals) if central_tendency == "Average" else np.median(vals)
+                    e = np.std(vals) if len(vals) > 1 else 0.0
+                    return c, e
+
+                ic, ie = _stat(init_vals)
+                tc, te_e = _stat(te_vals)
+                nc, ne = _stat(non_te_vals)
+                init_centers.append(ic); init_errs.append(ie); init_counts.append(len(init_vals))
+                te_centers.append(tc); te_errs.append(te_e); te_counts.append(len(te_vals))
+                non_te_centers.append(nc); non_te_errs.append(ne); non_te_counts.append(len(non_te_vals))
+
+            # All Combined
+            if global_te or global_non_te:
+                x_labels.append(r"$\mathrm{All\ Combined}$")
+                ic = np.mean(global_init) if central_tendency == "Average" else np.median(global_init)
+                tc = np.mean(global_te) if central_tendency == "Average" else np.median(global_te)
+                nc = np.mean(global_non_te) if central_tendency == "Average" else np.median(global_non_te)
+                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0); init_counts.append(len(global_init))
+                te_centers.append(tc); te_errs.append(np.std(global_te) if global_te else 0.0); te_counts.append(len(global_te))
+                non_te_centers.append(nc); non_te_errs.append(np.std(global_non_te) if global_non_te else 0.0); non_te_counts.append(len(global_non_te))
 
             x = np.arange(len(x_labels))
-            width = 0.35
+            width = 0.25
+            ekw = dict(elinewidth=0.8, capthick=0.8)
 
-            ax.bar(x - width/2, te_means, width, label="TE Final States", color="forestgreen", edgecolor="black", linewidth=0.5)
-            ax.bar(x + width/2, non_te_means, width, label="non-TE Final States", color="crimson", edgecolor="black", linewidth=0.5)
+            b_init = ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
+                   label=r"$\text{Initial (Magic)}$", color="mediumseagreen",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+            b_te = ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
+                   label=r"$\text{Final TE States}$", color="royalblue",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+            b_non_te = ax.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
+                   label=r"$\text{Final non-TE States}$", color="crimson",
+                   edgecolor="black", linewidth=0.5, error_kw=ekw)
+
+            ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
+            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3, color="black")
+            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3, color="black")
 
             ax.set_xticks(x)
-            ax.set_xticklabels(x_labels)
-            ax.set_xlabel(r"$\text{Experiment Gap } (k)$", fontsize=11)
-            ax.set_ylabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
-            ax.set_title(r"$\text{SRE: TE vs non-TE Final States}$", fontsize=13)
+            ax.set_xticklabels(x_labels, fontsize=9)
+            ax.set_xlabel(r"$\text{Stabilizer gap } (k)$", fontsize=11)
+            ax.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
+            ax.set_title(r"$\text{SRE (Magic): Initial vs Final TE/non-TE States}$", fontsize=13)
             ax.spines["top"].set_visible(True)
             ax.spines["right"].set_visible(True)
             ax.tick_params(direction="in", top=True, right=True, which="both")
-            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
-            ax.legend(frameon=True, fontsize=9, loc="best")
+            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+            ax.legend(frameon=True, fontsize=9, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=3)
+            ax.margins(y=0.15)
 
-            fig.tight_layout()
+            fig.subplots_adjust(bottom=0.25)
             return fig
 
         # 4. HISTOGRAM SRE
@@ -1428,18 +1471,14 @@ def _(is_TE, np, pickle, plt, re):
                 if not is_correct_data:
                     continue
 
-                te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                if use_te_filter == "TE States" or use_te_filter is True:
-                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
-                elif use_te_filter == "Non-TE States":
-                    vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if not keep]
-                else:
-                    vals = [data["sre"][j][-1] for j in range(len(data["final_states"]))]
+                te_mask, _ = get_state_mask(data["final_states"], use_te_filter)
+                vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
 
                 if not vals:
                     continue
 
-                ax.hist(vals, bins=25, alpha=0.5, label=f"$k={label.split('=')[-1].strip()}$", edgecolor="black", linewidth=0.5)
+                val_k = label.split("=")[-1].strip()
+                ax.hist(vals, bins=25, alpha=0.5, label=f"$k={val_k}$", edgecolor="black", linewidth=0.5)
 
             ax.set_xlabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
             ax.set_ylabel(r"$\text{Count}$", fontsize=11)
@@ -1475,20 +1514,18 @@ def _(
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
-    _selected_group_files = grouped_files[group_selector.value]
-
-    # Deriving labels representing the gaps from the filenames
-    _labels = []
-    for _f in _selected_group_files:
-        _match = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
-        if _match:
-            _labels.append(f"k = {_match.group(1)}")
+    _mpl_files = grouped_files[group_selector.value]
+    _mpl_labels = []
+    for _f in _mpl_files:
+        _m = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
+        if _m:
+            _mpl_labels.append(f"k = {_m.group(1)}")
         else:
-            _labels.append(_f.split("/")[-1].replace(".pkl", ""))
+            _mpl_labels.append(_f.split("/")[-1].replace(".pkl", ""))
 
-    _plot_fig = plot_te_filtered_trajectories_matplotlib(
-        pkl_files=_selected_group_files,
-        labels=_labels,
+    _mpl_fig = plot_te_filtered_trajectories_matplotlib(
+        pkl_files=_mpl_files,
+        labels=_mpl_labels,
         step_mes=step_mes_input.value,
         use_te_filter=te_filter_checkbox.value,
         central_tendency=metric_selector.value,
@@ -1497,7 +1534,7 @@ def _(
         fs=fs,
     )
 
-    matplotlib_plot = _plot_fig
+    matplotlib_plot = _mpl_fig
     matplotlib_plot
     return
 
