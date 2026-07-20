@@ -166,19 +166,7 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(
-    get_state_mask,
-    go,
-    is_TE,
-    jl,
-    make_subplots,
-    np,
-    os,
-    pc,
-    pickle,
-    plot_cache,
-    re,
-):
+def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -915,7 +903,7 @@ def _(
             ),
         )
         fig.update_xaxes(title_text="Steps")
-        return finalize_arxiv_style(fig)
+
 
     return compute_sre_exact, plot_te_filtered_trajectories
 
@@ -1147,17 +1135,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(
-    colors,
-    compute_sre_exact,
-    data_idx,
-    get_state_mask,
-    is_TE,
-    np,
-    pickle,
-    plt,
-    re,
-):
+def _(colors, compute_sre_exact, data_idx, is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1218,12 +1196,13 @@ def _(
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data, label, file in loaded_data:
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1540,9 +1519,7 @@ def _(
             ax.legend(frameon=True, fontsize=9, loc="best")
 
             fig.tight_layout()
-            return fig
 
-        return None
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
