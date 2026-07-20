@@ -1214,39 +1214,35 @@ def _(is_TE, np, pickle, plt, re):
                         indices = list(range(len(data["final_states"])))
 
                     for j in indices:
-                        if metric == "sre" and is_correct_data:
-                            final_state = data["final_states"][j]
-                            init_sre = data["sre"][j][0]
-                            final_sre = data["sre"][j][-1]
+                        traj = data[metric][j]
+                        opt_len = 2
+                        for m in ["average_purity", "max_purity", "total_violation"]:
+                            if m in data and data[m]:
+                                opt_len = len(data[m][j])
+                                break
 
+                        is_sre_metric = (metric == "sre")
+                        if is_sre_metric:
+                            init_sre = traj[0]
+                            final_sre = traj[-1]
                             if init_sre == 0.0 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
-                                data["sre"][j][0] = derived_init_sre
-                                data_changed = True
-                            if final_sre == 0.0:
-                                computed_final, _ = compute_sre_exact(final_state, alpha=2)
+                                if is_correct_data:
+                                    data["sre"][j][0] = derived_init_sre
+                                    data_changed = True
+                            if final_sre == 0.0 and is_correct_data:
+                                computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
                                 data["sre"][j][-1] = computed_final
                                 data_changed = True
 
-                            sre_traj = data["sre"][j]
-                            opt_len = 2
-                            for m in ["average_purity", "max_purity", "total_violation"]:
-                                if m in data and data[m]:
-                                    opt_len = len(data[m][0])
-                                    break
-
-                            has_step_by_step = False
-                            if len(sre_traj) == opt_len:
-                                if opt_len > 2 and any(v != 0.0 for v in sre_traj[1:-1]):
-                                    has_step_by_step = True
-
+                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
                             if has_step_by_step:
-                                trajs.append(list(sre_traj))
+                                trajs.append(list(traj))
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
-                            trajs.append(data[metric][j])
+                            trajs.append(traj)
 
                     if data_changed and not fs:
                         try:
