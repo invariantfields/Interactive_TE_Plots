@@ -1069,7 +1069,6 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         grouped_files,
         metric_selector,
         metrics_to_plot,
-        plot_button,
         plot_type_dropdown,
         re,
         step_mes_input,
@@ -1085,15 +1084,13 @@ def _(
     metric_selector,
     metrics_to_plot,
     mo,
-    plot_button,
     plot_te_filtered_trajectories,
     plot_type_dropdown,
     re,
     step_mes_input,
     te_filter_dropdown,
 ):
-    mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
-
+    mo.stop(not group_selector.value, mo.md("Select an experiment group."))
     selected_group_files = grouped_files[group_selector.value]
 
     # Deriving labels representing the gaps from the filenames
@@ -1557,14 +1554,13 @@ def _(
     metric_selector,
     metrics_to_plot,
     mo,
-    plot_button,
     plot_te_filtered_trajectories_matplotlib,
     plot_type_dropdown,
     re,
     step_mes_input,
     te_filter_dropdown,
 ):
-    mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
+    mo.stop(not group_selector.value, mo.md("Select an experiment group."))
 
     _mpl_files = grouped_files[group_selector.value]
     _mpl_labels = []
