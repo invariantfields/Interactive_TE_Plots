@@ -241,9 +241,6 @@ def _(
             if fig is not None:
                 plot_cache[cache_key] = fig
             return fig
-        return wrapper
-
-    @cache_plot
     def plot_te_filtered_trajectories(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -472,7 +469,12 @@ def _(
                             data_changed = True
 
                         if len(traj) > 2:
-                            filtered_trajs.append(list(traj))
+                            t_copy = list(traj)
+                            if t_copy[0] == 0.0 and derived_init_sre != 0.0:
+                                t_copy[0] = derived_init_sre
+                            if t_copy[-1] == 0.0 and is_correct_data:
+                                t_copy[-1] = computed_final
+                            filtered_trajs.append(t_copy)
                         else:
                             filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                     else:
