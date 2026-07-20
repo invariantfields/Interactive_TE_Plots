@@ -184,6 +184,32 @@ def run_jax_gpu_optimization(
 
     # Initialize JAX Solver with maxiter set to step_mes (which is 1)
     solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11)
+    # Initialize Julia/HadaMAG for step-by-step SRE calculations
+    print("Initializing Julia/HadaMAG.jl...")
+    from juliacall import Main as jl
+    jl.seval("using Logging")
+    jl.seval("disable_logging(Logging.Error)")
+    jl.seval("using HadaMAG")
+    jl.seval("using CUDA")
+    jl.seval("using LinearAlgebra: norm")
+    jl.seval("""
+    function jl_compute_sre_batch(psi_batch_np, alpha, n_qubits, dim, num_starts)
+        results = zeros(Float64, num_starts)
+        for i in 1:num_starts
+            psi_row = psi_batch_np[i, :]
+            psi_jl = Vector{ComplexF64}(psi_row)
+            nrm = norm(psi_jl)
+            if nrm > 1e-12
+                psi_jl ./= nrm
+            end
+            psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
+            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
+            results[i] = sre_result
+        end
+        return results
+    end
+    """)
+    print("Julia HadaMAG batch SRE initialized.")
 
     # Generate initial states
     print(f"Generating {num_starts} initial states...")
@@ -206,17 +232,26 @@ def run_jax_gpu_optimization(
     traj_avg_p = [[] for _ in range(num_starts)]
     traj_max_p = [[] for _ in range(num_starts)]
     traj_viol = [[] for _ in range(num_starts)]
+    traj_sre = [[] for _ in range(num_starts)]
 
     start_time = time.time()
 
     # Compute initial metrics
     avg_p, max_p, viol = vmapped_metrics(params_batch)
     avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
+    
+    # Compute initial SRE (step 0)
+    params_np = np.array(params_batch)
+    states_complex_batch = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
+    sre_vals = jl.jl_compute_sre_batch(states_complex_batch, 2, n, n_dim, num_starts)
+    sre_vals_cpu = np.array(sre_vals)
+
     for i in range(num_starts):
         traj_avg_p[i].append(float(avg_p_cpu[i]))
         traj_max_p[i].append(float(max_p_cpu[i]))
         traj_viol[i].append(float(viol_cpu[i]))
-    print(f"  Start Step | Mean Violation: {float(np.mean(viol_cpu)):.2e}")
+        traj_sre[i].append(float(sre_vals_cpu[i]))
+    print(f"  Start Step | Mean Violation: {float(np.mean(viol_cpu)):.2e} | Mean SRE: {float(np.mean(sre_vals_cpu)):.4f}")
 
     # Number of macro-steps (chunks of step_mes size)
     num_chunks = max(1, num_loops // step_mes)
@@ -230,67 +265,26 @@ def run_jax_gpu_optimization(
         # Compute and log metrics
         avg_p, max_p, viol = vmapped_metrics(params_batch)
         avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
+        
+        # Compute SRE at this step
+        params_np = np.array(params_batch)
+        states_complex_batch = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
+        sre_vals = jl.jl_compute_sre_batch(states_complex_batch, 2, n, n_dim, num_starts)
+        sre_vals_cpu = np.array(sre_vals)
+
         for i in range(num_starts):
             traj_avg_p[i].append(float(avg_p_cpu[i]))
             traj_max_p[i].append(float(max_p_cpu[i]))
             traj_viol[i].append(float(viol_cpu[i]))
+            traj_sre[i].append(float(sre_vals_cpu[i]))
 
         if chunk_idx % 20 == 0 or chunk_idx == num_chunks:
             elapsed = time.time() - start_time
             est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
-            print(f"  Step {chunk_idx * step_mes:5d}/{num_loops} | Mean Violation: {float(np.mean(viol_cpu)):.2e} | Elapsed: {elapsed:.1f}s | Est. Remaining: {est_rem:.1f}s")
+            print(f"  Step {chunk_idx * step_mes:5d}/{num_loops} | Mean Violation: {float(np.mean(viol_cpu)):.2e} | Mean SRE: {float(np.mean(sre_vals_cpu)):.4f} | Elapsed: {elapsed:.1f}s | Est. Remaining: {est_rem:.1f}s")
 
     # Assemble final trajectories
     final_states_list = [np.array(params_batch[i][:n_dim] + 1j * params_batch[i][n_dim:]) for i in range(num_starts)]
-
-    # Compute SRE values directly using Julia call in Python process
-    print("Initializing Julia for SRE calculation...")
-    from juliacall import Main as jl
-    
-    # Check if julia helper function is defined, otherwise define it
-    if not hasattr(jl, "jl_compute_sre_exact"):
-        jl.seval("using HadaMAG")
-        jl.seval("using CUDA")
-        jl.seval("""
-        function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
-            psi_jl = Vector{ComplexF64}(psi_np)
-            psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-            return (sre_result, lost_norm)
-        end
-        """)
-
-    def compute_sre_exact(psi_np, alpha=2):
-        try:
-            arr_np = np.asarray(psi_np)
-            # Ensure state is normalized
-            norm_val = np.linalg.norm(arr_np)
-            if norm_val > 1e-12:
-                arr_np = arr_np / norm_val
-            dim = len(arr_np)
-            n_qubits = int(np.log2(dim))
-
-            res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
-            val = float(res[0])
-            return val if val != 0.0 else 1e-15, float(res[1])
-        except Exception as e:
-            print(f"SRE Calculation Error: {e}")
-            return 1e-15, 0.0
-
-    print(f"Computing exact final SREs for {num_starts} states...")
-    traj_sre = [[0.0] * len(traj_avg_p[0]) for _ in range(num_starts)]
-    derived_init_sre = float(gap) # since stabilizer generators = n_qubits - gap
-
-    for i in range(num_starts):
-        # Initial state SRE
-        traj_sre[i][0] = derived_init_sre
-        # Final state SRE
-        final_state = final_states_list[i]
-        final_sre, _ = compute_sre_exact(final_state)
-        traj_sre[i][-1] = final_sre
-
-        if (i + 1) % 150 == 0 or (i + 1) == num_starts:
-            print(f"  Processed SRE for {i + 1}/{num_starts} states...")
 
     trajectories = {
         "average_purity": traj_avg_p,
