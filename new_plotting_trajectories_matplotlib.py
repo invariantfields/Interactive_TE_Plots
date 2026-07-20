@@ -544,6 +544,26 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                         pickle.dump(data, f)
                 except Exception as e:
                     print(f"Error saving updated SRE back to {file}: {e}")
+
+        fig.update_layout(
+            title=f"Entanglement Trajectories ({central_tendency})"
+            + (f" — {use_te_filter}" if use_te_filter in ["TE States", "Non-TE States"] or use_te_filter is True else ""),
+            height=500,
+            width=400 * len(selected_metrics),
+            hovermode="x unified",
+            template="plotly_white",
+            margin=dict(b=120),
+            font=dict(family="Computer Modern"),
+            legend=dict(
+                orientation="h",
+                yanchor="top",
+                y=-0.15,
+                xanchor="center",
+                x=0.5,
+            ),
+        )
+        fig.update_xaxes(title_text="Optimization Steps")
+        return finalize_arxiv_style(fig)
         # ------------------------------------------------------------
         # TE vs non-TE SRE BAR CHART COMPARISON
         # ------------------------------------------------------------
@@ -885,25 +905,6 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
             )
             return finalize_arxiv_style(fig)
 
-        fig.update_layout(
-            title=f"Entanglement Trajectories ({central_tendency})"
-            + (" — TE Filtered" if use_te_filter else ""),
-            height=500,
-            width=400 * len(selected_metrics),
-            hovermode="x unified",
-            template="plotly_white",
-            margin=dict(b=120),
-            font=dict(family="Computer Modern"),
-            legend=dict(
-                orientation="h",
-                yanchor="top",
-                y=-0.15,
-                xanchor="center",
-                x=0.5,
-            ),
-        )
-        fig.update_xaxes(title_text="Steps")
-
 
     return compute_sre_exact, plot_te_filtered_trajectories
 
@@ -1135,7 +1136,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(colors, compute_sre_exact, data_idx, is_TE, np, pickle, plt, re):
+def _(compute_sre_exact, is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
