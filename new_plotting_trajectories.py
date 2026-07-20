@@ -166,7 +166,19 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
+def _(
+    go,
+    is_TE,
+    jl,
+    make_subplots,
+    np,
+    opt_len,
+    os,
+    pc,
+    pickle,
+    plot_cache,
+    re,
+):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -459,14 +471,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             data["sre"][j][-1] = computed_final
                             data_changed = True
 
-                        opt_len = 2
-                        for m in ["average_purity", "max_purity", "total_violation"]:
-                            if m in data and data[m]:
-                                opt_len = len(data[m][j])
-                                break
-
-                        has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
-                        if has_step_by_step:
+                        if len(traj) > 2:
                             filtered_trajs.append(list(traj))
                         else:
                             filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
@@ -1243,8 +1248,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
-                            if has_step_by_step:
+                            if len(traj) > 2:
                                 trajs.append(list(traj))
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
