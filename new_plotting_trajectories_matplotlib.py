@@ -166,7 +166,19 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
+def _(
+    get_state_mask,
+    go,
+    is_TE,
+    jl,
+    make_subplots,
+    np,
+    os,
+    pc,
+    pickle,
+    plot_cache,
+    re,
+):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -188,6 +200,16 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
             return 1e-15, 0.0
 
     print("compute_sre_exact reloaded OK")
+
+    def get_state_mask(final_states, filter_opt):
+        te_flags = np.array([is_TE(state) for state in final_states])
+        if filter_opt == "TE States" or filter_opt is True:
+            return te_flags, f"TE-only (n={te_flags.sum()}) "
+        elif filter_opt == "Non-TE States":
+            non_te = ~te_flags
+            return non_te, f"Non-TE-only (n={non_te.sum()}) "
+        else:
+            return np.ones(len(final_states), dtype=bool), ""
 
     def cache_plot(func):
         """Decorator: cache plotting results keyed on params + file modification times."""
@@ -895,7 +917,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
         fig.update_xaxes(title_text="Steps")
         return finalize_arxiv_style(fig)
 
-    return (plot_te_filtered_trajectories,)
+    return compute_sre_exact, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -1031,6 +1053,9 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         mo.md("### 3. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
+
+
+
     return (
         fs,
         group_selector,
@@ -1084,6 +1109,9 @@ def _(
         fs=fs,
     )
     plot
+
+
+
     return
 
 
@@ -1119,10 +1147,30 @@ def _(os, pickle):
 
 
 @app.cell
-def _(is_TE, np, pickle, plt, re):
+def _(
+    colors,
+    compute_sre_exact,
+    data_idx,
+    get_state_mask,
+    is_TE,
+    np,
+    pickle,
+    plt,
+    re,
+):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
+        def get_state_mask(final_states, filter_opt):
+            te_flags = np.array([is_TE(state) for state in final_states])
+            if filter_opt == "TE States" or filter_opt is True:
+                return te_flags, f"TE-only (n={te_flags.sum()}) "
+            elif filter_opt == "Non-TE States":
+                non_te = ~te_flags
+                return non_te, f"Non-TE-only (n={non_te.sum()}) "
+            else:
+                return np.ones(len(final_states), dtype=bool), ""
+
         if not selected_metrics:
             return None
 
@@ -1512,7 +1560,7 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
-    te_filter_checkbox,
+    te_filter_dropdown,
 ):
     mo.stop(not plot_button.value or not group_selector.value, mo.md("Select an experiment group and click **Generate Plot**."))
 
@@ -1538,6 +1586,9 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
+
+
+
     return
 
 
