@@ -410,77 +410,154 @@ def _(
         # ------------------------------------------------------------
         # STANDARD LINE CHART TRAJECTORIES
         # ------------------------------------------------------------
-        fig = make_subplots(rows=1, cols=len(selected_metrics), subplot_titles=metric_titles)
+        if plot_type == "Line Chart":
+            fig = make_subplots(rows=1, cols=len(selected_metrics), subplot_titles=metric_titles)
 
-        for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
-            if not file or not label:
-                continue
-            try:
-                if fs:
-                    with fs.open(file, "rb") as f:
-                        data = pickle.load(f)
-                else:
-                    with open(file, "rb") as f:
-                        data = pickle.load(f)
-            except Exception as e:
-                print(f"Error loading {file}: {e}")
-                continue
-
-            # Filter by state type if requested (TE / Non-TE / All)
-            te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
-            if te_mask.sum() == 0:
-                continue
-
-            base_color = colors[file_idx % len(colors)]
-            fill_color = hex_to_rgba(base_color, alpha=0.2)
-
-            # Derive SRE initial state gap value
-            derived_init_sre = 0.0
-            _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-            if not _gap_match and file:
-                _gap_match = re.search(r'_stps_(\d+)', file)
-            if _gap_match:
-                derived_init_sre = float(_gap_match.group(1))
-
-            data_changed = False
-            for i, metric in enumerate(selected_metrics):
-                col = i + 1
-
-                filtered_trajs = []
-                is_correct_data = "correct_data" in file
-
-                for j, keep in enumerate(te_mask):
-                    if not keep:
-                        continue
-                    if metric == "sre" and is_correct_data:
-                        final_state = data["final_states"][j]
-                        traj = data["sre"][j]
-                        init_sre = traj[0]
-                        final_sre = traj[-1]
-
-                        if init_sre == 0.0 and derived_init_sre != 0.0:
-                            init_sre = derived_init_sre
-                            data["sre"][j][0] = derived_init_sre
-                            data_changed = True
-                        if final_sre == 0.0:
-                            computed_final, _ = compute_sre_exact(final_state, alpha=2)
-                            final_sre = computed_final
-                            data["sre"][j][-1] = computed_final
-                            data_changed = True
-
-                        if len(traj) > 2:
-                            t_copy = list(traj)
-                            if t_copy[0] == 0.0 and derived_init_sre != 0.0:
-                                t_copy[0] = derived_init_sre
-                            if t_copy[-1] == 0.0 and is_correct_data:
-                                t_copy[-1] = computed_final
-                            filtered_trajs.append(t_copy)
-                        else:
-                            filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+            for file_idx, (file, label) in enumerate(zip(pkl_files, labels)):
+                if not file or not label:
+                    continue
+                try:
+                    if fs:
+                        with fs.open(file, "rb") as f:
+                            data = pickle.load(f)
                     else:
-                        filtered_trajs.append(data[metric][j])
+                        with open(file, "rb") as f:
+                            data = pickle.load(f)
+                except Exception as e:
+                    print(f"Error loading {file}: {e}")
+                    continue
 
-                # Store back to pickle
+                # Filter by state type if requested (TE / Non-TE / All)
+                te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
+                if te_mask.sum() == 0:
+                    continue
+
+                base_color = colors[file_idx % len(colors)]
+                fill_color = hex_to_rgba(base_color, alpha=0.2)
+
+                # Derive SRE initial state gap value
+                derived_init_sre = 0.0
+                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                if not _gap_match and file:
+                    _gap_match = re.search(r'_stps_(\d+)', file)
+                if _gap_match:
+                    derived_init_sre = float(_gap_match.group(1))
+
+                data_changed = False
+                for i, metric in enumerate(selected_metrics):
+                    col = i + 1
+
+                    filtered_trajs = []
+                    is_correct_data = "correct_data" in file
+
+                    for j, keep in enumerate(te_mask):
+                        if not keep:
+                            continue
+                        if metric == "sre" and is_correct_data:
+                            final_state = data["final_states"][j]
+                            traj = data["sre"][j]
+                            init_sre = traj[0]
+                            final_sre = traj[-1]
+
+                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                                init_sre = derived_init_sre
+                                data["sre"][j][0] = derived_init_sre
+                                data_changed = True
+                            if final_sre == 0.0:
+                                computed_final, _ = compute_sre_exact(final_state, alpha=2)
+                                final_sre = computed_final
+                                data["sre"][j][-1] = computed_final
+                                data_changed = True
+
+                            if len(traj) > 2:
+                                t_copy = list(traj)
+                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
+                                    t_copy[0] = derived_init_sre
+                                if t_copy[-1] == 0.0 and is_correct_data:
+                                    t_copy[-1] = computed_final
+                                filtered_trajs.append(t_copy)
+                            else:
+                                filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                        else:
+                            filtered_trajs.append(data[metric][j])
+
+                    # Store back to pickle
+                    if data_changed and not fs:
+                        try:
+                            with open(file, "wb") as f:
+                                pickle.dump(data, f)
+                        except Exception as e:
+                            print(f"Error saving updated SRE back to {file}: {e}")
+
+                    if not filtered_trajs:
+                        continue
+                    max_len = max(len(t) for t in filtered_trajs)
+                    arr = np.full((len(filtered_trajs), max_len), np.nan)
+                    for j, traj in enumerate(filtered_trajs):
+                        arr[j, :len(traj)] = traj
+
+                    if max_len == 2:
+                        steps = np.array([0, 1]) * step_mes
+                    else:
+                        steps = np.arange(max_len) * step_mes
+
+                    if central_tendency == "Average":
+                        center_line = np.nanmean(arr, axis=0)
+                        std = np.nanstd(arr, axis=0)
+                        lower_bound = center_line - std
+                        upper_bound = center_line + std
+                        leg_suffix = f"(Avg ±1 Std)"
+                    else:
+                        center_line = np.nanmedian(arr, axis=0)
+                        lower_bound = np.nanpercentile(arr, 25, axis=0)
+                        upper_bound = np.nanpercentile(arr, 75, axis=0)
+                        leg_suffix = f"(Median & IQR)"
+
+                    show_leg = i == 0
+
+                    fig.add_trace(
+                        go.Scatter(
+                            x=steps,
+                            y=lower_bound,
+                            mode="lines",
+                            line=dict(width=0),
+                            showlegend=False,
+                            legendgroup=label,
+                            hoverinfo="skip",
+                        ),
+                        row=1,
+                        col=col,
+                    )
+                    fig.add_trace(
+                        go.Scatter(
+                            x=steps,
+                            y=upper_bound,
+                            mode="lines",
+                            line=dict(width=0),
+                            fill="tonexty",
+                            fillcolor=fill_color,
+                            showlegend=False,
+                            legendgroup=label,
+                            hoverinfo="skip",
+                        ),
+                        row=1,
+                        col=col,
+                    )
+                    fig.add_trace(
+                        go.Scatter(
+                            x=steps,
+                            y=center_line,
+                            mode="lines",
+                            line=dict(color=base_color, width=2),
+                            name=f"{prefix}{label} {leg_suffix}",
+                            legendgroup=label,
+                            showlegend=show_leg,
+                        ),
+                        row=1,
+                        col=col,
+                    )
+
+                # Store back to pickle (once per file, after all metrics processed)
                 if data_changed and not fs:
                     try:
                         with open(file, "wb") as f:
@@ -488,101 +565,25 @@ def _(
                     except Exception as e:
                         print(f"Error saving updated SRE back to {file}: {e}")
 
-                if not filtered_trajs:
-                    continue
-                max_len = max(len(t) for t in filtered_trajs)
-                arr = np.full((len(filtered_trajs), max_len), np.nan)
-                for j, traj in enumerate(filtered_trajs):
-                    arr[j, :len(traj)] = traj
-
-                if max_len == 2:
-                    steps = np.array([0, 1]) * step_mes
-                else:
-                    steps = np.arange(max_len) * step_mes
-
-                if central_tendency == "Average":
-                    center_line = np.nanmean(arr, axis=0)
-                    std = np.nanstd(arr, axis=0)
-                    lower_bound = center_line - std
-                    upper_bound = center_line + std
-                    leg_suffix = f"(Avg ±1 Std)"
-                else:
-                    center_line = np.nanmedian(arr, axis=0)
-                    lower_bound = np.nanpercentile(arr, 25, axis=0)
-                    upper_bound = np.nanpercentile(arr, 75, axis=0)
-                    leg_suffix = f"(Median & IQR)"
-
-                show_leg = i == 0
-
-                fig.add_trace(
-                    go.Scatter(
-                        x=steps,
-                        y=lower_bound,
-                        mode="lines",
-                        line=dict(width=0),
-                        showlegend=False,
-                        legendgroup=label,
-                        hoverinfo="skip",
-                    ),
-                    row=1,
-                    col=col,
-                )
-                fig.add_trace(
-                    go.Scatter(
-                        x=steps,
-                        y=upper_bound,
-                        mode="lines",
-                        line=dict(width=0),
-                        fill="tonexty",
-                        fillcolor=fill_color,
-                        showlegend=False,
-                        legendgroup=label,
-                        hoverinfo="skip",
-                    ),
-                    row=1,
-                    col=col,
-                )
-                fig.add_trace(
-                    go.Scatter(
-                        x=steps,
-                        y=center_line,
-                        mode="lines",
-                        line=dict(color=base_color, width=2),
-                        name=f"{prefix}{label} {leg_suffix}",
-                        legendgroup=label,
-                        showlegend=show_leg,
-                    ),
-                    row=1,
-                    col=col,
-                )
-
-            # Store back to pickle (once per file, after all metrics processed)
-            if data_changed and not fs:
-                try:
-                    with open(file, "wb") as f:
-                        pickle.dump(data, f)
-                except Exception as e:
-                    print(f"Error saving updated SRE back to {file}: {e}")
-
-        fig.update_layout(
-            title=f"Entanglement Trajectories ({central_tendency})"
-            + (f" — {use_te_filter}" if use_te_filter in ["TE States", "Non-TE States"] or use_te_filter is True else ""),
-            height=500,
-            width=400 * len(selected_metrics),
-            hovermode="x unified",
-            template="plotly_white",
-            margin=dict(b=120),
-            font=dict(family="Computer Modern"),
-            legend=dict(
-                orientation="h",
-                yanchor="top",
-                y=-0.15,
-                xanchor="center",
-                x=0.5,
-            ),
-        )
-        fig.update_xaxes(title_text="Optimization Steps")
-        return finalize_arxiv_style(fig)
+            fig.update_layout(
+                title=f"Entanglement Trajectories ({central_tendency})"
+                + (f" — {use_te_filter}" if use_te_filter in ["TE States", "Non-TE States"] or use_te_filter is True else ""),
+                height=500,
+                width=400 * len(selected_metrics),
+                hovermode="x unified",
+                template="plotly_white",
+                margin=dict(b=120),
+                font=dict(family="Computer Modern"),
+                legend=dict(
+                    orientation="h",
+                    yanchor="top",
+                    y=-0.15,
+                    xanchor="center",
+                    x=0.5,
+                ),
+            )
+            fig.update_xaxes(title_text="Optimization Steps")
+            return finalize_arxiv_style(fig)
         # ------------------------------------------------------------
         # TE vs non-TE SRE BAR CHART COMPARISON
         # ------------------------------------------------------------
@@ -922,10 +923,9 @@ def _(
                     x=0.5,
                 ),
             )
-            return finalize_arxiv_style(fig)
 
 
-    return compute_sre_exact, plot_te_filtered_trajectories
+    return compute_sre_exact, get_state_mask, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -1092,6 +1092,7 @@ def _(
     te_filter_dropdown,
 ):
     mo.stop(not group_selector.value, mo.md("Select an experiment group."))
+
     selected_group_files = grouped_files[group_selector.value]
 
     # Deriving labels representing the gaps from the filenames
@@ -1150,20 +1151,20 @@ def _(os, pickle):
 
 
 @app.cell
-def _(compute_sre_exact, is_TE, np, pickle, plt, re):
+def _(
+    colors,
+    compute_sre_exact,
+    data_idx,
+    get_state_mask,
+    is_TE,
+    np,
+    pickle,
+    plt,
+    re,
+):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
-        def get_state_mask(final_states, filter_opt):
-            te_flags = np.array([is_TE(state) for state in final_states])
-            if filter_opt == "TE States" or filter_opt is True:
-                return te_flags, f"TE-only (n={te_flags.sum()}) "
-            elif filter_opt == "Non-TE States":
-                non_te = ~te_flags
-                return non_te, f"Non-TE-only (n={non_te.sum()}) "
-            else:
-                return np.ones(len(final_states), dtype=bool), ""
-
         if not selected_metrics:
             return None
 
@@ -1211,13 +1212,12 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
-            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1248,13 +1248,9 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            if len(traj) > 2:
-                                t_copy = list(traj)
-                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
-                                    t_copy[0] = derived_init_sre
-                                if t_copy[-1] == 0.0 and is_correct_data:
-                                    t_copy[-1] = computed_final
-                                trajs.append(t_copy)
+                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            if has_step_by_step:
+                                trajs.append(list(traj))
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
@@ -1263,22 +1259,18 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     if not trajs:
                         continue
 
-                    max_len = max(len(t) for t in trajs)
-                    arr = np.full((len(trajs), max_len), np.nan)
-                    for j, t in enumerate(trajs):
-                        arr[j, :len(t)] = t
-
-                    steps = np.arange(max_len) * step_mes
+                    steps = np.arange(len(trajs[0])) * step_mes
+                    arr = np.array(trajs)
 
                     if central_tendency == "Average":
-                        center = np.nanmean(arr, axis=0)
-                        std = np.nanstd(arr, axis=0)
+                        center = np.mean(arr, axis=0)
+                        std = np.std(arr, axis=0)
                         lower_bound = center - std
                         upper_bound = center + std
                     else:
-                        center = np.nanmedian(arr, axis=0)
-                        lower_bound = np.nanpercentile(arr, 25, axis=0)
-                        upper_bound = np.nanpercentile(arr, 75, axis=0)
+                        center = np.median(arr, axis=0)
+                        lower_bound = np.percentile(arr, 25, axis=0)
+                        upper_bound = np.percentile(arr, 75, axis=0)
 
                     color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
@@ -1486,7 +1478,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
             ekw = dict(elinewidth=0.8, capthick=0.8)
 
             b_init = ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
-                   label=r"$\text{Initial (Magic)}$", color="mediumseagreen",
+                   label=r"$\text{Initial States}$", color="mediumseagreen",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
             b_te = ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
                    label=r"$\text{Final TE States}$", color="royalblue",
@@ -1496,8 +1488,8 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
 
             ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
-            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3, color="black")
-            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3, color="black")
+            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=5, color="black")
+            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=0, color="black")
 
             ax.set_xticks(x)
             ax.set_xticklabels(x_labels, fontsize=9)
@@ -1542,7 +1534,9 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
             ax.legend(frameon=True, fontsize=9, loc="best")
 
             fig.tight_layout()
+            return fig
 
+        return None
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
