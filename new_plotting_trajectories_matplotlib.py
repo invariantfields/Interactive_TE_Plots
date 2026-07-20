@@ -1302,11 +1302,15 @@ def _(is_TE, np, pickle, plt, re):
                 x_labels = []
                 init_means = []
                 final_means = []
-
                 for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file
-
-                        continue
+                    te_mask = np.array([is_TE(state) for state in data["final_states"]])
+                    if use_te_filter == "TE States" or use_te_filter is True:
+                        filter_mask = te_mask
+                    elif use_te_filter == "Non-TE States":
+                        filter_mask = ~te_mask
+                    else:
+                        filter_mask = np.ones(len(data["final_states"]), dtype=bool)
 
                     init_vals = []
                     final_vals = []
