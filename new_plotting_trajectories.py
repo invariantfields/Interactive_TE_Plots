@@ -460,7 +460,24 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
                             final_sre = computed_final
                             data["sre"][j][-1] = computed_final
                             data_changed = True
-                        filtered_trajs.append([init_sre, final_sre])
+                        # Support full step-by-step SRE trajectories or interpolate endpoints for old data
+                            sre_traj = data["sre"][j]
+                            opt_len = 2
+                            for m in ["average_purity", "max_purity", "total_violation"]:
+                                if m in data and data[m]:
+                                    opt_len = len(data[m][0])
+                                    break
+
+                            has_step_by_step = False
+                            if len(sre_traj) == opt_len:
+                                if opt_len > 2 and any(v != 0.0 for v in sre_traj[1:-1]):
+                                    has_step_by_step = True
+
+                            if has_step_by_step:
+                                filtered_trajs.append(list(sre_traj))
+                            else:
+                                # Draw a straight line from start to end by linear interpolation
+                                filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                     else:
                         filtered_trajs.append(data[metric][j])
 
@@ -907,7 +924,7 @@ def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
         fig.update_xaxes(title_text="Steps")
         return finalize_arxiv_style(fig)
 
-    return (plot_te_filtered_trajectories,)
+    return compute_sre_exact, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -1129,7 +1146,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(is_TE, np, pickle, plt, re):
+def _(compute_sre_exact, is_TE, np, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1186,11 +1203,64 @@ def _(is_TE, np, pickle, plt, re):
                 ax.set_title(metric_map[metric], fontsize=13)
 
                 for data, label, file in loaded_data:
+                    is_correct_data = "correct_data" in file
+                    derived_init_sre = 0.0
+                    _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
+                    if not _gap_match and file:
+                        _gap_match = re.search(r'_stps_(\d+)', file)
+                    if _gap_match:
+                        derived_init_sre = float(_gap_match.group(1))
+
+                    data_changed = False
+                    trajs = []
+
                     if use_te_filter:
                         te_mask = np.array([is_TE(state) for state in data["final_states"]])
-                        trajs = [data[metric][j] for j, keep in enumerate(te_mask) if keep]
+                        indices = [j for j, keep in enumerate(te_mask) if keep]
                     else:
-                        trajs = data[metric]
+                        indices = list(range(len(data["final_states"])))
+
+                    for j in indices:
+                        if metric == "sre" and is_correct_data:
+                            final_state = data["final_states"][j]
+                            init_sre = data["sre"][j][0]
+                            final_sre = data["sre"][j][-1]
+
+                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                                init_sre = derived_init_sre
+                                data["sre"][j][0] = derived_init_sre
+                                data_changed = True
+                            if final_sre == 0.0:
+                                computed_final, _ = compute_sre_exact(final_state, alpha=2)
+                                final_sre = computed_final
+                                data["sre"][j][-1] = computed_final
+                                data_changed = True
+
+                            sre_traj = data["sre"][j]
+                            opt_len = 2
+                            for m in ["average_purity", "max_purity", "total_violation"]:
+                                if m in data and data[m]:
+                                    opt_len = len(data[m][0])
+                                    break
+
+                            has_step_by_step = False
+                            if len(sre_traj) == opt_len:
+                                if opt_len > 2 and any(v != 0.0 for v in sre_traj[1:-1]):
+                                    has_step_by_step = True
+
+                            if has_step_by_step:
+                                trajs.append(list(sre_traj))
+                            else:
+                                trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                        else:
+                            trajs.append(data[metric][j])
+
+                    if data_changed and not fs:
+                        try:
+                            with open(file, "wb") as f:
+                                pickle.dump(data, f)
+                        except Exception as e:
+                            print(f"Error saving updated SRE back to {file}: {e}")
 
                     if not trajs:
                         continue
@@ -1305,7 +1375,7 @@ def _(is_TE, np, pickle, plt, re):
                        label=r"$\text{Final State}$", color="#ff7f0e",
                        edgecolor="black", linewidth=0.5, error_kw=ekw)
 
-            
+        
                 ax.bar_label(b_final, labels=[f"n={n}" for n in final_counts], fontsize=7, padding=3, color="black")
 
                 ax.set_facecolor('white')
@@ -1413,7 +1483,7 @@ def _(is_TE, np, pickle, plt, re):
                    label=r"$\text{Final non-TE States}$", color="crimson",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
 
-        
+    
             ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3, color="black")
             ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3, color="black")
 
@@ -1466,6 +1536,10 @@ def _(is_TE, np, pickle, plt, re):
             return fig
 
         return None
+
+
+
+
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
