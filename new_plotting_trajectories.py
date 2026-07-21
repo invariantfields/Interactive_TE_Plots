@@ -3,12 +3,11 @@
 # dependencies = [
 #     "marimo",
 #     "numpy",
-#     "cupy-cuda12x",
 #     "plotly",
+#     "matplotlib",
 #     "scipy",
 #     "fsspec",
 #     "requests",
-#     "juliacall==0.9.35",
 # ]
 # ///
 
@@ -20,37 +19,24 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    try:
-        from juliacall import Main as jl
-    except ImportError:
-        jl = None
+    jl = None
     return (jl,)
 
 
 @app.cell
 def _(jl, mo):
-    if jl is not None:
-        jl.seval("using HadaMAG")
-        jl.seval("using CUDA")
-        jl.seval("""
-        function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
-            psi_jl = Vector{ComplexF64}(psi_np)
-            psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-            return (sre_result, lost_norm)
-        end
-        """)
-        status = mo.md("⚡ **Julia SRE Direct Bridge:** Initialized successfully (`HadaMAG` + `CUDA` backend)")
-    else:
-        status = mo.md("⚠️ **Julia SRE Direct Bridge:** Julia/JuliaCall not available (falling back to placeholders)")
-    return
+    status = mo.md("⚡ **SRE Exact Calculation:** Standalone / Cloud mode (returns `(-1, -1)`)")
+    return (status,)
 
 
 @app.cell
 def _():
     import marimo as mo
     import numpy as np
-    import cupy as cp
+    try:
+        import cupy as cp
+    except ImportError:
+        cp = None
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import plotly.colors as pc
@@ -120,14 +106,14 @@ def _():
 
 
 @app.cell
-def _(cp):
+def _(cp, np):
     def par_trace(psi, dim, n, n_parties):
         n_rem = n - n_parties
         psi_mat = psi.reshape(dim**n_rem, dim**n_parties)
         return psi_mat @ psi_mat.conj().T
 
     def is_appt(x) -> bool:
-        xp = cp.get_array_module(x)
+        xp = cp.get_array_module(x) if cp is not None else np
         _purity = xp.sum(x.real**2 + x.imag**2)
         _D = x.shape[0]
         if _purity <= 1 / (_D - 1):
@@ -144,7 +130,7 @@ def _(cp):
 @app.cell
 def _(combinations, cp, is_appt, np, par_trace):
     def is_TE(psi, dim: int = 2) -> bool:
-        xp = cp.get_array_module(psi)
+        xp = cp.get_array_module(psi) if cp is not None else np
         n = int(np.log2(len(psi)))
         k = n - n // 2
         for _i in combinations(range(n), k):
@@ -169,7 +155,6 @@ def hex_to_rgba(hex_color, alpha=0.2):
 def _(
     go,
     is_TE,
-    jl,
     make_subplots,
     np,
     opt_len,
@@ -180,26 +165,10 @@ def _(
     re,
 ):
     def compute_sre_exact(psi_np, alpha=2):
-        """Compute exact SRE using HadaMAG.jl via JuliaCall."""
-        if jl is None:
-            return 1e-15, 0.0
-        try:
-            arr_np = np.asarray(psi_np)
-            norm_val = np.linalg.norm(arr_np)
-            if norm_val > 1e-12:
-                arr_np = arr_np / norm_val
-            dim = len(arr_np)
-            n_qubits = int(np.log2(dim))
+        """Standalone/Cloud SRE function returning (-1.0, -1.0)."""
+        return -1.0, -1.0
 
-            # Call pre-defined Julia function directly — no seval parser overhead per iteration
-            res = jl.jl_compute_sre_exact(arr_np, alpha, n_qubits, dim)
-            val = float(res[0])
-            return val if val != 0.0 else 1e-15, float(res[1])
-        except Exception as e:
-            print(f"SRE Exact Calculation Error: {e}")
-            return 1e-15, 0.0
-
-    print("compute_sre_exact reloaded OK")
+    print("compute_sre_exact reloaded OK (-1.0, -1.0)")
 
     def get_state_mask(final_states, filter_opt):
         te_flags = np.array([is_TE(state) for state in final_states])
