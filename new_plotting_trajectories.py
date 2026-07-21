@@ -1063,7 +1063,6 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
     ])
 
 
-
     return (
         fs,
         group_selector,
@@ -1115,7 +1114,6 @@ def _(
         fs=fs,
     )
     plot
-
     return
 
 
@@ -1151,17 +1149,8 @@ def _(os, pickle):
 
 
 @app.cell
-def _(
-    colors,
-    compute_sre_exact,
-    data_idx,
-    get_state_mask,
-    is_TE,
-    np,
-    pickle,
-    plt,
-    re,
-):
+def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
+    colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1212,7 +1201,6 @@ def _(
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
-            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
@@ -1249,13 +1237,9 @@ def _(
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            if len(traj) > 2:
-                                t_copy = list(traj)
-                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
-                                    t_copy[0] = derived_init_sre
-                                if t_copy[-1] == 0.0 and is_correct_data:
-                                    t_copy[-1] = computed_final
-                                trajs.append(t_copy)
+                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            if has_step_by_step:
+                                trajs.append(list(traj))
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
@@ -1264,22 +1248,18 @@ def _(
                     if not trajs:
                         continue
 
-                    max_len = max(len(t) for t in trajs)
-                    arr = np.full((len(trajs), max_len), np.nan)
-                    for j, t in enumerate(trajs):
-                        arr[j, :len(t)] = t
-
-                    steps = np.arange(max_len) * step_mes
+                    steps = np.arange(len(trajs[0])) * step_mes
+                    arr = np.array(trajs)
 
                     if central_tendency == "Average":
-                        center = np.nanmean(arr, axis=0)
-                        std = np.nanstd(arr, axis=0)
+                        center = np.mean(arr, axis=0)
+                        std = np.std(arr, axis=0)
                         lower_bound = center - std
                         upper_bound = center + std
                     else:
-                        center = np.nanmedian(arr, axis=0)
-                        lower_bound = np.nanpercentile(arr, 25, axis=0)
-                        upper_bound = np.nanpercentile(arr, 75, axis=0)
+                        center = np.median(arr, axis=0)
+                        lower_bound = np.percentile(arr, 25, axis=0)
+                        upper_bound = np.percentile(arr, 75, axis=0)
 
                     color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
@@ -1317,7 +1297,7 @@ def _(
                 global_init_vals = []
                 global_final_vals = []
 
-                for data, label, file in loaded_data:
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file or "more_data" in file
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
@@ -1426,7 +1406,7 @@ def _(
             global_te = []
             global_non_te = []
 
-            for data, label, file in loaded_data:
+            for data_idx, (data, label, file) in enumerate(loaded_data):
                 te_mask = np.array([is_TE(state) for state in data["final_states"]])
 
                 derived_init_sre = 0.0
@@ -1519,7 +1499,7 @@ def _(
         elif plot_type == "Histogram SRE":
             fig, ax = plt.subplots(figsize=(6, 4.5))
 
-            for data, label, file in loaded_data:
+            for data_idx, (data, label, file) in enumerate(loaded_data):
                 is_correct_data = "correct_data" in file
                 if not is_correct_data:
                     continue
@@ -1588,7 +1568,6 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-
     return
 
 
