@@ -104,7 +104,6 @@ def _():
     # One global instance — loaded from disk once per kernel session
     plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
     return (
-        GithubFileSystem,
         combinations,
         cp,
         go,
@@ -938,6 +937,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
+
     data_source = mo.ui.radio(
         options=["Local", "GitHub"],
         value="Local",
@@ -945,66 +945,13 @@ def _(mo):
         inline=True,
     )
     refresh_button = mo.ui.button(label="🔄 Refresh List", value=0)
+
     return data_source, refresh_button
 
 
 @app.cell
-def _(GithubFileSystem, data_source, mo, os, refresh_button):
-    refresh_button.value
+def _(data_source, folder_selector, fs, mo, os, plot_cache, refresh_button):
 
-    fs = None
-    available_folders = []
-
-    if data_source.value == "Local":
-        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
-        available_folders = [
-            d
-            for d in candidate_dirs
-            if os.path.exists(d)
-            and any(
-                f.endswith(".pkl")
-                for f in os.listdir(d)
-                if os.path.isfile(os.path.join(d, f))
-            )
-        ]
-        if not available_folders:
-            available_folders = ["."]
-    else:
-        org = "invariantfields"
-        repo = "Interactive_TE_Plots"
-        try:
-            fs = GithubFileSystem(org=org, repo=repo)
-            repo_dirs = ["correct_data", "data", "new_data"]
-            for rdir in repo_dirs:
-                try:
-                    if any(_f.endswith(".pkl") for _f in fs.ls(rdir)):
-                        available_folders.append(rdir)
-                except Exception:
-                    pass
-            if not available_folders:
-                available_folders = ["data"]
-        except Exception as e:
-            mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
-            available_folders = ["data"]
-
-    folder_selector = mo.ui.dropdown(
-        options=available_folders,
-        label="📁 **Select Folder / Repository:**",
-        value=available_folders[0] if available_folders else None,
-    )
-    return available_folders, folder_selector, fs
-
-
-@app.cell
-def _(
-    data_source,
-    folder_selector,
-    fs,
-    mo,
-    os,
-    plot_cache,
-    refresh_button,
-):
     import re
 
     selected_folder = folder_selector.value or "."
@@ -1123,20 +1070,16 @@ def _(
     ])
 
     ui_layout
+
     return (
-        clear_cache_button,
-        clear_cache_callback,
         group_selector,
         grouped_files,
-        metric_options,
         metric_selector,
         metrics_to_plot,
-        plot_button,
         plot_type_dropdown,
         re,
         step_mes_input,
         te_filter_dropdown,
-        ui_layout,
     )
 
 
@@ -1178,6 +1121,55 @@ def _(
         fs=fs,
     )
     plot
+    return
+
+
+@app.cell
+def _(os, pickle):
+    def pack_pkl_files(source_dir_or_files, output_archive_path):
+        """
+        Packs multiple .pkl files into a single combined .pkl archive.
+        Matches the dictionary structure expected by unpack_pkl_file.
+
+        Parameters:
+        - source_dir_or_files: list of file paths OR a directory path containing .pkl files.
+        - output_archive_path: destination path for the combined .pkl file.
+        """
+        if isinstance(source_dir_or_files, str):
+            if not os.path.exists(source_dir_or_files):
+                print(f"Error: Directory '{source_dir_or_files}' does not exist.")
+                return
+            file_paths = [
+                os.path.join(source_dir_or_files, f)
+                for f in sorted(os.listdir(source_dir_or_files))
+                if f.endswith(".pkl")
+            ]
+        else:
+            file_paths = list(source_dir_or_files)
+
+        packed_data = {}
+        for fpath in file_paths:
+            fname = os.path.basename(fpath)
+            try:
+                with open(fpath, "rb") as f:
+                    content = pickle.load(f)
+                packed_data[fname] = content
+                print(f"Packed: {fname}")
+            except Exception as e:
+                print(f"Error reading {fname}: {e}")
+
+        # Ensure parent directory exists for output archive
+        out_dir = os.path.dirname(output_archive_path)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+        try:
+            with open(output_archive_path, "wb") as f:
+                pickle.dump(packed_data, f)
+            print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}")
+        except Exception as e:
+            print(f"Error saving archive: {e}")
+
     return
 
 
@@ -1270,7 +1262,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1331,8 +1323,8 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                     ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
-                if col_idx == 0:
-                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                # if col_idx == 0:
+                #     ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
@@ -1361,7 +1353,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data, label, file in loaded_data:
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file or "more_data" in file
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
@@ -1590,8 +1582,6 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             return fig
 
         return None
-
-
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
