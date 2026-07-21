@@ -938,82 +938,122 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    # Data source selection UI
     data_source = mo.ui.radio(
         options=["Local", "GitHub"],
         value="Local",
         label="**Data Source:**",
-        inline=True
+        inline=True,
     )
-
-    refresh_button = mo.ui.button(label="🔄 Refresh File List", value=0)
-
-    mo.md(f"### 1. Data Selection\n{mo.hstack([data_source, refresh_button], align='center', gap=2)}")
+    refresh_button = mo.ui.button(label="🔄 Refresh List", value=0)
     return data_source, refresh_button
 
 
 @app.cell
-def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
-    import re
-
-    # We use refresh_button.value as a dependency to trigger re-scanning
+def _(GithubFileSystem, data_source, mo, os, refresh_button):
     refresh_button.value
 
-    available_files = []
     fs = None
+    available_folders = []
 
     if data_source.value == "Local":
-        available_files = []
-        for data_dir in ["correct_data/", "new_data/", "data/"]:
-            if os.path.exists(data_dir):
-                available_files.extend(
-                    [os.path.join(data_dir, _f) for _f in os.listdir(data_dir) if _f.endswith(".pkl")]
-                )
-        available_files.sort()
+        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
+        available_folders = [
+            d
+            for d in candidate_dirs
+            if os.path.exists(d)
+            and any(
+                f.endswith(".pkl")
+                for f in os.listdir(d)
+                if os.path.isfile(os.path.join(d, f))
+            )
+        ]
+        if not available_folders:
+            available_folders = ["."]
     else:
-        # GitHub configuration
         org = "invariantfields"
         repo = "Interactive_TE_Plots"
         try:
             fs = GithubFileSystem(org=org, repo=repo)
-            # Fetch files from /data folder in the repo
-            repo_data_dir = "data"
-            available_files = sorted([_f for _f in fs.ls(repo_data_dir) if _f.endswith(".pkl")])
+            repo_dirs = ["correct_data", "data", "new_data"]
+            for rdir in repo_dirs:
+                try:
+                    if any(_f.endswith(".pkl") for _f in fs.ls(rdir)):
+                        available_folders.append(rdir)
+                except Exception:
+                    pass
+            if not available_folders:
+                available_folders = ["data"]
         except Exception as e:
             mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
+            available_folders = ["data"]
 
-    # Group files by prefix (everything before 'stps' or 'steps')
+    folder_selector = mo.ui.dropdown(
+        options=available_folders,
+        label="📁 **Select Folder / Repository:**",
+        value=available_folders[0] if available_folders else None,
+    )
+    return available_folders, folder_selector, fs
+
+
+@app.cell
+def _(
+    data_source,
+    folder_selector,
+    fs,
+    mo,
+    os,
+    plot_cache,
+    refresh_button,
+):
+    import re
+
+    selected_folder = folder_selector.value or "."
+
+    available_files = []
+    if data_source.value == "Local":
+        if os.path.exists(selected_folder):
+            available_files = [
+                os.path.join(selected_folder, _f)
+                for _f in os.listdir(selected_folder)
+                if _f.endswith(".pkl")
+            ]
+        available_files.sort()
+    else:
+        if fs:
+            try:
+                available_files = sorted(
+                    [_f for _f in fs.ls(selected_folder) if _f.endswith(".pkl")]
+                )
+            except Exception as e:
+                mo.output.append(
+                    mo.md(f"⚠️ Error listing files in {selected_folder}: {e}")
+                )
+
     groups = {}
     for _f in available_files:
         _basename = os.path.basename(_f)
-        # Parse gap from filename (e.g. "..._stps_4.pkl")
-        _match = re.search(r'^(.*)(?:stps|steps|stps_)(\d+)\.pkl$', _basename)
+        _match = re.search(r"^(.*)(?:stps|steps|stps_)(\d+)\.pkl$", _basename)
         if _match:
             _prefix = _match.group(1).rstrip("_")
             _gap = int(_match.group(2))
         else:
-            # Fallback if no steps/gaps structure
             _prefix = _basename.replace(".pkl", "")
             _gap = 0
 
-        # Check if the folder contains all the data i.e., "x" + str(n) for all n in range(number of qubits + 1)
-        # Let's group files by their general prefix (e.g. everything up to '_stps_')
         if _prefix not in groups:
             groups[_prefix] = []
         groups[_prefix].append((_f, _gap))
 
     sorted_group_names = sorted(groups.keys())
 
-    # Store sorted lists of file paths for each group
     grouped_files = {}
     for _g in groups:
-        # Sort by gap value
         sorted_tuples = sorted(groups[_g], key=lambda x: x[1])
         grouped_files[_g] = [item[0] for item in sorted_tuples]
 
     group_selector = mo.ui.dropdown(
         options=sorted_group_names,
-        label="Select Experiment Group",
+        label="📊 **Select Available Run:**",
         value=sorted_group_names[0] if sorted_group_names else None,
     )
 
@@ -1029,51 +1069,74 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         label="**Central Tendency:** ",
     )
 
-    # Select which metrics to plot
     metric_options = ["average_purity", "max_purity", "sre"]
     metrics_to_plot = mo.ui.multiselect(
         options=metric_options,
         value=metric_options,
-        label="**Metrics to Plot:**"
+        label="**Metrics to Plot:**",
     )
 
     plot_type_dropdown = mo.ui.dropdown(
-        options=["Line Chart", "Bar Chart", "TE vs non-TE SRE", "Histogram SRE"],
+        options=[
+            "Line Chart",
+            "Bar Chart",
+            "TE vs non-TE SRE",
+            "Histogram SRE",
+        ],
         value="Line Chart",
-        label="**Plot Type:**"
+        label="**Plot Type:**",
     )
 
     step_mes_input = mo.ui.number(
         start=1, stop=1000, step=1, value=1, label="Steps per measurement"
     )
 
-    # Run button to prevent heavy computations on every click
     plot_button = mo.ui.run_button(label="🚀 Generate Plot")
+
     def clear_cache_callback(_):
         plot_cache.clear()
         mo.status.toast("🧹 Plot cache cleared successfully!")
-    clear_cache_button = mo.ui.button(label="🧹 Clear Plot Cache", on_click=clear_cache_callback)
 
-    mo.vstack([
-        group_selector,
-        mo.md("### 2. Plot Settings"),
-        mo.hstack([plot_type_dropdown, metrics_to_plot, te_filter_dropdown, metric_selector, step_mes_input], justify="start", gap=2),
-        mo.md("### 3. Execution"),
-        mo.hstack([plot_button, clear_cache_button], gap=2)
+    clear_cache_button = mo.ui.button(
+        label="🧹 Clear Plot Cache", on_click=clear_cache_callback
+    )
+
+    ui_layout = mo.vstack([
+        mo.md("### 1. Data Source Selection"),
+        mo.hstack([data_source, refresh_button], align="center", gap=2),
+        mo.md("### 2. Folder / Repository & Available Runs"),
+        mo.hstack([folder_selector, group_selector], align="center", gap=2),
+        mo.md("### 3. Plot Settings"),
+        mo.hstack(
+            [
+                plot_type_dropdown,
+                metrics_to_plot,
+                te_filter_dropdown,
+                metric_selector,
+                step_mes_input,
+            ],
+            justify="start",
+            gap=2,
+        ),
+        mo.md("### 4. Execution"),
+        mo.hstack([plot_button, clear_cache_button], gap=2),
     ])
 
-
-
+    ui_layout
     return (
-        fs,
+        clear_cache_button,
+        clear_cache_callback,
         group_selector,
         grouped_files,
+        metric_options,
         metric_selector,
         metrics_to_plot,
+        plot_button,
         plot_type_dropdown,
         re,
         step_mes_input,
         te_filter_dropdown,
+        ui_layout,
     )
 
 
