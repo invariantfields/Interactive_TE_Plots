@@ -1062,7 +1062,6 @@ def _(GithubFileSystem, data_source, mo, os, plot_cache, refresh_button):
         mo.hstack([plot_button, clear_cache_button], gap=2)
     ])
 
-
     return (
         fs,
         group_selector,
@@ -1114,6 +1113,55 @@ def _(
         fs=fs,
     )
     plot
+    return
+
+
+@app.cell
+def _(os, pickle):
+    def pack_pkl_files(source_dir_or_files, output_archive_path):
+        """
+        Packs multiple .pkl files into a single combined .pkl archive.
+        Matches the dictionary structure expected by unpack_pkl_file.
+
+        Parameters:
+        - source_dir_or_files: list of file paths OR a directory path containing .pkl files.
+        - output_archive_path: destination path for the combined .pkl file.
+        """
+        if isinstance(source_dir_or_files, str):
+            if not os.path.exists(source_dir_or_files):
+                print(f"Error: Directory '{source_dir_or_files}' does not exist.")
+                return
+            file_paths = [
+                os.path.join(source_dir_or_files, f)
+                for f in sorted(os.listdir(source_dir_or_files))
+                if f.endswith(".pkl")
+            ]
+        else:
+            file_paths = list(source_dir_or_files)
+
+        packed_data = {}
+        for fpath in file_paths:
+            fname = os.path.basename(fpath)
+            try:
+                with open(fpath, "rb") as f:
+                    content = pickle.load(f)
+                packed_data[fname] = content
+                print(f"Packed: {fname}")
+            except Exception as e:
+                print(f"Error reading {fname}: {e}")
+
+        # Ensure parent directory exists for output archive
+        out_dir = os.path.dirname(output_archive_path)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+        try:
+            with open(output_archive_path, "wb") as f:
+                pickle.dump(packed_data, f)
+            print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}")
+        except Exception as e:
+            print(f"Error saving archive: {e}")
+
     return
 
 
@@ -1206,7 +1254,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1267,8 +1315,8 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                     ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
-                if col_idx == 0:
-                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                # if col_idx == 0:
+                #     ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
@@ -1297,7 +1345,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data, label, file in loaded_data:
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file or "more_data" in file
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
@@ -1526,8 +1574,6 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             return fig
 
         return None
-
-
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
