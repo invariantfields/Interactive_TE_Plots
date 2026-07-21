@@ -104,6 +104,7 @@ def _():
     # One global instance — loaded from disk once per kernel session
     plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
     return (
+        GithubFileSystem,
         combinations,
         cp,
         go,
@@ -946,11 +947,16 @@ def _(mo):
     )
     refresh_button = mo.ui.button(label="🔄 Refresh List", value=0)
 
+    mo.vstack([
+        mo.md("### 1. Data Source Selection"),
+        mo.hstack([data_source, refresh_button], align="center", gap=2)
+    ])
+
     return data_source, refresh_button
 
 
 @app.cell
-def _(data_source, folder_selector, fs, mo, os, plot_cache, refresh_button):
+def _(data_source, folder_selector, fs, mo, os, plot_cache):
 
     import re
 
@@ -1048,12 +1054,10 @@ def _(data_source, folder_selector, fs, mo, os, plot_cache, refresh_button):
         label="🧹 Clear Plot Cache", on_click=clear_cache_callback
     )
 
-    ui_layout = mo.vstack([
-        mo.md("### 1. Data Source Selection"),
-        mo.hstack([data_source, refresh_button], align="center", gap=2),
-        mo.md("### 2. Folder / Repository & Available Runs"),
-        mo.hstack([folder_selector, group_selector], align="center", gap=2),
-        mo.md("### 3. Plot Settings"),
+    mo.vstack([
+        mo.md("### 3. Available Runs Selection"),
+        group_selector,
+        mo.md("### 4. Plot Settings"),
         mo.hstack(
             [
                 plot_type_dropdown,
@@ -1065,11 +1069,9 @@ def _(data_source, folder_selector, fs, mo, os, plot_cache, refresh_button):
             justify="start",
             gap=2,
         ),
-        mo.md("### 4. Execution"),
+        mo.md("### 5. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2),
     ])
-
-    ui_layout
 
     return (
         group_selector,
@@ -1630,6 +1632,59 @@ def _(
 @app.cell
 def _():
     return
+
+
+@app.cell(hide_code=True)
+def _(GithubFileSystem, data_source, mo, os, refresh_button):
+
+    refresh_button.value
+    fs = None
+    available_folders = []
+
+    if data_source.value == "Local":
+        _candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
+        available_folders = [
+            _d
+            for _d in _candidate_dirs
+            if os.path.exists(_d)
+            and any(
+                _f.endswith(".pkl")
+                for _f in os.listdir(_d)
+                if os.path.isfile(os.path.join(_d, _f))
+            )
+        ]
+        if not available_folders:
+            available_folders = ["."]
+    else:
+        _org = "invariantfields"
+        _repo = "Interactive_TE_Plots"
+        try:
+            fs = GithubFileSystem(org=_org, repo=_repo)
+            _repo_dirs = ["correct_data", "data", "new_data"]
+            for _rdir in _repo_dirs:
+                try:
+                    if any(_f.endswith(".pkl") for _f in fs.ls(_rdir)):
+                        available_folders.append(_rdir)
+                except Exception:
+                    pass
+            if not available_folders:
+                available_folders = ["data"]
+        except Exception as e:
+            mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
+            available_folders = ["data"]
+
+    folder_selector = mo.ui.dropdown(
+        options=available_folders,
+        label="📁 **Select Folder / Repository:**",
+        value=available_folders[0] if available_folders else None,
+    )
+
+    mo.vstack([
+        mo.md("### 2. Folder / Repository Selection"),
+        folder_selector
+    ])
+
+    return folder_selector, fs
 
 
 if __name__ == "__main__":
