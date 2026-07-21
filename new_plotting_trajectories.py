@@ -955,6 +955,59 @@ def _(mo):
     return data_source, refresh_button
 
 
+@app.cell(hide_code=True)
+def _(GithubFileSystem, data_source, mo, os, refresh_button):
+
+    refresh_button.value
+    fs = None
+    available_folders = []
+
+    if data_source.value == "Local":
+        _candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
+        available_folders = [
+            _d
+            for _d in _candidate_dirs
+            if os.path.exists(_d)
+            and any(
+                _f.endswith(".pkl")
+                for _f in os.listdir(_d)
+                if os.path.isfile(os.path.join(_d, _f))
+            )
+        ]
+        if not available_folders:
+            available_folders = ["."]
+    else:
+        _org = "invariantfields"
+        _repo = "Interactive_TE_Plots"
+        try:
+            fs = GithubFileSystem(org=_org, repo=_repo)
+            _repo_dirs = ["correct_data", "data", "new_data"]
+            for _rdir in _repo_dirs:
+                try:
+                    if any(_f.endswith(".pkl") for _f in fs.ls(_rdir)):
+                        available_folders.append(_rdir)
+                except Exception:
+                    pass
+            if not available_folders:
+                available_folders = ["data"]
+        except Exception as e:
+            mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
+            available_folders = ["data"]
+
+    folder_selector = mo.ui.dropdown(
+        options=available_folders,
+        label="📁 **Select Folder / Repository:**",
+        value=available_folders[0] if available_folders else None,
+    )
+
+    mo.vstack([
+        mo.md("### 2. Folder / Repository Selection"),
+        folder_selector
+    ])
+
+    return folder_selector, fs
+
+
 @app.cell
 def _(data_source, folder_selector, fs, mo, os, plot_cache):
 
@@ -1632,59 +1685,6 @@ def _(
 @app.cell
 def _():
     return
-
-
-@app.cell(hide_code=True)
-def _(GithubFileSystem, data_source, mo, os, refresh_button):
-
-    refresh_button.value
-    fs = None
-    available_folders = []
-
-    if data_source.value == "Local":
-        _candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
-        available_folders = [
-            _d
-            for _d in _candidate_dirs
-            if os.path.exists(_d)
-            and any(
-                _f.endswith(".pkl")
-                for _f in os.listdir(_d)
-                if os.path.isfile(os.path.join(_d, _f))
-            )
-        ]
-        if not available_folders:
-            available_folders = ["."]
-    else:
-        _org = "invariantfields"
-        _repo = "Interactive_TE_Plots"
-        try:
-            fs = GithubFileSystem(org=_org, repo=_repo)
-            _repo_dirs = ["correct_data", "data", "new_data"]
-            for _rdir in _repo_dirs:
-                try:
-                    if any(_f.endswith(".pkl") for _f in fs.ls(_rdir)):
-                        available_folders.append(_rdir)
-                except Exception:
-                    pass
-            if not available_folders:
-                available_folders = ["data"]
-        except Exception as e:
-            mo.output.append(mo.md(f"⚠️ Error connecting to GitHub: {e}"))
-            available_folders = ["data"]
-
-    folder_selector = mo.ui.dropdown(
-        options=available_folders,
-        label="📁 **Select Folder / Repository:**",
-        value=available_folders[0] if available_folders else None,
-    )
-
-    mo.vstack([
-        mo.md("### 2. Folder / Repository Selection"),
-        folder_selector
-    ])
-
-    return folder_selector, fs
 
 
 if __name__ == "__main__":
