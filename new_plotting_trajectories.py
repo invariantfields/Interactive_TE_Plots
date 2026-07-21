@@ -1297,7 +1297,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data, label, file in loaded_data:
                     is_correct_data = "correct_data" in file or "more_data" in file
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
@@ -1499,7 +1499,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
         elif plot_type == "Histogram SRE":
             fig, ax = plt.subplots(figsize=(6, 4.5))
 
-            for data_idx, (data, label, file) in enumerate(loaded_data):
+            for data, label, file in loaded_data:
                 is_correct_data = "correct_data" in file
                 if not is_correct_data:
                     continue
@@ -1526,6 +1526,8 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             return fig
 
         return None
+
+
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
