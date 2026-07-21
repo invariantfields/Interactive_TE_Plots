@@ -1212,12 +1212,13 @@ def _(
         if plot_type == "Line Chart":
             n_plots = len(selected_metrics)
             fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False)
+            colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
             for col_idx, metric in enumerate(selected_metrics):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data, label, file in loaded_data:
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1248,9 +1249,13 @@ def _(
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
-                            if has_step_by_step:
-                                trajs.append(list(traj))
+                            if len(traj) > 2:
+                                t_copy = list(traj)
+                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
+                                    t_copy[0] = derived_init_sre
+                                if t_copy[-1] == 0.0 and is_correct_data:
+                                    t_copy[-1] = computed_final
+                                trajs.append(t_copy)
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
@@ -1259,18 +1264,22 @@ def _(
                     if not trajs:
                         continue
 
-                    steps = np.arange(len(trajs[0])) * step_mes
-                    arr = np.array(trajs)
+                    max_len = max(len(t) for t in trajs)
+                    arr = np.full((len(trajs), max_len), np.nan)
+                    for j, t in enumerate(trajs):
+                        arr[j, :len(t)] = t
+
+                    steps = np.arange(max_len) * step_mes
 
                     if central_tendency == "Average":
-                        center = np.mean(arr, axis=0)
-                        std = np.std(arr, axis=0)
+                        center = np.nanmean(arr, axis=0)
+                        std = np.nanstd(arr, axis=0)
                         lower_bound = center - std
                         upper_bound = center + std
                     else:
-                        center = np.median(arr, axis=0)
-                        lower_bound = np.percentile(arr, 25, axis=0)
-                        upper_bound = np.percentile(arr, 75, axis=0)
+                        center = np.nanmedian(arr, axis=0)
+                        lower_bound = np.nanpercentile(arr, 25, axis=0)
+                        upper_bound = np.nanpercentile(arr, 75, axis=0)
 
                     color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
