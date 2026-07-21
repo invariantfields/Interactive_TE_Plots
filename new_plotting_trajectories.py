@@ -1206,7 +1206,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx, (data, label, file) in enumerate(loaded_data):
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
@@ -1267,8 +1267,8 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                     ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
-                if col_idx == 0:
-                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                # if col_idx == 0:
+                #     ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
@@ -1297,7 +1297,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data, label, file in loaded_data:
+                for data_idx,(data, label, file) in enumerate(loaded_data):
                     is_correct_data = "correct_data" in file or "more_data" in file
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
@@ -1526,8 +1526,6 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             return fig
 
         return None
-
-
 
     return (plot_te_filtered_trajectories_matplotlib,)
 
