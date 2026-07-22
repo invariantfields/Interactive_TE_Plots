@@ -16,6 +16,38 @@ os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
 os.environ['JAX_PLATFORMS'] = 'cuda,cpu'
 jax.config.update("jax_enable_x64", True)
 
+# Global Julia singleton handle
+_JL_INSTANCE = None
+
+def get_julia_handle():
+    global _JL_INSTANCE
+    if _JL_INSTANCE is None:
+        print("Initializing Julia/HadaMAG.jl (once per process)...")
+        from juliacall import Main as jl
+        jl.seval("using Logging; disable_logging(Logging.Error)")
+        jl.seval("using HadaMAG, CUDA")
+        jl.seval("using LinearAlgebra: norm")
+        jl.seval("""
+        function jl_compute_sre_batch(psi_batch_np, alpha, n_qubits, dim, num_starts)
+            results = zeros(Float64, num_starts)
+            for i in 1:num_starts
+                psi_row = psi_batch_np[i, :]
+                psi_jl = Vector{ComplexF64}(psi_row)
+                nrm = norm(psi_jl)
+                if nrm > 1e-12
+                    psi_jl ./= nrm
+                end
+                psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
+                sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA, progress=false)
+                results[i] = sre_result
+            end
+            return results
+        end
+        """)
+        _JL_INSTANCE = jl
+        print("Julia HadaMAG batch SRE initialized successfully.")
+    return _JL_INSTANCE
+
 # =====================================================================
 # 1. Symplectic Generator (NumPy / CPU)
 # =====================================================================
@@ -178,32 +210,9 @@ def run_jax_gpu_optimization(
         return total_viol
 
     solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11)
+    jl = get_julia_handle()
 
-    print("Initializing Julia/HadaMAG.jl...")
-    from juliacall import Main as jl
-    jl.seval("using Logging; disable_logging(Logging.Error)")
-    jl.seval("using HadaMAG, CUDA")
-    jl.seval("using LinearAlgebra: norm")
-    jl.seval("""
-    function jl_compute_sre_batch(psi_batch_np, alpha, n_qubits, dim, num_starts)
-        results = zeros(Float64, num_starts)
-        for i in 1:num_starts
-            psi_row = psi_batch_np[i, :]
-            psi_jl = Vector{ComplexF64}(psi_row)
-            nrm = norm(psi_jl)
-            if nrm > 1e-12
-                psi_jl ./= nrm
-            end
-            psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA, progress=false)
-            results[i] = sre_result
-        end
-        return results
-    end
-    """)
-    print("Julia HadaMAG batch SRE initialized.")
-
-    print(f"Generating {num_starts} initial states...")
+    print(f"Generating {num_starts} initial states for Gap {gap}...")
     init_params_list = []
     for st in range(num_starts):
         psi_init = rand_Almost_Stab_state(n, gap)
