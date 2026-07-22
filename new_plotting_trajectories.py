@@ -327,11 +327,11 @@ def _(
                             init_sre = data["sre"][j][0]
                             final_sre = data["sre"][j][-1]
 
-                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                            if abs(init_sre) <= 1e-5 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
                                 data["sre"][j][0] = derived_init_sre
                                 data_changed = True
-                            if final_sre == 0.0:
+                            if abs(final_sre) <= 1e-5:
                                 computed_final, _ = compute_sre_exact(final_state, alpha=2)
                                 final_sre = computed_final
                                 data["sre"][j][-1] = computed_final
@@ -463,22 +463,22 @@ def _(
                                         opt_len = len(data[m][j])
                                         break
 
-                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                            if abs(init_sre) <= 1e-5 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
                                 data["sre"][j][0] = derived_init_sre
                                 data_changed = True
-                            if final_sre == 0.0:
+                            if abs(final_sre) <= 1e-5:
                                 computed_final, _ = compute_sre_exact(final_state, alpha=2)
                                 final_sre = computed_final
                                 data["sre"][j][-1] = computed_final
                                 data_changed = True
 
-                            has_step_by_step = (len(traj) > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            has_step_by_step = (len(traj) > 2 and any(abs(v) > 1e-5 for v in traj[1:-1]))
                             if has_step_by_step:
                                 t_copy = list(traj)
-                                if t_copy[0] == 0.0 and derived_init_sre != 0.0:
+                                if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
-                                if t_copy[-1] == 0.0:
+                                if abs(t_copy[-1]) <= 1e-5:
                                     t_copy[-1] = computed_final
                                 filtered_trajs.append(t_copy)
                             else:
@@ -1313,9 +1313,9 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                         if is_sre_metric:
                             init_sre = traj[0]
                             final_sre = traj[-1]
-                            if init_sre == 0.0 and derived_init_sre != 0.0:
+                            if abs(init_sre) <= 1e-5 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
-                            if final_sre == 0.0:
+                            if abs(final_sre) <= 1e-5:
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
@@ -1393,10 +1393,10 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                         if metric == "sre":
                             init_sre = data["sre"][j][0]
                             final_sre = data["sre"][j][-1]
-                            if final_sre == 0.0:
+                            if abs(final_sre) <= 1e-5:
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
-                            init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
+                            init_vals.append(init_sre if abs(init_sre) > 1e-5 else derived_init_sre)
                             final_vals.append(final_sre)
                         else:
                             init_vals.append(data[metric][j][0])
