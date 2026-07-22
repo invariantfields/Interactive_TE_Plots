@@ -1137,6 +1137,7 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
+    te_filter_dropdown,
 ):
     if not group_selector.value or group_selector.value not in grouped_files or not grouped_files.get(group_selector.value):
         mo.stop(True, mo.md("⚠️ **Please select an available dataset folder or run from Step 2.**"))
@@ -1243,7 +1244,7 @@ def _(os, pickle):
 
         print(f"\nSuccessfully unpacked all files into directory: {destination_dir}")
 
-    return
+    return (unpack_pkl_file,)
 
 
 @app.cell
@@ -1622,7 +1623,7 @@ def _(
 
         return None
 
-    return (plot_te_filtered_trajectories_matplotlib,)
+    return
 
 
 @app.cell
@@ -1664,6 +1665,12 @@ def _(
 
     plotly_plot = _plotly_fig
     plotly_plot
+    return
+
+
+@app.cell
+def _(unpack_pkl_file):
+    unpack_pkl_file("zip.pkl", "data_zip_7/")
     return
 
 
