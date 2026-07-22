@@ -167,17 +167,18 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 @app.cell
 def _(
+    final_sre_vals,
     go,
     is_TE,
     jl,
     make_subplots,
     np,
-    opt_len,
     os,
     pc,
     pickle,
     plot_cache,
     re,
+    state,
 ):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
@@ -902,7 +903,12 @@ def _(
             )
 
 
-    return compute_sre_exact, get_state_mask, plot_te_filtered_trajectories
+    return (
+        compute_sre_exact,
+        get_state_mask,
+        parse_gap_sre,
+        plot_te_filtered_trajectories,
+    )
 
 
 @app.cell
@@ -928,7 +934,6 @@ def _(mo):
         mo.md("### 1. Data Source Selection"),
         mo.hstack([data_source, refresh_button], align="center", gap=2)
     ])
-
     return data_source, refresh_button
 
 
@@ -981,7 +986,6 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         mo.md("### 2. Folder / Repository Selection"),
         folder_selector
     ])
-
     return folder_selector, fs
 
 
@@ -1102,7 +1106,6 @@ def _(data_source, folder_selector, fs, mo, os, plot_cache):
         mo.md("### 5. Execution"),
         mo.hstack([plot_button, clear_cache_button], gap=2),
     ])
-
     return (
         group_selector,
         grouped_files,
@@ -1237,7 +1240,15 @@ def _(os, pickle):
 
 
 @app.cell
-def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
+def _(
+    compute_sre_exact,
+    get_state_mask,
+    is_TE,
+    np,
+    parse_gap_sre,
+    pickle,
+    plt,
+):
     colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
