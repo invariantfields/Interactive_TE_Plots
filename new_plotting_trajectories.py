@@ -487,9 +487,7 @@ def _(
                                     data_changed = True
                                 filtered_trajs.append(t_copy)
                             else:
-                                steps_arr = np.arange(opt_len)
-                                tau = max(1.0, opt_len / 8.0)
-                                reconstructed_sre = list(final_sre + (init_sre - final_sre) * np.exp(-steps_arr / tau))
+                                reconstructed_sre = list(np.linspace(init_sre, final_sre, opt_len))
                                 data["sre"][j] = reconstructed_sre
                                 data_changed = True
                                 filtered_trajs.append(reconstructed_sre)
