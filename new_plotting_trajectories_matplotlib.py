@@ -1281,23 +1281,16 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            has_step_by_step = (len(traj) > 2 and any(abs(v) > 1e-5 for v in traj[1:-1]))
-                            if has_step_by_step:
+                            if len(traj) > 2:
+                                # Use stored trajectory directly (Gap 0 legitimately has SRE=0, which is correct)
                                 t_copy = list(traj)
                                 if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
-                                    data["sre"][j][0] = derived_init_sre
-                                    data_changed = True
-                                if abs(t_copy[-1]) <= 1e-5:
+                                if abs(t_copy[-1]) <= 1e-5 and abs(derived_init_sre) > 1e-5:
                                     t_copy[-1] = computed_final
-                                    data["sre"][j][-1] = computed_final
-                                    data_changed = True
                                 trajs.append(t_copy)
                             else:
-                                reconstructed_sre = list(np.linspace(init_sre, final_sre, opt_len))
-                                data["sre"][j] = reconstructed_sre
-                                data_changed = True
-                                trajs.append(reconstructed_sre)
+                                trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
                             trajs.append(traj)
 

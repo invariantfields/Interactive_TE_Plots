@@ -311,7 +311,7 @@ def _(
                 base_color = colors[file_idx % len(colors)]
 
                 derived_init_sre = parse_gap_sre(file, label)
-
+                print(derived_init_sre)
                 data_changed = False
                 for i, metric in enumerate(selected_metrics):
                     col = i + 1
@@ -440,6 +440,7 @@ def _(
                 fill_color = hex_to_rgba(base_color, alpha=0.2)
 
                 derived_init_sre = parse_gap_sre(file, label)
+                print(derived_init_sre)
 
                 data_changed = False
                 for i, metric in enumerate(selected_metrics):
@@ -464,27 +465,23 @@ def _(
                                         opt_len = len(data[m][j])
                                         break
 
-                            if abs(init_sre) <= 1e-5 and derived_init_sre != 0.0:
+                            if abs(init_sre) <= 1e-8 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
                                 data["sre"][j][0] = derived_init_sre
                                 data_changed = True
-                            if abs(final_sre) <= 1e-5:
+                            if abs(final_sre) <= 1e-8:
                                 computed_final, _ = compute_sre_exact(final_state, alpha=2)
                                 final_sre = computed_final
                                 data["sre"][j][-1] = computed_final
                                 data_changed = True
 
-                            has_step_by_step = (len(traj) > 2 and any(abs(v) > 1e-5 for v in traj[1:-1]))
-                            if has_step_by_step:
+                            if len(traj) > 2:
+                                # Use stored trajectory directly (Gap 0 legitimately has SRE=0, which is correct)
                                 t_copy = list(traj)
                                 if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
-                                    data["sre"][j][0] = derived_init_sre
-                                    data_changed = True
-                                if abs(t_copy[-1]) <= 1e-5:
+                                if abs(t_copy[-1]) <= 1e-5 and abs(derived_init_sre) > 1e-5:
                                     t_copy[-1] = computed_final
-                                    data["sre"][j][-1] = computed_final
-                                    data_changed = True
                                 filtered_trajs.append(t_copy)
                             else:
                                 reconstructed_sre = list(np.linspace(init_sre, final_sre, opt_len))
@@ -1323,7 +1320,7 @@ def _(
                     for j in indices:
                         traj = data[metric][j]
                         opt_len = 2
-                        for m in ["average_purity", "max_purity", "total_violation"]:
+                        for m in ["average_purity", "max_purity", "total_violation","sre"]:
                             if m in data and data[m]:
                                 opt_len = len(data[m][j])
                                 break
@@ -1338,9 +1335,14 @@ def _(
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
-                            if has_step_by_step:
-                                trajs.append(list(traj))
+                            if len(traj) > 2:
+                                # Use stored trajectory directly; Gap 0 legitimately has SRE=0 everywhere
+                                t_copy = list(traj)
+                                if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
+                                    t_copy[0] = derived_init_sre
+                                if abs(t_copy[-1]) <= 1e-5 and abs(derived_init_sre) > 1e-5:
+                                    t_copy[-1] = computed_final
+                                trajs.append(t_copy)
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
@@ -1671,6 +1673,12 @@ def _(
 @app.cell
 def _(unpack_pkl_file):
     unpack_pkl_file("zip.pkl", "data_zip_7/")
+    return
+
+
+@app.cell
+def _(parse_gap_sre):
+    print(parse_gap_sre("data_zip_7/7_qbt_1000_sds_ptmzng_jfr_1000_stps_0.pkl",label=""))
     return
 
 
