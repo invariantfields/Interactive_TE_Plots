@@ -199,6 +199,17 @@ def _(
             print(f"SRE Exact Calculation Error: {e}")
             return 1e-15, 0.0
 
+    def parse_gap_sre(file, label=""):
+        target_str = f"{label} {file}"
+        _match = re.search(r'(?:gap\s*|k\s*=\s*|_)?(\d+)\.pkl$', file or "")
+        if not _match:
+            _match = re.search(r'(?:gap\s*|k\s*=\s*)(\d+)', target_str, re.IGNORECASE)
+        if _match:
+            val = float(_match.group(1))
+            if val <= 15:
+                return val
+        return 0.0
+
     plot_cache.clear()
     print("compute_sre_exact reloaded OK & plot_cache cleared")
 
@@ -298,13 +309,7 @@ def _(
 
                 base_color = colors[file_idx % len(colors)]
 
-                # Derive SRE initial state gap value
-                derived_init_sre = 0.0
-                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                if not _gap_match and file:
-                    _gap_match = re.search(r'_stps_(\d+)', file)
-                if _gap_match:
-                    derived_init_sre = float(_gap_match.group(1))
+                derived_init_sre = parse_gap_sre(file, label)
 
                 data_changed = False
                 for i, metric in enumerate(selected_metrics):
@@ -433,13 +438,7 @@ def _(
                 base_color = colors[file_idx % len(colors)]
                 fill_color = hex_to_rgba(base_color, alpha=0.2)
 
-                # Derive SRE initial state gap value
-                derived_init_sre = 0.0
-                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                if not _gap_match and file:
-                    _gap_match = re.search(r'_stps_(\d+)', file)
-                if _gap_match:
-                    derived_init_sre = float(_gap_match.group(1))
+                derived_init_sre = parse_gap_sre(file, label)
 
                 data_changed = False
                 for i, metric in enumerate(selected_metrics):
@@ -635,15 +634,7 @@ def _(
                 te_sre_vals = []
                 non_te_sre_vals = []
 
-                # Parse gap value from the label (e.g., 'gap2' -> 2.0 SRE)
-                # Since rand_Almost_Stab_state(n, gap) has stabilizer group of size 2^(n - gap)
-                # the initial state has SRE exactly equal to the gap value (for alpha=2).
-                derived_init_sre = 0.0
-                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                if not _gap_match and file:
-                    _gap_match = re.search(r'_stps_(\d+)', file)
-                if _gap_match:
-                    derived_init_sre = float(_gap_match.group(1))
+                derived_init_sre = parse_gap_sre(file, label)
 
                 data_changed = False
                 for j, is_te_state in enumerate(te_mask):
@@ -1297,12 +1288,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 ax.set_title(metric_map[metric], fontsize=13)
 
                 for data_idx, (data, label, file) in enumerate(loaded_data):
-                    derived_init_sre = 0.0
-                    _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                    if not _gap_match and file:
-                        _gap_match = re.search(r'_stps_(\d+)', file)
-                    if _gap_match:
-                        derived_init_sre = float(_gap_match.group(1))
+                    derived_init_sre = parse_gap_sre(file, label)
 
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
                     indices = [j for j, keep in enumerate(te_mask) if keep]
@@ -1392,12 +1378,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                     init_vals = []
                     final_vals = []
 
-                    derived_init_sre = 0.0
-                    _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                    if not _gap_match and file:
-                        _gap_match = re.search(r'_stps_(\d+)', file)
-                    if _gap_match:
-                        derived_init_sre = float(_gap_match.group(1))
+                    derived_init_sre = parse_gap_sre(file, label)
 
                     for j, keep in enumerate(te_mask):
                         if not keep:
@@ -1499,12 +1480,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             for data_idx, (data, label, file) in enumerate(loaded_data):
                 te_mask = np.array([is_TE(state) for state in data["final_states"]])
 
-                derived_init_sre = 0.0
-                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                if not _gap_match and file:
-                    _gap_match = re.search(r'_stps_(\d+)', file)
-                if _gap_match:
-                    derived_init_sre = float(_gap_match.group(1))
+                derived_init_sre = parse_gap_sre(file, label)
 
                 init_vals = []
                 te_vals = []
