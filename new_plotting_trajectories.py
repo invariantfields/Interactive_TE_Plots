@@ -630,7 +630,7 @@ def _(
 
                 final_states = data["final_states"]
                 te_mask = np.array([is_TE(state) for state in final_states])
-                is_correct_data = ("correct_data" in file) or ("more_data" in file)
+                is_correct_data = True
 
                 init_sre_vals = []
                 all_final_sre_vals = []
@@ -661,7 +661,7 @@ def _(
                         data_changed = True
 
                     # Update SRE final states in file
-                    if sre_val == 0.0 and is_correct_data:
+                    if sre_val == 0.0:
                         computed, _ = compute_sre_exact(final_state, alpha=2)
                         sre_val = computed
                         data["sre"][j][-1] = computed
@@ -963,7 +963,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     available_folders = []
 
     if data_source.value == "Local":
-        _candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
+        _candidate_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7"]
         available_folders = [
             _d
             for _d in _candidate_dirs
@@ -981,7 +981,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         _repo = "Interactive_TE_Plots"
         try:
             fs = GithubFileSystem(org=_org, repo=_repo)
-            _repo_dirs = ["correct_data", "data", "new_data"]
+            _repo_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7"]
             for _rdir in _repo_dirs:
                 try:
                     if any(_f.endswith(".pkl") for _f in fs.ls(_rdir)):
