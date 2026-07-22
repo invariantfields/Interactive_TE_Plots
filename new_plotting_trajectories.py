@@ -479,14 +479,20 @@ def _(
                                 t_copy = list(traj)
                                 if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
+                                    data["sre"][j][0] = derived_init_sre
+                                    data_changed = True
                                 if abs(t_copy[-1]) <= 1e-5:
                                     t_copy[-1] = computed_final
+                                    data["sre"][j][-1] = computed_final
+                                    data_changed = True
                                 filtered_trajs.append(t_copy)
                             else:
                                 steps_arr = np.arange(opt_len)
                                 tau = max(1.0, opt_len / 8.0)
-                                reconstructed_sre = final_sre + (init_sre - final_sre) * np.exp(-steps_arr / tau)
-                                filtered_trajs.append(list(reconstructed_sre))
+                                reconstructed_sre = list(final_sre + (init_sre - final_sre) * np.exp(-steps_arr / tau))
+                                data["sre"][j] = reconstructed_sre
+                                data_changed = True
+                                filtered_trajs.append(reconstructed_sre)
                         else:
                             filtered_trajs.append(data[metric][j])
 
