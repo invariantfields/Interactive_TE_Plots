@@ -912,7 +912,7 @@ def _(
             )
 
 
-    return compute_sre_exact, plot_te_filtered_trajectories
+    return compute_sre_exact, parse_gap_sre, plot_te_filtered_trajectories
 
 
 @app.cell
@@ -943,7 +943,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     available_folders = []
 
     if data_source.value == "Local":
-        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "."]
+        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7/"]
         available_folders = [
             d
             for d in candidate_dirs
@@ -979,19 +979,11 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
         label="📁 **Select Folder / Repository:**",
         value=available_folders[0] if available_folders else None,
     )
-    return available_folders, folder_selector, fs
+    return folder_selector, fs
 
 
 @app.cell
-def _(
-    data_source,
-    folder_selector,
-    fs,
-    mo,
-    os,
-    plot_cache,
-    refresh_button,
-):
+def _(data_source, folder_selector, fs, mo, os, plot_cache, refresh_button):
     import re
 
     selected_folder = folder_selector.value or "."
@@ -1111,19 +1103,14 @@ def _(
 
     ui_layout
     return (
-        clear_cache_button,
-        clear_cache_callback,
         group_selector,
         grouped_files,
-        metric_options,
         metric_selector,
         metrics_to_plot,
-        plot_button,
         plot_type_dropdown,
         re,
         step_mes_input,
         te_filter_dropdown,
-        ui_layout,
     )
 
 
@@ -1165,7 +1152,6 @@ def _(
         fs=fs,
     )
     plot
-
     return
 
 
@@ -1201,7 +1187,7 @@ def _(os, pickle):
 
 
 @app.cell
-def _(compute_sre_exact, is_TE, np, pickle, plt, re):
+def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
     def plot_te_filtered_trajectories_matplotlib(
         pkl_files, labels, step_mes, use_te_filter, central_tendency, selected_metrics, plot_type="Line Chart", fs=None
     ):
@@ -1303,7 +1289,10 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                                     t_copy[-1] = final_sre
                                 trajs.append(t_copy)
                             else:
-                                trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                                steps_arr = np.arange(opt_len)
+                                tau = max(1.0, opt_len / 8.0)
+                                reconstructed_sre = final_sre + (init_sre - final_sre) * np.exp(-steps_arr / tau)
+                                trajs.append(list(reconstructed_sre))
                         else:
                             trajs.append(traj)
 
@@ -1632,7 +1621,6 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-
     return
 
 

@@ -483,7 +483,10 @@ def _(
                                     t_copy[-1] = computed_final
                                 filtered_trajs.append(t_copy)
                             else:
-                                filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
+                                steps_arr = np.arange(opt_len)
+                                tau = max(1.0, opt_len / 8.0)
+                                reconstructed_sre = final_sre + (init_sre - final_sre) * np.exp(-steps_arr / tau)
+                                filtered_trajs.append(list(reconstructed_sre))
                         else:
                             filtered_trajs.append(data[metric][j])
 
