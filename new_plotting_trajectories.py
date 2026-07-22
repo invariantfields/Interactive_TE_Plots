@@ -1139,9 +1139,9 @@ def _(
     plot_type_dropdown,
     re,
     step_mes_input,
-    te_filter_dropdown,
 ):
-    mo.stop(not group_selector.value, mo.md("Select an experiment group."))
+    if not group_selector.value or group_selector.value not in grouped_files or not grouped_files.get(group_selector.value):
+        mo.stop(True, mo.md("⚠️ **Please select an available dataset folder or run from Step 2.**"))
 
     selected_group_files = grouped_files[group_selector.value]
 
@@ -1641,7 +1641,8 @@ def _(
     step_mes_input,
     te_filter_dropdown,
 ):
-    mo.stop(not group_selector.value, mo.md("Select an experiment group."))
+    if not group_selector.value or group_selector.value not in grouped_files or not grouped_files.get(group_selector.value):
+        mo.stop(True, mo.md("⚠️ **Please select an available dataset folder or run from Step 2.**"))
 
     _plotly_files = grouped_files[group_selector.value]
     _plotly_labels = []
