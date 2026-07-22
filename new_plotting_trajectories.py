@@ -466,7 +466,8 @@ def _(
                                 data["sre"][j][-1] = computed_final
                                 data_changed = True
 
-                            if len(traj) > 2:
+                            has_step_by_step = (len(traj) > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            if has_step_by_step:
                                 t_copy = list(traj)
                                 if t_copy[0] == 0.0 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
