@@ -312,9 +312,6 @@ def _(
                     init_vals = []
                     final_vals = []
 
-                    # Compute SRE for initial/final states if correct_data directory is active
-                    is_correct_data = "correct_data" in file
-
                     for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
@@ -448,7 +445,6 @@ def _(
                     col = i + 1
 
                     filtered_trajs = []
-                    is_correct_data = "correct_data" in file
 
                     for j, keep in enumerate(te_mask):
                         if not keep:
@@ -630,7 +626,6 @@ def _(
 
                 final_states = data["final_states"]
                 te_mask = np.array([is_TE(state) for state in final_states])
-                is_correct_data = ("correct_data" in file) or ("more_data" in file)
 
                 init_sre_vals = []
                 all_final_sre_vals = []
@@ -857,7 +852,6 @@ def _(
 
                 final_states = data["final_states"]
                 te_mask = np.array([is_TE(state) for state in final_states])
-                is_correct_data = "correct_data" in file
 
                 final_sre_vals = []
                 # Derive SRE initial state gap value
@@ -1282,7 +1276,6 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 ax.set_title(metric_map[metric], fontsize=13)
 
                 for data_idx, (data, label, file) in enumerate(loaded_data):
-                    is_correct_data = "correct_data" in file
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
                     if not _gap_match and file:
@@ -1381,9 +1374,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data, label, file in loaded_data:
-                    is_correct_data = "correct_data" in file or "more_data" in file
-
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
 
                     init_vals = []

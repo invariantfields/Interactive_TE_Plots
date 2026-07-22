@@ -312,14 +312,11 @@ def _(
                     init_vals = []
                     final_vals = []
 
-                    # Compute SRE for initial/final states if correct_data directory is active
-                    is_correct_data = "correct_data" in file
-
                     for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
 
-                        if metric == "sre" and is_correct_data:
+                        if metric == "sre":
                             final_state = data["final_states"][j]
                             init_sre = data["sre"][j][0]
                             final_sre = data["sre"][j][-1]
@@ -448,12 +445,12 @@ def _(
                     col = i + 1
 
                     filtered_trajs = []
-                    is_correct_data = "correct_data" in file
 
                     for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
-                        if metric == "sre" and is_correct_data:
+
+                        if metric == "sre":
                             final_state = data["final_states"][j]
                             traj = data["sre"][j]
                             init_sre = traj[0]
@@ -473,7 +470,7 @@ def _(
                                 t_copy = list(traj)
                                 if t_copy[0] == 0.0 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
-                                if t_copy[-1] == 0.0 and is_correct_data:
+                                if t_copy[-1] == 0.0:
                                     t_copy[-1] = computed_final
                                 filtered_trajs.append(t_copy)
                             else:
@@ -630,7 +627,6 @@ def _(
 
                 final_states = data["final_states"]
                 te_mask = np.array([is_TE(state) for state in final_states])
-                is_correct_data = True
 
                 init_sre_vals = []
                 all_final_sre_vals = []
@@ -855,27 +851,8 @@ def _(
                     print(f"Error loading {file}: {e}")
                     continue
 
-                final_states = data["final_states"]
-                te_mask = np.array([is_TE(state) for state in final_states])
-                is_correct_data = "correct_data" in file
-
-                final_sre_vals = []
-                # Derive SRE initial state gap value
-                derived_init_sre = 0.0
-                _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
-                if not _gap_match and file:
-                    _gap_match = re.search(r'_stps_(\d+)', file)
-                if _gap_match:
-                    derived_init_sre = float(_gap_match.group(1))
-
-                te_mask, _ = get_state_mask(final_states, use_te_filter)
-                data_changed = False
-                for j, state in enumerate(final_states):
-                    if not te_mask[j]:
-                        continue
-
                     sre_val = data["sre"][j][-1]
-                    if sre_val == 0.0 and is_correct_data:
+                    if sre_val == 0.0:
                         computed, _ = compute_sre_exact(state, alpha=2)
                         sre_val = computed
                         data["sre"][j][-1] = computed
@@ -1317,8 +1294,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 ax = axes[0, col_idx]
                 ax.set_title(metric_map[metric], fontsize=13)
 
-                for data_idx,(data, label, file) in enumerate(loaded_data):
-                    is_correct_data = "correct_data" in file
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     derived_init_sre = 0.0
                     _gap_match = re.search(r'(?:gap|k\s*=\s*)(\d+)', label)
                     if not _gap_match and file:
@@ -1344,7 +1320,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                             final_sre = traj[-1]
                             if init_sre == 0.0 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
-                            if final_sre == 0.0 and is_correct_data:
+                            if final_sre == 0.0:
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
@@ -1408,9 +1384,7 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                 global_init_vals = []
                 global_final_vals = []
 
-                for data_idx,(data, label, file) in enumerate(loaded_data):
-                    is_correct_data = "correct_data" in file or "more_data" in file
-
+                for data_idx, (data, label, file) in enumerate(loaded_data):
                     te_mask, prefix = get_state_mask(data["final_states"], use_te_filter)
 
                     init_vals = []
@@ -1426,9 +1400,12 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
                     for j, keep in enumerate(te_mask):
                         if not keep:
                             continue
-                        if metric == "sre" and is_correct_data:
+                        if metric == "sre":
                             init_sre = data["sre"][j][0]
                             final_sre = data["sre"][j][-1]
+                            if final_sre == 0.0:
+                                computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
+                                final_sre = computed_final
                             init_vals.append(init_sre if init_sre != 0.0 else derived_init_sre)
                             final_vals.append(final_sre)
                         else:
@@ -1611,12 +1588,16 @@ def _(compute_sre_exact, get_state_mask, is_TE, np, pickle, plt, re):
             fig, ax = plt.subplots(figsize=(6, 4.5))
 
             for data, label, file in loaded_data:
-                is_correct_data = "correct_data" in file
-                if not is_correct_data:
-                    continue
-
                 te_mask, _ = get_state_mask(data["final_states"], use_te_filter)
-                vals = [data["sre"][j][-1] for j, keep in enumerate(te_mask) if keep]
+                vals = []
+                for j, keep in enumerate(te_mask):
+                    if not keep:
+                        continue
+                    s_val = data["sre"][j][-1]
+                    if s_val == 0.0:
+                        computed_s, _ = compute_sre_exact(data["final_states"][j], alpha=2)
+                        s_val = computed_s
+                    vals.append(s_val)
 
                 if not vals:
                     continue
