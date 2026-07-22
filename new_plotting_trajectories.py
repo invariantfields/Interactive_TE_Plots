@@ -1635,7 +1635,7 @@ def _(
     metric_selector,
     metrics_to_plot,
     mo,
-    plot_te_filtered_trajectories_matplotlib,
+    plot_te_filtered_trajectories,
     plot_type_dropdown,
     re,
     step_mes_input,
@@ -1643,18 +1643,18 @@ def _(
 ):
     mo.stop(not group_selector.value, mo.md("Select an experiment group."))
 
-    _mpl_files = grouped_files[group_selector.value]
-    _mpl_labels = []
-    for _f in _mpl_files:
+    _plotly_files = grouped_files[group_selector.value]
+    _plotly_labels = []
+    for _f in _plotly_files:
         _m = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
         if _m:
-            _mpl_labels.append(f"k = {_m.group(1)}")
+            _plotly_labels.append(f"k = {_m.group(1)}")
         else:
-            _mpl_labels.append(_f.split("/")[-1].replace(".pkl", ""))
+            _plotly_labels.append(_f.split("/")[-1].replace(".pkl", ""))
 
-    _mpl_fig = plot_te_filtered_trajectories_matplotlib(
-        pkl_files=_mpl_files,
-        labels=_mpl_labels,
+    _plotly_fig = plot_te_filtered_trajectories(
+        pkl_files=_plotly_files,
+        labels=_plotly_labels,
         step_mes=step_mes_input.value,
         use_te_filter=te_filter_dropdown.value,
         central_tendency=metric_selector.value,
@@ -1663,8 +1663,8 @@ def _(
         fs=fs,
     )
 
-    matplotlib_plot = _mpl_fig
-    matplotlib_plot
+    plotly_plot = _plotly_fig
+    plotly_plot
     return
 
 
