@@ -456,6 +456,13 @@ def _(
                             init_sre = traj[0]
                             final_sre = traj[-1]
 
+                            opt_len = len(traj)
+                            if opt_len <= 2:
+                                for m in ["average_purity", "max_purity", "total_violation", "sre"]:
+                                    if m in data and len(data[m]) > j and len(data[m][j]) > 2:
+                                        opt_len = len(data[m][j])
+                                        break
+
                             if init_sre == 0.0 and derived_init_sre != 0.0:
                                 init_sre = derived_init_sre
                                 data["sre"][j][0] = derived_init_sre

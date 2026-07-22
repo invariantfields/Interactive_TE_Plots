@@ -1277,11 +1277,12 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                     trajs = []
                     for j in indices:
                         traj = data[metric][j]
-                        opt_len = 2
-                        for m in ["average_purity", "max_purity", "total_violation"]:
-                            if m in data and data[m]:
-                                opt_len = len(data[m][j])
-                                break
+                        opt_len = len(traj)
+                        if opt_len <= 2:
+                            for m in ["average_purity", "max_purity", "total_violation", "sre"]:
+                                if m in data and len(data[m]) > j and len(data[m][j]) > 2:
+                                    opt_len = len(data[m][j])
+                                    break
 
                         is_sre_metric = (metric == "sre")
                         if is_sre_metric:
@@ -1293,7 +1294,7 @@ def _(compute_sre_exact, is_TE, np, pickle, plt, re):
                                 computed_final, _ = compute_sre_exact(data["final_states"][j], alpha=2)
                                 final_sre = computed_final
 
-                            has_step_by_step = (len(traj) == opt_len and opt_len > 2 and any(v != 0.0 for v in traj[1:-1]))
+                            has_step_by_step = (len(traj) > 2 and any(v != 0.0 for v in traj[1:-1]))
                             if has_step_by_step:
                                 t_copy = list(traj)
                                 if t_copy[0] == 0.0 and derived_init_sre != 0.0:
