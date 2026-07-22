@@ -5,16 +5,25 @@ import pickle
 import re
 from itertools import combinations
 from functools import reduce
-import numpy as np
-import cupy as cp
-import jax
-import jax.numpy as jnp
-from jaxopt import LBFGS
 
 # VRAM/XLA Configurations
 os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
 os.environ['JAX_PLATFORMS'] = 'cuda,cpu'
-jax.config.update("jax_enable_x64", True)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+import numpy as np
+import cupy as cp
+
+try:
+    import jax
+    import jax.numpy as jnp
+    from jaxopt import LBFGS
+    jax.config.update("jax_enable_x64", True)
+except Exception as _e:
+    print(f"JAX init notice: {_e}")
+    import jax
+    import jax.numpy as jnp
+    from jaxopt import LBFGS
 
 # Global Julia singleton handle
 _JL_INSTANCE = None
