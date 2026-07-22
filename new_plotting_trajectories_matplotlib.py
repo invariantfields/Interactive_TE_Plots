@@ -36,8 +36,8 @@ def _(jl, mo):
         function jl_compute_sre_exact(psi_np, alpha, n_qubits, dim)
             psi_jl = Vector{ComplexF64}(psi_np)
             psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-            sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CUDA)
-            return (sre_result, lost_norm)
+            res = SRE(psi_sv, Int(round(alpha)); progress=false)
+            return (Float64(res[1]), Float64(res[2]))
         end
         """)
         status = mo.md("⚡ **Julia SRE Direct Bridge:** Initialized successfully (`HadaMAG` + `CUDA` backend)")

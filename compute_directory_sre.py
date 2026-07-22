@@ -29,8 +29,8 @@ try:
     jl.seval("""
     function jl_compute_sre_exact(state_vec, alpha, n, d)
         psi = StateVec(ComplexF64.(state_vec))
-        s = SRE(psi, Float64(alpha))
-        return (s, 0.0)
+        res = SRE(psi, Int(round(alpha)); progress=false)
+        return (Float64(res[1]), Float64(res[2]))
     end
     """)
     print("✅ Julia/HadaMAG.jl CUDA initialized successfully.")
