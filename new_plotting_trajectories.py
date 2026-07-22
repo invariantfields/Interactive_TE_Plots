@@ -199,7 +199,8 @@ def _(
             print(f"SRE Exact Calculation Error: {e}")
             return 1e-15, 0.0
 
-    print("compute_sre_exact reloaded OK")
+    plot_cache.clear()
+    print("compute_sre_exact reloaded OK & plot_cache cleared")
 
     def get_state_mask(final_states, filter_opt):
         te_flags = np.array([is_TE(state) for state in final_states])
