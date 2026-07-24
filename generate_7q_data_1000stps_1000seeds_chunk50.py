@@ -14,6 +14,7 @@ from jaxopt import LBFGS
 # VRAM/XLA Configurations
 os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
 os.environ['JAX_PLATFORMS'] = 'cuda,cpu'
+os.environ['LD_LIBRARY_PATH'] = '/home/naga/marimo/lib/python3.14/site-packages/nvidia/cu13/lib:' + os.environ.get('LD_LIBRARY_PATH', '')
 jax.config.update("jax_enable_x64", True)
 
 # Global Julia singleton handle
@@ -181,6 +182,8 @@ def run_jax_gpu_optimization(
         trace = [i for i in range(n) if i not in keep]
         perms_list.append(tuple(trace + keep))
 
+    k_dim = 2**k
+
     @jax.jit
     def get_purity_and_violation(psi_vec):
         psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
@@ -188,17 +191,17 @@ def run_jax_gpu_optimization(
         psi_tensor = psi.reshape((2,) * n)
 
         rhos = [
-            psi_tensor.transpose(perm).reshape(-1, 2**k).conj().T
-            @ psi_tensor.transpose(perm).reshape(-1, 2**k)
+            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
+            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
             for perm in perms_list
         ]
         batch_rho = jnp.stack(rhos, axis=0)
-        ex = jnp.linalg.eigvalsh(batch_rho)
 
-        purities = jnp.sum(ex**2, axis=-1)
+        purities = jnp.sum(jnp.abs(batch_rho)**2, axis=(-2, -1))
         avg_purity = jnp.mean(purities)
         max_purity = jnp.max(purities)
 
+        ex = jnp.linalg.eigvalsh(batch_rho)
         rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
         viols = jnp.maximum(0.0, ex[:, -1] - rhs)
         total_violation = jnp.sum(viols**2)
@@ -210,7 +213,7 @@ def run_jax_gpu_optimization(
         _, _, total_viol = get_purity_and_violation(params)
         return total_viol
 
-    solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11)
+    solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11, history_size=20)
     jl = get_julia_handle()
 
     print(f"Generating {num_starts} initial states for Gap {gap}...")
