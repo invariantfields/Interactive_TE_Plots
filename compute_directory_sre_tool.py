@@ -30,6 +30,7 @@ import numpy as np
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def parse_gap_from_filename(filename: str) -> float:
     """Extract stabilizer gap k from filename. Returns float (e.g. 3.0 for _stps_3.pkl)."""
     match = re.search(r"(?:gap|stps|steps)[_\s]*(\d+)\.pkl$", filename, re.IGNORECASE)
@@ -93,6 +94,7 @@ def compute_sre_batch(jl, states: np.ndarray, n_qubits: int) -> np.ndarray:
 # Main processing
 # ---------------------------------------------------------------------------
 
+
 def process_directory(directory_path: str, batch_size: int = 100):
     if not os.path.exists(directory_path):
         print(f"Error: directory '{directory_path}' does not exist.")
@@ -121,7 +123,7 @@ def process_directory(directory_path: str, batch_size: int = 100):
 
     for file_idx, file_path in enumerate(files, 1):
         filename = os.path.basename(file_path)
-        gap_k    = parse_gap_from_filename(filename)
+        gap_k = parse_gap_from_filename(filename)
 
         print(f"\n[{file_idx}/{len(files)}] {filename}  (gap k={gap_k:.0f})")
 
@@ -134,8 +136,8 @@ def process_directory(directory_path: str, batch_size: int = 100):
             continue
 
         num_seeds = len(final_states)
-        dim       = len(final_states[0])
-        n_qubits  = int(round(np.log2(dim)))
+        dim = len(final_states[0])
+        n_qubits = int(round(np.log2(dim)))
 
         print(f"  Seeds: {num_seeds}, dim: {dim}, qubits: {n_qubits}")
 
@@ -144,7 +146,7 @@ def process_directory(directory_path: str, batch_size: int = 100):
         t0 = time.time()
 
         for start in range(0, num_seeds, batch_size):
-            end   = min(start + batch_size, num_seeds)
+            end = min(start + batch_size, num_seeds)
             batch = np.array(final_states[start:end], dtype=np.complex128)
 
             # Normalise
@@ -156,9 +158,9 @@ def process_directory(directory_path: str, batch_size: int = 100):
             final_sre_all[start:end] = sre_batch
 
             elapsed = time.time() - t0
-            pct     = (end / num_seeds) * 100
-            rate    = end / elapsed if elapsed > 0 else 1
-            eta     = (num_seeds - end) / rate
+            pct = (end / num_seeds) * 100
+            rate = end / elapsed if elapsed > 0 else 1
+            eta = (num_seeds - end) / rate
             print(
                 f"  [{end:>5}/{num_seeds}] {pct:5.1f}%  "
                 f"mean SRE={float(np.mean(sre_batch)):.4f}  "
@@ -167,10 +169,7 @@ def process_directory(directory_path: str, batch_size: int = 100):
 
         # ---- write updated sre trajectories --------------------------------
         # Two honest real endpoints: [init_sre, final_sre]
-        updated_sre = [
-            [gap_k, float(final_sre_all[j])]
-            for j in range(num_seeds)
-        ]
+        updated_sre = [[gap_k, float(final_sre_all[j])] for j in range(num_seeds)]
         data["sre"] = updated_sre
 
         with open(file_path, "wb") as fh:

@@ -1319,9 +1319,9 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                     ax.plot(steps, center, label=f"$k={val_k}$", color=color, linewidth=2.0)
                     ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
-                ax.set_xlabel(r"$\text{Optimization Step } (t)$", fontsize=11)
-                if col_idx == 0:
-                    ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
+                ax.set_xlabel(r"$\text{Optimization Steps}$", fontsize=11)
+                # if col_idx == 0:
+                #     ax.set_ylabel(r"$\text{Metric Value}$", fontsize=11)
                 ax.spines["top"].set_visible(True)
                 ax.spines["right"].set_visible(True)
                 ax.tick_params(direction="in", top=True, right=True, which="both")
@@ -1516,7 +1516,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ekw = dict(elinewidth=0.8, capthick=0.8)
 
             b_init = ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
-                   label=r"$\text{Initial (Magic)}$", color="mediumseagreen",
+                   label=r"$\text{Initial States}$", color="mediumseagreen",
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
             b_te = ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
                    label=r"$\text{Final TE States}$", color="royalblue",
@@ -1526,8 +1526,8 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                    edgecolor="black", linewidth=0.5, error_kw=ekw)
 
             ax.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
-            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=3, color="black")
-            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=3, color="black")
+            ax.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=5, color="black")
+            ax.bar_label(b_non_te, labels=[f"n={n}" for n in non_te_counts], fontsize=7, padding=0, color="black")
 
             ax.set_xticks(x)
             ax.set_xticklabels(x_labels, fontsize=9)
