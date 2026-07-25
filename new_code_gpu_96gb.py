@@ -403,7 +403,7 @@ def _(np):
                         psi_jl ./= nrm
                     end
                     psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :cuda, progress=false)
+                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :cuda, progress=false, batch=256, threads=512)
                     return sre_result, lost_norm
                 end
                 """)
