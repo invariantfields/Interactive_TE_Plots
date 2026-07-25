@@ -89,6 +89,38 @@ def _():
                 print(f"[cache] Could not remove disk cache: {_e}")
 
     plot_cache = globals().get("plot_cache", _DiskCache(_CACHE_FILE))
+
+    mem_pool = cp.get_default_memory_pool()
+    p2p_pool = cp.get_p2p_memory_pool() if hasattr(cp, 'get_p2p_memory_pool') else None
+
+    def _cleanup_gpu_memory(force=False):
+        freed_bytes = mem_pool.free_all_blocks()
+        if p2p_pool:
+            p2p_pool.free_all_blocks()
+        return freed_bytes
+
+    def memory_manager(cleanup_func=_cleanup_gpu_memory, force=False):
+        class _GPUMemoryContext:
+            def __init__(self, cleanup, f):
+                self.cleanup = cleanup
+                self.force = f
+                self.before_mem = 0
+
+            def __enter__(self):
+                self.before_mem = mem_pool.used_bytes()
+                return self
+
+            def conditional_cleanup(self):
+                if self.force or (mem_pool.used_bytes() > 0.7 * mem_pool.total_bytes()):
+                    return self.cleanup(force=self.force)
+                return 0
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                self.conditional_cleanup()
+                return False
+
+        return _GPUMemoryContext(cleanup_func, force)
+
     return (
         LBFGS,
         combinations,
@@ -99,6 +131,7 @@ def _():
         jnp,
         make_subplots,
         mean,
+        memory_manager,
         minimize,
         mo,
         np,
@@ -108,6 +141,7 @@ def _():
         plot_cache,
         random,
         reduce,
+        _cleanup_gpu_memory,
     )
 
 
@@ -331,18 +365,54 @@ def par_trace(psi, dim, n, n_parties):
 
 
 @app.cell
-def _(cp):
+def _():
     def inv_perm(permn):
-        s = cp.zeros(len(permn), dtype=int)
-        s[cp.array(permn)] = list(cp.arange(len(permn)))
-        return s.tolist()
+        inv = [0] * len(permn)
+        for i, p in enumerate(permn):
+            inv[p] = i
+        return inv
 
     return (inv_perm,)
 
 
-@app.function
-def compute_sre(psi_np, alpha=2):
-    return None, None
+@app.cell
+def _(np):
+    _JL_INSTANCE = None
+
+    def compute_sre(psi_np, alpha=2):
+        global _JL_INSTANCE
+        if psi_np is None:
+            return None, None
+        try:
+            if hasattr(psi_np, "get"):
+                psi_np = psi_np.get()
+            psi_np = np.asarray(psi_np, dtype=complex)
+            n_qubits = int(np.log2(len(psi_np)))
+            dim = 2
+            if _JL_INSTANCE is None:
+                from juliacall import Main as jl
+                jl.seval("using Logging; disable_logging(Logging.Error)")
+                jl.seval("using HadaMAG")
+                jl.seval("using LinearAlgebra: norm")
+                jl.seval("""
+                function jl_compute_sre(psi_np, alpha, n_qubits, dim)
+                    psi_jl = Vector{ComplexF64}(psi_np)
+                    nrm = norm(psi_jl)
+                    if nrm > 1e-12
+                        psi_jl ./= nrm
+                    end
+                    psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
+                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CPU, progress=false)
+                    return sre_result, lost_norm
+                end
+                """)
+                _JL_INSTANCE = jl
+            res = _JL_INSTANCE.jl_compute_sre(psi_np, alpha, n_qubits, dim)
+            return float(res[0]), float(res[1])
+        except Exception as e:
+            return None, None
+
+    return (compute_sre,)
 
 
 @app.cell

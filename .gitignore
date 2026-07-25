@@ -8,3 +8,7 @@ __marimo__/session/
 # _plot_cache.pkl is intentionally tracked so collaborators
 # benefit from pre-computed plots after a git pull.
 # To regenerate: click "🧹 Clear Plot Cache" in the notebook.
+
+# Large file exclusions (>100MB)
+zip1.pkl
+*.Zone.Identifier
