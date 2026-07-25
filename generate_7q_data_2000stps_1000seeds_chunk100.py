@@ -26,6 +26,7 @@ def get_julia_handle():
         print("Initializing Julia/HadaMAG.jl (once per process)...")
         from juliacall import Main as jl
         jl.seval("using Logging; disable_logging(Logging.Error)")
+        jl.seval("using CUDA")
         jl.seval("using HadaMAG")
         jl.seval("using LinearAlgebra: norm")
         jl.seval("""
@@ -39,7 +40,7 @@ def get_julia_handle():
                     psi_jl ./= nrm
                 end
                 psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-                sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CPU, progress=false)
+                sre_result, lost_norm = SRE(psi_sv, alpha, backend= :cuda, progress=false)
                 results[i] = sre_result
             end
             GC.gc()

@@ -392,6 +392,7 @@ def _(np):
             if _JL_INSTANCE is None:
                 from juliacall import Main as jl
                 jl.seval("using Logging; disable_logging(Logging.Error)")
+                jl.seval("using CUDA")
                 jl.seval("using HadaMAG")
                 jl.seval("using LinearAlgebra: norm")
                 jl.seval("""
@@ -402,7 +403,7 @@ def _(np):
                         psi_jl ./= nrm
                     end
                     psi_sv = HadaMAG.StateVec{ComplexF64, 2}(psi_jl, Int(n_qubits), Int(dim))
-                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :CPU, progress=false)
+                    sre_result, lost_norm = SRE(psi_sv, alpha, backend= :cuda, progress=false)
                     return sre_result, lost_norm
                 end
                 """)
