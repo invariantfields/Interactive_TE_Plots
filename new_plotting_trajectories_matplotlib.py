@@ -1184,12 +1184,6 @@ def _(os, pickle):
 
         print(f"\nSuccessfully unpacked all files into directory: {destination_dir}")
 
-    return (unpack_pkl_file,)
-
-
-@app.cell
-def _(unpack_pkl_file):
-    unpack_pkl_file("zip1.pkl","zip1/")
     return
 
 

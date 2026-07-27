@@ -36,39 +36,24 @@ def _():
     os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
     os.environ['JAX_PLATFORMS'] = 'cuda,cpu'
     jax.config.update("jax_enable_x64", True)
-
-    return (
-        LBFGS,
-        combinations,
-        cp,
-        jax,
-        jnp,
-        mo,
-        np,
-        os,
-        pickle,
-        re,
-        reduce,
-        sys,
-        time,
-    )
+    return LBFGS, combinations, cp, jax, jnp, mo, np, os, pickle, reduce, time
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        """# 🧪 7-Qubit State Optimization & SRE Trajectory Generator
+    mo.md("""
+    # 🧪 7-Qubit State Optimization & SRE Trajectory Generator
 
-Generate $N$-qubit trajectories initialized with random stabilizer-gap states, optimizing total Hildebrand violation via **JAX L-BFGS** and computing exact SRE at each step via **CUDA HadaMAG.jl**."""
-    )
+    Generate $N$-qubit trajectories initialized with random stabilizer-gap states, optimizing total Hildebrand violation via **JAX L-BFGS** and computing exact SRE at each step via **CUDA HadaMAG.jl**.
+    """)
     return
 
 
 @app.cell
 def _(mo):
     n_qubits_slider = mo.ui.slider(start=2, stop=9, step=1, value=7, label="Qubits (N)")
-    num_seeds_input = mo.ui.number(start=1, stop=5000, value=200, step=10, label="Num Seeds (Samples)")
-    num_steps_input = mo.ui.number(start=1, stop=1000, value=200, step=10, label="Optimization Steps")
+    num_seeds_input = mo.ui.number(start=1, stop=5000, value=200, step=1, label="Num Seeds (Samples)")
+    num_steps_input = mo.ui.number(start=1, stop=2000, value=200, step=1, label="Optimization Steps")
     chunk_size_input = mo.ui.number(start=1, stop=100, value=1, step=1, label="Chunk Size (step_mes)")
     run_button = mo.ui.run_button(label="🚀 Run Data Generation")
 
@@ -202,13 +187,7 @@ def _(cp, generate_random_generators_symplectic, reduce):
         projected_psi = proj @ psi
         return projected_psi / cp.linalg.norm(projected_psi)
 
-    return (
-        PAULI_MAP,
-        build_projector_from_generators,
-        haar_random_unitary_gpu,
-        pauli_string_to_matrix,
-        rand_Almost_Stab_state,
-    )
+    return (rand_Almost_Stab_state,)
 
 
 @app.cell
@@ -262,7 +241,7 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state, time):
             return total_viol
 
         solver = LBFGS(fun=objective, maxiter=step_mes, tol=1e-11)
-        
+
         try:
             from juliacall import Main as jl
             jl.seval("using Logging; disable_logging(Logging.Error)")
@@ -314,7 +293,7 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state, time):
 
         avg_p, max_p, viol = vmapped_metrics(params_batch)
         avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
-        
+
         params_np = np.array(params_batch)
         states_complex_batch = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
         if has_julia:
@@ -337,7 +316,7 @@ def _(LBFGS, combinations, jax, jnp, np, pickle, rand_Almost_Stab_state, time):
 
             avg_p, max_p, viol = vmapped_metrics(params_batch)
             avg_p_cpu, max_p_cpu, viol_cpu = np.array(avg_p), np.array(max_p), np.array(viol)
-            
+
             params_np = np.array(params_batch)
             states_complex_batch = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
             if has_julia:
@@ -422,7 +401,7 @@ def _(
         steps = num_steps_input.value
         step_mes = chunk_size_input.value
 
-        prefix = f"correct_data/{N}_qbt_{seeds}_sds_ptmzng_jfr_"
+        prefix = f"zip1/{N}_qbt_{seeds}_sds_ptmzng_jfr_"
         print(f"\n=======================================================")
         print(f"Running simulation for {N} Qubits | {seeds} Seeds | {steps} Steps | Chunk size = {step_mes}")
         print(f"Output prefix: {prefix}")
@@ -440,7 +419,12 @@ def _(
         status_md = mo.md("👆 Adjust parameters above and click **Run Data Generation** to start simulation.")
 
     status_md
-    return N, prefix, seeds, should_run, status_md, step_mes, steps
+    return
+
+
+@app.cell
+def _():
+    return
 
 
 if __name__ == "__main__":

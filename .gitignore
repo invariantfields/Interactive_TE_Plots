@@ -11,4 +11,5 @@ __marimo__/session/
 
 # Large file exclusions (>100MB)
 zip1.pkl
+abc.pkl
 *.Zone.Identifier
