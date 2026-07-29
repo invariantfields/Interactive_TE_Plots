@@ -11,6 +11,7 @@ os.environ["TF_GPU_ALLOCATOR"] = "cuda_malloc_async"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".70"
+os.environ["PYTHONUNBUFFERED"] = "1"
 
 import jax
 import jax.numpy as jnp
@@ -183,7 +184,7 @@ def compute_sre_pure_jax_batch(psi_batch_np: np.ndarray, H_jax, phases_jax, xor_
 def pack_pkl_files(source_dir_or_files, output_archive_path):
     if isinstance(source_dir_or_files, str):
         if not os.path.exists(source_dir_or_files):
-            print(f"Error: Directory '{source_dir_or_files}' does not exist.")
+            print(f"Error: Directory '{source_dir_or_files}' does not exist.", flush=True)
             return
         file_paths = [
             os.path.join(source_dir_or_files, f)
@@ -200,9 +201,9 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
             with open(fpath, "rb") as f:
                 content = pickle.load(f)
             packed_data[fname] = content
-            print(f"Packed: {fname}")
+            print(f"Packed: {fname}", flush=True)
         except Exception as e:
-            print(f"Error reading {fname}: {e}")
+            print(f"Error reading {fname}: {e}", flush=True)
 
     out_dir = os.path.dirname(output_archive_path)
     if out_dir and not os.path.exists(out_dir):
@@ -211,9 +212,9 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
     try:
         with open(output_archive_path, "wb") as f:
             pickle.dump(packed_data, f)
-        print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}")
+        print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}", flush=True)
     except Exception as e:
-        print(f"Error saving archive: {e}")
+        print(f"Error saving archive: {e}", flush=True)
 
 # =====================================================================
 # 3. Adaptive Warm-Start Transition Engine (Switches When Slowed Down)
@@ -241,16 +242,15 @@ def run_simulation():
     out_prefix = os.path.join(out_dir, f"{n_qubits}_qbt_{num_starts}_sds_ptmzng_jfr_")
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
-    print("=======================================================")
-    print(f"ADAPTIVE WARM-START TRANSITION GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
-    print(f"Output directory: {out_dir}/")
-    print("=======================================================")
+    print("=======================================================", flush=True)
+    print(f"ADAPTIVE WARM-START TRANSITION GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps", flush=True)
+    print(f"Output directory: {out_dir}/", flush=True)
+    print("=======================================================", flush=True)
 
     H_jax = create_hadamard_jax(n_qubits)
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
-    # 1. Exact Eigvalsh Function (Phase 1: Dynamic Phase)
     @jax.jit
     def get_purity_and_violation_exact(psi_vec):
         psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
@@ -305,7 +305,6 @@ def run_simulation():
     vmapped_run_exact = jax.jit(vmap(single_opt_exact))
     vmapped_metrics_exact = jax.jit(vmap(get_purity_and_violation_exact))
 
-    # 2. Warm-Started Rayleigh Function (Phase 2: 84.25x Accelerated Slowdown Phase)
     @jax.jit
     def objective_warmstart(params, evecs_prev):
         psi = params[:n_dim] + 1j * params[n_dim:]
@@ -341,7 +340,7 @@ def run_simulation():
     completed_files = []
 
     for k_gap in range(n_qubits, -1, -1):
-        print(f"\nComputing for {n_qubits}-qubits with initial random {k_gap}-qubit stabilized state (Gap {k_gap}).")
+        print(f"\nComputing for {n_qubits}-qubits with initial random {k_gap}-qubit stabilized state (Gap {k_gap}).", flush=True)
         
         init_states = [rand_Almost_Stab_state_np(n_qubits, k_gap) for _ in range(num_starts)]
         params_batch_np = np.array([np.concatenate([np.real(s), np.imag(s)]) for s in init_states])
@@ -365,7 +364,7 @@ def run_simulation():
         states_complex_np = params_batch_np[:, :n_dim] + 1j * params_batch_np[:, n_dim:]
         initial_sre = compute_sre_pure_jax_batch(states_complex_np, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
         
-        print(f"  Start Step 0 | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(initial_sre):.4f}")
+        print(f"  Start Step 0 | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(initial_sre):.4f}", flush=True)
 
         purities_history = [avg_p]
         max_purities_history = [max_p]
@@ -379,7 +378,6 @@ def run_simulation():
             new_params_np = np.empty_like(params_batch_np)
             avg_p_list, max_p_list, viol_list, new_evecs_list = [], [], [], []
 
-            # Check Adaptive Transition Condition: if violation/magic rate of change slows down (< 1e-4)
             prev_viol_mean = np.mean(violations_history[-1])
             prev_sre_mean = np.mean(sre_history[-1])
             
@@ -389,10 +387,9 @@ def run_simulation():
                 viol_rel_change = abs(prev_viol_mean - prev2_viol_mean) / max(prev2_viol_mean, 1e-12)
                 sre_rel_change = abs(prev_sre_mean - prev2_sre_mean)
                 
-                # Activate 84.25x Warm-Start when violation rate or SRE rate slows down (< 1e-4)
                 if (viol_rel_change < 1e-3 or sre_rel_change < 1e-4 or prev_viol_mean < 1e-4) and not use_warmstart:
                     use_warmstart = True
-                    print(f"  ⚡ ADAPTIVE TRANSITION: Trajectory slowed down (rel_viol_change={viol_rel_change:.2e}, rel_sre_change={sre_rel_change:.2e}). Activating 84.25x Warm-Start Engine at Step {(chunk_idx-1)*chunk_size}!")
+                    print(f"  ⚡ ADAPTIVE TRANSITION: Trajectory slowed down (rel_viol_change={viol_rel_change:.2e}, rel_sre_change={sre_rel_change:.2e}). Activating 84.25x Warm-Start Engine at Step {(chunk_idx-1)*chunk_size}!", flush=True)
 
             for i in range(0, num_starts, sub_batch_size):
                 p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
@@ -430,7 +427,7 @@ def run_simulation():
             est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
             
             mode_str = "WARMSTART ⚡" if use_warmstart else "EXACT"
-            print(f"  Step {step_num:5d}/{num_steps} [{mode_str:9s}] | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Rem: {est_rem:.1f}s")
+            print(f"  Step {step_num:5d}/{num_steps} [{mode_str:9s}] | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Rem: {est_rem:.1f}s", flush=True)
 
         final_states_np = np.array(states_complex_np)
 
@@ -454,7 +451,7 @@ def run_simulation():
             pickle.dump(results_dict, f)
 
         completed_files.append(save_filepath)
-        print(f"Saved completed trajectory data to {save_filepath}")
+        print(f"Saved completed trajectory data to {save_filepath}", flush=True)
 
         # Auto-pack completed files into archive after each gap
         pack_pkl_files(completed_files, archive_path)
