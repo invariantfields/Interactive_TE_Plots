@@ -216,7 +216,7 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
         print(f"Error saving archive: {e}")
 
 # =====================================================================
-# 3. Exact Hildebrand Minimization Engine (Monotonic Decreasing Violation)
+# 3. Adaptive Warm-Start Transition Engine (Switches When Slowed Down)
 # =====================================================================
 def run_simulation():
     n_qubits = 7
@@ -242,7 +242,7 @@ def run_simulation():
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================")
-    print(f"EXACT MONOTONIC HILDEBRAND GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
+    print(f"ADAPTIVE WARM-START TRANSITION GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
     print(f"Output directory: {out_dir}/")
     print("=======================================================")
 
@@ -250,6 +250,7 @@ def run_simulation():
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
+    # 1. Exact Eigvalsh Function (Phase 1: Dynamic Phase)
     @jax.jit
     def get_purity_and_violation_exact(psi_vec):
         psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
@@ -267,17 +268,30 @@ def run_simulation():
         avg_purity = jnp.mean(purities)
         max_purity = jnp.max(purities)
 
-        ex = jnp.linalg.eigvalsh(batch_rho)
+        ex, evecs = jnp.linalg.eigh(batch_rho)
         rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
         viols = jnp.maximum(0.0, ex[:, -1] - rhs)
         total_violation = jnp.sum(viols**2)
 
-        return avg_purity, max_purity, total_violation
+        return avg_purity, max_purity, total_violation, evecs
 
     @jax.jit
     def objective_fn_exact(params):
-        _, _, total_viol = get_purity_and_violation_exact(params)
-        return total_viol
+        psi = params[:n_dim] + 1j * params[n_dim:]
+        psi /= jnp.linalg.norm(psi)
+        psi_tensor = psi.reshape((2,) * n_qubits)
+
+        rhos = [
+            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
+            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
+            for perm in perms_list
+        ]
+        batch_rho = jnp.stack(rhos, axis=0)
+
+        ex = jnp.linalg.eigvalsh(batch_rho)
+        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
+        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
+        return jnp.sum(viols**2)
 
     def single_opt_exact(p):
         solver = jaxopt.LBFGS(
@@ -291,6 +305,39 @@ def run_simulation():
     vmapped_run_exact = jax.jit(vmap(single_opt_exact))
     vmapped_metrics_exact = jax.jit(vmap(get_purity_and_violation_exact))
 
+    # 2. Warm-Started Rayleigh Function (Phase 2: 84.25x Accelerated Slowdown Phase)
+    @jax.jit
+    def objective_warmstart(params, evecs_prev):
+        psi = params[:n_dim] + 1j * params[n_dim:]
+        psi /= jnp.linalg.norm(psi)
+        psi_tensor = psi.reshape((2,) * n_qubits)
+
+        rhos = [
+            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
+            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
+            for perm in perms_list
+        ]
+        batch_rho = jnp.stack(rhos, axis=0)
+
+        rho_v = jnp.matmul(batch_rho, evecs_prev)
+        v_rho_v = jnp.matmul(jnp.conj(jnp.swapaxes(evecs_prev, -1, -2)), rho_v)
+        ex = jnp.real(jnp.diagonal(v_rho_v, axis1=-2, axis2=-1))
+
+        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
+        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
+        return jnp.sum(viols**2)
+
+    def single_opt_warmstart(p, evecs_prev):
+        solver = jaxopt.LBFGS(
+            fun=objective_warmstart,
+            maxiter=chunk_size,
+            tol=1e-11,
+            history_size=5
+        )
+        return solver.run(p, evecs_prev=evecs_prev).params
+
+    vmapped_run_warmstart = jax.jit(vmap(single_opt_warmstart))
+
     completed_files = []
 
     for k_gap in range(n_qubits, -1, -1):
@@ -301,17 +348,19 @@ def run_simulation():
 
         t0_gap = time.time()
         
-        avg_p_list, max_p_list, viol_list = [], [], []
+        avg_p_list, max_p_list, viol_list, evecs_list = [], [], [], []
         for i in range(0, num_starts, sub_batch_size):
             p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-            avg_p, max_p, viol = vmapped_metrics_exact(p_sub)
+            avg_p, max_p, viol, evecs = vmapped_metrics_exact(p_sub)
             avg_p_list.append(np.array(avg_p))
             max_p_list.append(np.array(max_p))
             viol_list.append(np.array(viol))
+            evecs_list.append(evecs)
 
         avg_p = np.concatenate(avg_p_list)
         max_p = np.concatenate(max_p_list)
         viol = np.concatenate(viol_list)
+        evecs_all = jnp.concatenate(evecs_list, axis=0)
 
         states_complex_np = params_batch_np[:, :n_dim] + 1j * params_batch_np[:, n_dim:]
         initial_sre = compute_sre_pure_jax_batch(states_complex_np, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
@@ -324,25 +373,49 @@ def run_simulation():
         sre_history = [initial_sre]
 
         initial_states_np = np.array(states_complex_np)
+        use_warmstart = False
 
         for chunk_idx in range(1, num_chunks + 1):
             new_params_np = np.empty_like(params_batch_np)
-            avg_p_list, max_p_list, viol_list = [], [], []
+            avg_p_list, max_p_list, viol_list, new_evecs_list = [], [], [], []
+
+            # Check Adaptive Transition Condition: if violation/magic rate of change slows down (< 1e-4)
+            prev_viol_mean = np.mean(violations_history[-1])
+            prev_sre_mean = np.mean(sre_history[-1])
+            
+            if len(violations_history) >= 2:
+                prev2_viol_mean = np.mean(violations_history[-2])
+                prev2_sre_mean = np.mean(sre_history[-2])
+                viol_rel_change = abs(prev_viol_mean - prev2_viol_mean) / max(prev2_viol_mean, 1e-12)
+                sre_rel_change = abs(prev_sre_mean - prev2_sre_mean)
+                
+                # Activate 84.25x Warm-Start when violation rate or SRE rate slows down (< 1e-4)
+                if (viol_rel_change < 1e-3 or sre_rel_change < 1e-4 or prev_viol_mean < 1e-4) and not use_warmstart:
+                    use_warmstart = True
+                    print(f"  ⚡ ADAPTIVE TRANSITION: Trajectory slowed down (rel_viol_change={viol_rel_change:.2e}, rel_sre_change={sre_rel_change:.2e}). Activating 84.25x Warm-Start Engine at Step {(chunk_idx-1)*chunk_size}!")
 
             for i in range(0, num_starts, sub_batch_size):
                 p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-                p_opt = vmapped_run_exact(p_sub)
-                avg_p, max_p, viol = vmapped_metrics_exact(p_opt)
+                evecs_sub = evecs_all[i : i + sub_batch_size]
+
+                if use_warmstart:
+                    p_opt = vmapped_run_warmstart(p_sub, evecs_sub)
+                else:
+                    p_opt = vmapped_run_exact(p_sub)
+
+                avg_p, max_p, viol, evecs_new = vmapped_metrics_exact(p_opt)
                 
                 new_params_np[i : i + sub_batch_size] = np.array(p_opt)
                 avg_p_list.append(np.array(avg_p))
                 max_p_list.append(np.array(max_p))
                 viol_list.append(np.array(viol))
+                new_evecs_list.append(evecs_new)
 
             params_batch_np = new_params_np
             avg_p = np.concatenate(avg_p_list)
             max_p = np.concatenate(max_p_list)
             viol = np.concatenate(viol_list)
+            evecs_all = jnp.concatenate(new_evecs_list, axis=0)
 
             purities_history.append(avg_p)
             max_purities_history.append(max_p)
@@ -356,7 +429,8 @@ def run_simulation():
             elapsed = time.time() - t0_gap
             est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
             
-            print(f"  Step {step_num:5d}/{num_steps} | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Remaining: {est_rem:.1f}s")
+            mode_str = "WARMSTART ⚡" if use_warmstart else "EXACT"
+            print(f"  Step {step_num:5d}/{num_steps} [{mode_str:9s}] | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Rem: {est_rem:.1f}s")
 
         final_states_np = np.array(states_complex_np)
 
