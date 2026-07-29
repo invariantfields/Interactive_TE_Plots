@@ -55,7 +55,7 @@ def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax
     pauli_4_sum = jnp.sum(expval_pauli ** 4, axis=(1, 2))
     dim = H_jax.shape[0]
     sre_sub = -jnp.log2(pauli_4_sum / dim)
-    return np.array(sre_sub)
+    return sre_sub
 
 # =====================================================================
 # 2. Optimized Memory-Light JAX Objective & Optimization Helpers
@@ -192,7 +192,7 @@ def run_simulation():
         states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
         
         t0_gap = time.time()
-        initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
+        initial_sre = np.array(compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax))
         
         print(f"  Start Step 0 | Mean Violation: {float(jnp.mean(viol)):.2e} | Mean SRE: {np.mean(initial_sre):.4f}")
 
@@ -214,7 +214,7 @@ def run_simulation():
 
             states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
             
-            sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
+            sre_vals = np.array(compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax))
             sre_history.append(sre_vals)
 
             step_num = chunk_idx * chunk_size
