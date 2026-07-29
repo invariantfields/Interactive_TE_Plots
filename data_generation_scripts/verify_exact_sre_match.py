@@ -2,12 +2,13 @@ import time
 import numpy as np
 import cupy as cp
 
-# 1. Native CuPy GPU Implementation
-def create_hadamard_gpu(n_qubits: int) -> cp.ndarray:
-    H = cp.array([[1.0, 1.0], [1.0, -1.0]], dtype=cp.float64)
-    H_n = H
+# 1. Corrected Native CuPy GPU Implementation with Normalized Hadamard Transform
+def create_normalized_hadamard_gpu(n_qubits: int) -> cp.ndarray:
+    # Normalized 1-qubit Hadamard matrix
+    H1 = cp.array([[1.0, 1.0], [1.0, -1.0]], dtype=cp.float64) / cp.sqrt(2.0)
+    H_n = H1
     for _ in range(n_qubits - 1):
-        H_n = cp.kron(H_n, H)
+        H_n = cp.kron(H_n, H1)
     return H_n
 
 _N_QUBITS_CACHED = None
@@ -18,7 +19,7 @@ def _init_gpu_cache(n_qubits: int = 7):
     global _N_QUBITS_CACHED, _H_GPU, _XOR_INDICES_GPU
     if _N_QUBITS_CACHED != n_qubits:
         dim = 2**n_qubits
-        _H_GPU = create_hadamard_gpu(n_qubits)
+        _H_GPU = create_normalized_hadamard_gpu(n_qubits)
         x_idx = cp.arange(dim, dtype=cp.int32)[:, None]
         b_idx = cp.arange(dim, dtype=cp.int32)[None, :]
         _XOR_INDICES_GPU = x_idx ^ b_idx
@@ -34,14 +35,18 @@ def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray) -> np.ndarray:
     norms = cp.where(norms > 1e-12, norms, 1.0)
     psi_gpu = psi_gpu / norms
     
+    # Outer product for each state: V[s, x, b] = real(conj(psi[s, x]) * psi[s, x ^ b])
     psi_conj = cp.conj(psi_gpu)[:, :, None]
     psi_xor = psi_gpu[:, _XOR_INDICES_GPU]
     V_batch = cp.real(psi_conj * psi_xor)
     
+    # Fast Walsh-Hadamard Transform with normalized Hadamard matrix H (so H^T H = I)
     Xi_batch = cp.matmul(_H_GPU, V_batch)
-    xi_4_sum = cp.sum(Xi_batch ** 4, axis=(1, 2))
     
-    sre_batch = -cp.log2(xi_4_sum / (dim**2))
+    # S2 = -log2( (1 / 2^N) * sum(Xi^4) )
+    xi_4_sum = cp.sum(Xi_batch ** 4, axis=(1, 2))
+    sre_batch = -cp.log2(xi_4_sum / dim)
+    
     return cp.asnumpy(sre_batch)
 
 # 2. Julia HadaMAG CUDA Reference
@@ -74,11 +79,10 @@ if __name__ == "__main__":
     num_states = 100
     
     print("=================================================================")
-    print(f" STATE-BY-STATE VERIFICATION: Native CuPy GPU vs. Julia HadaMAG")
+    print(f" STATE-BY-STATE VERIFICATION: Corrected CuPy GPU vs. Julia HadaMAG")
     print(f" System: {n_qubits} Qubits ({dim} dims) | Total Random States: {num_states}")
     print("=================================================================")
 
-    # Generate 100 diverse random complex state vectors
     np.random.seed(42)
     z = np.random.randn(num_states, dim) + 1j * np.random.randn(num_states, dim)
     psi_batch = z / np.linalg.norm(z, axis=1, keepdims=True)
@@ -96,7 +100,7 @@ if __name__ == "__main__":
 
     max_abs_diff = np.max(abs_diffs)
     mean_abs_diff = np.mean(abs_diffs)
-    max_rel_diff = np.max(rel_diffs)
+    r2_score = np.corrcoef(sre_native, sre_julia)[0, 1]**2
 
     print("\n-----------------------------------------------------------------")
     print(" FIRST 10 STATES INDIVIDUAL COMPARISON:")
@@ -108,14 +112,13 @@ if __name__ == "__main__":
 
     print("\n=================================================================")
     print(" STATISTICAL EQUIVALENCE SUMMARY:")
-    print(f" Total States Verified:     {num_states}")
-    print(f" Max Absolute Difference:   {max_abs_diff:.4e}")
-    print(f" Mean Absolute Difference:  {mean_abs_diff:.4e}")
-    print(f" Max Relative Difference:   {max_rel_diff:.4e}")
-    print(f" R-squared Correlation (R²): {np.corrcoef(sre_native, sre_julia)[0, 1]**2:.12f}")
+    print(f" Total States Verified:      {num_states}")
+    print(f" Max Absolute Difference:    {max_abs_diff:.4e}")
+    print(f" Mean Absolute Difference:   {mean_abs_diff:.4e}")
+    print(f" R-squared Correlation (R²): {r2_score:.12f}")
     
     if max_abs_diff < 1e-10:
         print("\n VERDICT: PERFECT MATCH! Native CuPy GPU SRE is mathematically identical to Julia HadaMAG.")
     else:
-        print("\n VERDICT: Differences detected, investigating tolerances...")
+        print(f"\n VERDICT: Max diff = {max_abs_diff:.2e}")
     print("=================================================================")
