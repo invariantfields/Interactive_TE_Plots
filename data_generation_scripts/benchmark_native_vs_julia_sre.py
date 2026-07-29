@@ -103,7 +103,7 @@ def get_julia_handle():
 if __name__ == "__main__":
     n_qubits = 7
     dim = 2**n_qubits
-    num_starts = 2000
+    num_starts = 50
     
     print("=================================================================")
     print(f" BENCHMARK: Native CuPy GPU SRE vs. Julia HadaMAG CUDA")
