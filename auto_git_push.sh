@@ -10,5 +10,5 @@ while true; do
     else
         echo "[$(date)] No new changes to push."
     fi
-    sleep 600 # 10 minutes
+    sleep 45 # 45 seconds check interval
 done
