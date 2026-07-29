@@ -216,7 +216,7 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
         print(f"Error saving archive: {e}")
 
 # =====================================================================
-# 3. 84.25x Faster Warm-Started Rayleigh Quotient Optimization Engine
+# 3. Exact Hildebrand Minimization Engine (Monotonic Decreasing Violation)
 # =====================================================================
 def run_simulation():
     n_qubits = 7
@@ -242,7 +242,7 @@ def run_simulation():
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================")
-    print(f"84.25x WARM-STARTED RAYLEIGH GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
+    print(f"EXACT MONOTONIC HILDEBRAND GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
     print(f"Output directory: {out_dir}/")
     print("=======================================================")
 
@@ -250,7 +250,6 @@ def run_simulation():
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
-    # Exact Eigvalsh Metrics (Step 0 & Refresh)
     @jax.jit
     def get_purity_and_violation_exact(psi_vec):
         psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
@@ -268,45 +267,28 @@ def run_simulation():
         avg_purity = jnp.mean(purities)
         max_purity = jnp.max(purities)
 
-        ex, evecs = jnp.linalg.eigh(batch_rho)
+        ex = jnp.linalg.eigvalsh(batch_rho)
         rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
         viols = jnp.maximum(0.0, ex[:, -1] - rhs)
         total_violation = jnp.sum(viols**2)
 
-        return avg_purity, max_purity, total_violation, evecs
+        return avg_purity, max_purity, total_violation
 
-    # Warm-Started Rayleigh Quotient Objective (84.25x Faster)
     @jax.jit
-    def objective_warmstart(params, evecs_prev):
-        psi = params[:n_dim] + 1j * params[n_dim:]
-        psi /= jnp.linalg.norm(psi)
-        psi_tensor = psi.reshape((2,) * n_qubits)
+    def objective_fn_exact(params):
+        _, _, total_viol = get_purity_and_violation_exact(params)
+        return total_viol
 
-        rhos = [
-            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
-            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
-            for perm in perms_list
-        ]
-        batch_rho = jnp.stack(rhos, axis=0) # (35, k_dim, k_dim)
-
-        rho_v = jnp.matmul(batch_rho, evecs_prev)
-        v_rho_v = jnp.matmul(jnp.conj(jnp.swapaxes(evecs_prev, -1, -2)), rho_v)
-        ex = jnp.real(jnp.diagonal(v_rho_v, axis1=-2, axis2=-1))
-
-        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
-        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
-        return jnp.sum(viols**2)
-
-    def single_opt_warmstart(p, evecs_prev):
+    def single_opt_exact(p):
         solver = jaxopt.LBFGS(
-            fun=objective_warmstart,
+            fun=objective_fn_exact,
             maxiter=chunk_size,
             tol=1e-11,
             history_size=5
         )
-        return solver.run(p, evecs_prev=evecs_prev).params
+        return solver.run(p).params
 
-    vmapped_run_warmstart = jax.jit(vmap(single_opt_warmstart))
+    vmapped_run_exact = jax.jit(vmap(single_opt_exact))
     vmapped_metrics_exact = jax.jit(vmap(get_purity_and_violation_exact))
 
     completed_files = []
@@ -319,20 +301,17 @@ def run_simulation():
 
         t0_gap = time.time()
         
-        # Initial exact eigendecomposition & basis setup
-        avg_p_list, max_p_list, viol_list, evecs_list = [], [], [], []
+        avg_p_list, max_p_list, viol_list = [], [], []
         for i in range(0, num_starts, sub_batch_size):
             p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-            avg_p, max_p, viol, evecs = vmapped_metrics_exact(p_sub)
+            avg_p, max_p, viol = vmapped_metrics_exact(p_sub)
             avg_p_list.append(np.array(avg_p))
             max_p_list.append(np.array(max_p))
             viol_list.append(np.array(viol))
-            evecs_list.append(evecs)
 
         avg_p = np.concatenate(avg_p_list)
         max_p = np.concatenate(max_p_list)
         viol = np.concatenate(viol_list)
-        evecs_all = jnp.concatenate(evecs_list, axis=0) # (num_starts, 35, k_dim, k_dim)
 
         states_complex_np = params_batch_np[:, :n_dim] + 1j * params_batch_np[:, n_dim:]
         initial_sre = compute_sre_pure_jax_batch(states_complex_np, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
@@ -348,29 +327,22 @@ def run_simulation():
 
         for chunk_idx in range(1, num_chunks + 1):
             new_params_np = np.empty_like(params_batch_np)
-            avg_p_list, max_p_list, viol_list, new_evecs_list = [], [], [], []
+            avg_p_list, max_p_list, viol_list = [], [], []
 
             for i in range(0, num_starts, sub_batch_size):
                 p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-                evecs_sub = evecs_all[i : i + sub_batch_size]
-
-                # 84.25x Warm-Started Rayleigh Quotient optimization step
-                p_opt = vmapped_run_warmstart(p_sub, evecs_sub)
-                
-                # Refresh eigenbasis at chunk boundaries to guarantee machine precision
-                avg_p, max_p, viol, evecs_new = vmapped_metrics_exact(p_opt)
+                p_opt = vmapped_run_exact(p_sub)
+                avg_p, max_p, viol = vmapped_metrics_exact(p_opt)
                 
                 new_params_np[i : i + sub_batch_size] = np.array(p_opt)
                 avg_p_list.append(np.array(avg_p))
                 max_p_list.append(np.array(max_p))
                 viol_list.append(np.array(viol))
-                new_evecs_list.append(evecs_new)
 
             params_batch_np = new_params_np
             avg_p = np.concatenate(avg_p_list)
             max_p = np.concatenate(max_p_list)
             viol = np.concatenate(viol_list)
-            evecs_all = jnp.concatenate(new_evecs_list, axis=0)
 
             purities_history.append(avg_p)
             max_purities_history.append(max_p)
