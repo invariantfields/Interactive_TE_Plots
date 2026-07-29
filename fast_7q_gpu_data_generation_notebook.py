@@ -68,7 +68,7 @@ def _(mo):
         [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/invariantfields/Interactive_TE_Plots/blob/master/fast_7q_gpu_data_generation_notebook.py)
 
         This notebook implements **100% GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **Single-vMap JAX L-BFGS state optimization**.
-        It prints detailed **step-by-step progress** for every chunk ($k$-gap, steps, violations, purities, and SRE values).
+        It prints detailed **step-by-step progress** for every chunk ($k$-gap, steps, violations, purities, and SRE values) and automatically **packs completed `.pkl` files into a combined archive after each gap**.
         """
     )
     return
@@ -116,6 +116,55 @@ def _(mo):
         out_dir_input,
         run_button,
     )
+
+
+@app.cell
+def _(os, pickle):
+    def pack_pkl_files(source_dir_or_files, output_archive_path):
+        """
+        Packs multiple .pkl files into a single combined .pkl archive.
+        Matches the dictionary structure expected by unpack_pkl_file.
+
+        Parameters:
+        - source_dir_or_files: list of file paths OR a directory path containing .pkl files.
+        - output_archive_path: destination path for the combined .pkl file.
+        """
+        if isinstance(source_dir_or_files, str):
+            if not os.path.exists(source_dir_or_files):
+                print(f"Error: Directory '{source_dir_or_files}' does not exist.")
+                return
+            file_paths = [
+                os.path.join(source_dir_or_files, f)
+                for f in sorted(os.listdir(source_dir_or_files))
+                if f.endswith(".pkl") and not f.startswith("packed_")
+            ]
+        else:
+            file_paths = list(source_dir_or_files)
+
+        packed_data = {}
+        for fpath in file_paths:
+            fname = os.path.basename(fpath)
+            try:
+                with open(fpath, "rb") as _f:
+                    content = pickle.load(_f)
+                packed_data[fname] = content
+                print(f"Packed: {fname}")
+            except Exception as e:
+                print(f"Error reading {fname}: {e}")
+
+        # Ensure parent directory exists for output archive
+        out_dir = os.path.dirname(output_archive_path)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+        try:
+            with open(output_archive_path, "wb") as _f:
+                pickle.dump(packed_data, _f)
+            print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}")
+        except Exception as e:
+            print(f"Error saving archive: {e}")
+
+    return (pack_pkl_files,)
 
 
 @app.cell
@@ -277,12 +326,13 @@ def _(
     objective_fn,
     os,
     out_dir_input,
+    pack_pkl_files,
     pickle,
     run_button,
     time,
     vmap,
 ):
-    # Execution cell: triggers when run_button is clicked with step-by-step progress logging
+    # Execution cell: triggers when run_button is clicked with step-by-step progress logging & auto-packing
     if not run_button.value:
         execution_status = mo.md("💡 *Click 'Start GPU Trajectory Generation' above to launch simulation.*")
         completed_files = []
@@ -297,6 +347,7 @@ def _(
         n_dim = 2**n_qubits
         os.makedirs(out_dir, exist_ok=True)
         out_prefix = os.path.join(out_dir, f"{n_qubits}_qbt_{num_starts}_sds_ptmzng_jfr_")
+        archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
         
         H_jax = create_hadamard_jax(n_qubits)
         phases_jax = get_pauli_y_phases_jax(n_qubits)
@@ -397,6 +448,12 @@ def _(
             saved_msg = f"  ✅ **Gap {k} Saved:** `{save_filepath}` (Total Gap Time: `{time.time() - t0_gap:.1f}s`)"
             status_logs.append(saved_msg)
             print(saved_msg)
+
+            # Auto-pack files after each gap
+            pack_pkl_files(completed_files, archive_path)
+            pack_msg = f"  📦 **Packed Archive Updated:** `{archive_path}` ({len(completed_files)} files)"
+            status_logs.append(pack_msg)
+            print(pack_msg)
 
         execution_status = mo.md("\n\n".join(status_logs))
     
