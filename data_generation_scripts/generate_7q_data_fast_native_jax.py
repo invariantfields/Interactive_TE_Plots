@@ -217,7 +217,7 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
         print(f"Error saving archive: {e}", flush=True)
 
 # =====================================================================
-# 3. Adaptive Warm-Start Transition Engine (Switches When Slowed Down)
+# 3. Per-Seed Independent Warm-Start Optimization Engine
 # =====================================================================
 def run_simulation():
     n_qubits = 7
@@ -243,13 +243,74 @@ def run_simulation():
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================", flush=True)
-    print(f"ADAPTIVE WARM-START TRANSITION GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps", flush=True)
+    print(f"PER-SEED INDEPENDENT WARM-START GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps", flush=True)
     print(f"Output directory: {out_dir}/", flush=True)
     print("=======================================================", flush=True)
 
     H_jax = create_hadamard_jax(n_qubits)
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
+
+    # Exact Eigvalsh Function for single seed
+    def objective_exact_single(params):
+        psi = params[:n_dim] + 1j * params[n_dim:]
+        psi /= jnp.linalg.norm(psi)
+        psi_tensor = psi.reshape((2,) * n_qubits)
+
+        rhos = [
+            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
+            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
+            for perm in perms_list
+        ]
+        batch_rho = jnp.stack(rhos, axis=0)
+
+        ex = jnp.linalg.eigvalsh(batch_rho)
+        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
+        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
+        return jnp.sum(viols**2)
+
+    # Warm-Started Rayleigh Function for single seed
+    def objective_warmstart_single(params, evecs_prev):
+        psi = params[:n_dim] + 1j * params[n_dim:]
+        psi /= jnp.linalg.norm(psi)
+        psi_tensor = psi.reshape((2,) * n_qubits)
+
+        rhos = [
+            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
+            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
+            for perm in perms_list
+        ]
+        batch_rho = jnp.stack(rhos, axis=0)
+
+        rho_v = jnp.matmul(batch_rho, evecs_prev)
+        v_rho_v = jnp.matmul(jnp.conj(jnp.swapaxes(evecs_prev, -1, -2)), rho_v)
+        ex = jnp.real(jnp.diagonal(v_rho_v, axis1=-2, axis2=-1))
+
+        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
+        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
+        return jnp.sum(viols**2)
+
+    # Per-Seed Adaptive Objective (Vectorized branching)
+    def objective_adaptive_single(params, evecs_prev, is_warmstart):
+        return jnp.where(
+            is_warmstart,
+            objective_warmstart_single(params, evecs_prev),
+            objective_exact_single(params)
+        )
+
+    def single_opt_adaptive(p, evecs_prev, is_warmstart):
+        def obj(params):
+            return objective_adaptive_single(params, evecs_prev, is_warmstart)
+
+        solver = jaxopt.LBFGS(
+            fun=obj,
+            maxiter=chunk_size,
+            tol=1e-11,
+            history_size=5
+        )
+        return solver.run(p).params
+
+    vmapped_run_adaptive = jax.jit(vmap(single_opt_adaptive))
 
     @jax.jit
     def get_purity_and_violation_exact(psi_vec):
@@ -275,67 +336,7 @@ def run_simulation():
 
         return avg_purity, max_purity, total_violation, evecs
 
-    @jax.jit
-    def objective_fn_exact(params):
-        psi = params[:n_dim] + 1j * params[n_dim:]
-        psi /= jnp.linalg.norm(psi)
-        psi_tensor = psi.reshape((2,) * n_qubits)
-
-        rhos = [
-            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
-            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
-            for perm in perms_list
-        ]
-        batch_rho = jnp.stack(rhos, axis=0)
-
-        ex = jnp.linalg.eigvalsh(batch_rho)
-        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
-        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
-        return jnp.sum(viols**2)
-
-    def single_opt_exact(p):
-        solver = jaxopt.LBFGS(
-            fun=objective_fn_exact,
-            maxiter=chunk_size,
-            tol=1e-11,
-            history_size=5
-        )
-        return solver.run(p).params
-
-    vmapped_run_exact = jax.jit(vmap(single_opt_exact))
     vmapped_metrics_exact = jax.jit(vmap(get_purity_and_violation_exact))
-
-    @jax.jit
-    def objective_warmstart(params, evecs_prev):
-        psi = params[:n_dim] + 1j * params[n_dim:]
-        psi /= jnp.linalg.norm(psi)
-        psi_tensor = psi.reshape((2,) * n_qubits)
-
-        rhos = [
-            psi_tensor.transpose(perm).reshape(-1, k_dim).conj().T
-            @ psi_tensor.transpose(perm).reshape(-1, k_dim)
-            for perm in perms_list
-        ]
-        batch_rho = jnp.stack(rhos, axis=0)
-
-        rho_v = jnp.matmul(batch_rho, evecs_prev)
-        v_rho_v = jnp.matmul(jnp.conj(jnp.swapaxes(evecs_prev, -1, -2)), rho_v)
-        ex = jnp.real(jnp.diagonal(v_rho_v, axis1=-2, axis2=-1))
-
-        rhs = ex[:, 1] + 2 * jnp.sqrt(jnp.maximum(ex[:, 0] * ex[:, 2], 1e-15))
-        viols = jnp.maximum(0.0, ex[:, -1] - rhs)
-        return jnp.sum(viols**2)
-
-    def single_opt_warmstart(p, evecs_prev):
-        solver = jaxopt.LBFGS(
-            fun=objective_warmstart,
-            maxiter=chunk_size,
-            tol=1e-11,
-            history_size=5
-        )
-        return solver.run(p, evecs_prev=evecs_prev).params
-
-    vmapped_run_warmstart = jax.jit(vmap(single_opt_warmstart))
 
     completed_files = []
 
@@ -372,33 +373,33 @@ def run_simulation():
         sre_history = [initial_sre]
 
         initial_states_np = np.array(states_complex_np)
-        use_warmstart = False
+        
+        # Track per-seed warm-start transition status
+        is_warmstart_flags = np.zeros(num_starts, dtype=bool)
 
         for chunk_idx in range(1, num_chunks + 1):
+            # Evaluate per-seed transition condition independently for each seed
+            if len(violations_history) >= 2:
+                viol_cur = violations_history[-1]   # (num_starts,)
+                viol_prev = violations_history[-2]  # (num_starts,)
+                
+                rel_change_per_seed = np.abs(viol_cur - viol_prev) / np.maximum(viol_prev, 1e-12)
+                
+                # Independent Per-Seed Warm-Start Condition:
+                # Seed i switches to warm-start if its individual violation change < 1e-3 or its violation < 1e-4
+                newly_switched = (rel_change_per_seed < 1e-3) | (viol_cur < 1e-4)
+                is_warmstart_flags = is_warmstart_flags | newly_switched
+
             new_params_np = np.empty_like(params_batch_np)
             avg_p_list, max_p_list, viol_list, new_evecs_list = [], [], [], []
-
-            prev_viol_mean = np.mean(violations_history[-1])
-            prev_sre_mean = np.mean(sre_history[-1])
-            
-            if len(violations_history) >= 2:
-                prev2_viol_mean = np.mean(violations_history[-2])
-                prev2_sre_mean = np.mean(sre_history[-2])
-                viol_rel_change = abs(prev_viol_mean - prev2_viol_mean) / max(prev2_viol_mean, 1e-12)
-                sre_rel_change = abs(prev_sre_mean - prev2_sre_mean)
-                
-                if (viol_rel_change < 1e-3 or sre_rel_change < 1e-4 or prev_viol_mean < 1e-4) and not use_warmstart:
-                    use_warmstart = True
-                    print(f"  ⚡ ADAPTIVE TRANSITION: Trajectory slowed down (rel_viol_change={viol_rel_change:.2e}, rel_sre_change={sre_rel_change:.2e}). Activating 84.25x Warm-Start Engine at Step {(chunk_idx-1)*chunk_size}!", flush=True)
 
             for i in range(0, num_starts, sub_batch_size):
                 p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
                 evecs_sub = evecs_all[i : i + sub_batch_size]
+                is_warmstart_sub = jnp.array(is_warmstart_flags[i : i + sub_batch_size])
 
-                if use_warmstart:
-                    p_opt = vmapped_run_warmstart(p_sub, evecs_sub)
-                else:
-                    p_opt = vmapped_run_exact(p_sub)
+                # Per-Seed Independent Adaptive L-BFGS Optimization
+                p_opt = vmapped_run_adaptive(p_sub, evecs_sub, is_warmstart_sub)
 
                 avg_p, max_p, viol, evecs_new = vmapped_metrics_exact(p_opt)
                 
@@ -426,8 +427,8 @@ def run_simulation():
             elapsed = time.time() - t0_gap
             est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
             
-            mode_str = "WARMSTART ⚡" if use_warmstart else "EXACT"
-            print(f"  Step {step_num:5d}/{num_steps} [{mode_str:9s}] | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Rem: {est_rem:.1f}s", flush=True)
+            num_warm = int(np.sum(is_warmstart_flags))
+            print(f"  Step {step_num:5d}/{num_steps} [Warm: {num_warm:4d}/{num_starts}] | Mean Violation: {float(np.mean(viol)):.2e} | Mean SRE: {np.mean(sre_vals):.4f} | Elapsed: {elapsed:.1f}s | Est. Rem: {est_rem:.1f}s", flush=True)
 
         final_states_np = np.array(states_complex_np)
 
