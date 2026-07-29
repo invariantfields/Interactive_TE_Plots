@@ -66,6 +66,50 @@ def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax
         results.append(np.array(sre_sub))
     return np.concatenate(results)
 
+def pack_pkl_files(source_dir_or_files, output_archive_path):
+    """
+    Packs multiple .pkl files into a single combined .pkl archive.
+    Matches the dictionary structure expected by unpack_pkl_file.
+
+    Parameters:
+    - source_dir_or_files: list of file paths OR a directory path containing .pkl files.
+    - output_archive_path: destination path for the combined .pkl file.
+    """
+    if isinstance(source_dir_or_files, str):
+        if not os.path.exists(source_dir_or_files):
+            print(f"Error: Directory '{source_dir_or_files}' does not exist.")
+            return
+        file_paths = [
+            os.path.join(source_dir_or_files, f)
+            for f in sorted(os.listdir(source_dir_or_files))
+            if f.endswith(".pkl") and not f.startswith("packed_")
+        ]
+    else:
+        file_paths = list(source_dir_or_files)
+
+    packed_data = {}
+    for fpath in file_paths:
+        fname = os.path.basename(fpath)
+        try:
+            with open(fpath, "rb") as f:
+                content = pickle.load(f)
+            packed_data[fname] = content
+            print(f"Packed: {fname}")
+        except Exception as e:
+            print(f"Error reading {fname}: {e}")
+
+    # Ensure parent directory exists for output archive
+    out_dir = os.path.dirname(output_archive_path)
+    if out_dir and not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    try:
+        with open(output_archive_path, "wb") as f:
+            pickle.dump(packed_data, f)
+        print(f"\nSuccessfully packed {len(packed_data)} files into archive: {output_archive_path}")
+    except Exception as e:
+        print(f"Error saving archive: {e}")
+
 # =====================================================================
 # 2. Optimized Memory-Light JAX Objective & Optimization Helpers
 # =====================================================================
@@ -201,6 +245,7 @@ def run_simulation():
     out_dir = "zip2"
     os.makedirs(out_dir, exist_ok=True)
     out_prefix = os.path.join(out_dir, f"{n_qubits}_qbt_{num_starts}_sds_ptmzng_jfr_")
+    archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================")
     print(f"FAST OPTIMAL SUB-BATCHED GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
@@ -211,7 +256,7 @@ def run_simulation():
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
-    vmapped_metrics_init = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k_val), in_axes=(0, 0))
+    completed_files = []
 
     for k in range(n_qubits, -1, -1):
         print(f"\nComputing for {n_qubits}-qubits with initial {k}-qubit stabilized state (Gap {k}).")
@@ -284,7 +329,11 @@ def run_simulation():
         with open(save_filepath, 'wb') as f:
             pickle.dump(results_dict, f)
 
+        completed_files.append(save_filepath)
         print(f"Saved completed trajectory data to {save_filepath}")
+
+        # Auto-pack completed files into archive after each gap
+        pack_pkl_files(completed_files, archive_path)
 
 if __name__ == "__main__":
     run_simulation()
