@@ -3,9 +3,9 @@
 # dependencies = [
 #     "marimo",
 #     "numpy",
+#     "scipy",
 #     "jax",
 #     "jaxopt",
-#     "cupy-cuda12x",
 #     "matplotlib",
 #     "plotly",
 # ]
@@ -24,11 +24,11 @@ def _():
     import time
     import pickle
     import numpy as np
+    from scipy.linalg import hadamard
     import jax
     import jax.numpy as jnp
     from jax import random, vmap
     import jaxopt
-    import cupy as cp
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import marimo as mo
@@ -36,7 +36,7 @@ def _():
     # Configure GPU memory sharing
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
-    os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".50"
+    os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".70"
     jax.config.update("jax_enable_x64", True)
 
     return (
@@ -45,12 +45,12 @@ def _():
         time,
         pickle,
         np,
+        hadamard,
         jax,
         jnp,
         random,
         vmap,
         jaxopt,
-        cp,
         go,
         make_subplots,
         mo,
@@ -61,38 +61,33 @@ def _():
 def _(mo):
     mo.md(
         """
-        # 🚀 High-Performance Native GPU Trajectory Generation
+        # 🚀 High-Performance Pure JAX GPU Trajectory Generation
         ### Fast Walsh-Hadamard Transform (FWHT) SRE Engine | Optimized for RTX 6000 PRO (96GB VRAM)
 
         [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/invariantfields/Interactive_TE_Plots/blob/master/fast_7q_gpu_data_generation_notebook.py)
 
-        This notebook implements **100% in-VRAM Native CuPy GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **JAX L-BFGS state optimization**.
-        It achieves a **175× to 240× speedup** over traditional Julia CFFI wrappers while matching exact machine precision ($10^{-15}$).
+        This notebook implements **100% Pure JAX GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **JAX L-BFGS state optimization**.
+        It achieves a **175× to 240× speedup** over traditional Julia CFFI wrappers while matching exact machine precision ($10^{-15}$) with zero external NVRTC dependencies.
         """
     )
     return
 
 
 @app.cell
-def _(cp, mo):
-    # Detect GPU VRAM Hardware Status
-    dev = cp.cuda.Device(0)
-    free_mem, total_mem = dev.mem_info
-    gpu_name = getattr(dev, "name", "NVIDIA RTX GPU")
-    
-    total_gb = total_mem / (1024**3)
-    free_gb = free_mem / (1024**3)
+def _(jax, mo):
+    # Detect GPU Hardware Status via JAX
+    devices = jax.devices("gpu")
+    gpu_name = devices[0].device_kind if len(devices) > 0 else "NVIDIA GPU"
     
     gpu_status_md = mo.md(
         f"""
         > [!NOTE]
-        > **GPU Accelerator Detected:** `{gpu_name}`  
-        > **Total VRAM:** `{total_gb:.2f} GB` | **Free VRAM:** `{free_gb:.2f} GB`  
-        > **Mode:** Ultra-fast in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
+        > **JAX GPU Accelerator Detected:** `{gpu_name}`  
+        > **Mode:** 100% Pure JAX XLA in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
         """
     )
     gpu_status_md
-    return dev, free_gb, free_mem, gpu_name, gpu_status_md, total_gb, total_mem
+    return devices, gpu_name, gpu_status_md
 
 
 @app.cell
@@ -102,7 +97,7 @@ def _(mo):
     num_steps_input = mo.ui.number(start=100, stop=5000, value=1500, step=100, label="Optimization Steps")
     chunk_size_slider = mo.ui.slider(start=10, stop=250, value=50, step=10, label="Chunk Size (Steps)")
     out_dir_input = mo.ui.text(value="zip2", label="Output Directory")
-    run_button = mo.ui.run_button(label="⚡ Start GPU Trajectory Generation")
+    run_button = mo.ui.run_button(label="⚡ Start Pure JAX GPU Trajectory Generation")
 
     control_panel = mo.vstack([
         mo.md("### ⚙️ Simulation Control Panel"),
@@ -122,69 +117,61 @@ def _(mo):
 
 
 @app.cell
-def _(cp, np):
-    # Native CuPy GPU FWHT SRE Functions
-    def create_unnormalized_hadamard_gpu(n_qubits: int) -> cp.ndarray:
-        H1 = cp.array([[1.0, 1.0], [1.0, -1.0]], dtype=cp.float64)
-        H_n = H1
-        for _ in range(n_qubits - 1):
-            H_n = cp.kron(H_n, H1)
-        return H_n
+def _(hadamard, jax, jnp, np):
+    # Pure JAX FWHT SRE Functions
+    def create_hadamard_jax(n_qubits: int) -> jnp.ndarray:
+        dim = 2**n_qubits
+        H_np = hadamard(dim).astype(np.float64)
+        return jnp.array(H_np)
 
-    _sre_cache = {}
+    def get_pauli_y_phases_jax(n_qubits: int) -> jnp.ndarray:
+        dim = 2**n_qubits
+        z_grid = np.arange(dim, dtype=np.int32)[:, None]
+        x_grid = np.arange(dim, dtype=np.int32)[None, :]
+        zx_and = z_grid & x_grid
+        num_y_np = np.vectorize(lambda v: bin(v).count('1'))(zx_and)
+        phases_np = np.array([1.0, 1.0j, -1.0, -1.0j], dtype=np.complex128)[num_y_np % 4]
+        return jnp.array(phases_np)
 
-    def get_sre_gpu_cache(n_qubits: int):
-        if n_qubits not in _sre_cache:
-            dim = 2**n_qubits
-            h_gpu = create_unnormalized_hadamard_gpu(n_qubits)
-            x_idx = cp.arange(dim, dtype=cp.int32)[:, None]
-            b_idx = cp.arange(dim, dtype=cp.int32)[None, :]
-            xor_map = x_idx ^ b_idx
-            
-            z_grid = np.arange(dim, dtype=np.int32)[:, None]
-            x_grid = np.arange(dim, dtype=np.int32)[None, :]
-            zx_and = z_grid & x_grid
-            num_y_np = np.vectorize(lambda v: bin(v).count('1'))(zx_and)
-            phases_np = np.array([1.0, 1.0j, -1.0, -1.0j], dtype=np.complex128)[num_y_np % 4]
-            phases_gpu = cp.array(phases_np)
-            _sre_cache[n_qubits] = (h_gpu, xor_map, phases_gpu)
-            
-        return _sre_cache[n_qubits]
+    def get_xor_indices_jax(n_qubits: int) -> jnp.ndarray:
+        dim = 2**n_qubits
+        x_idx = np.arange(dim, dtype=np.int32)[:, None]
+        b_idx = np.arange(dim, dtype=np.int32)[None, :]
+        return jnp.array(x_idx ^ b_idx)
 
-    def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, sub_batch_size: int = 1000) -> np.ndarray:
-        num_starts, dim = psi_batch_np.shape
-        n_qubits = int(np.log2(dim))
-        h_gpu, xor_map, phases_gpu = get_sre_gpu_cache(n_qubits)
+    @jax.jit
+    def _compute_sre_sub_batch_jax(psi_sub_batch, H_jax, phases_jax, xor_indices_jax):
+        norms = jnp.linalg.norm(psi_sub_batch, axis=1, keepdims=True)
+        norms = jnp.where(norms > 1e-12, norms, 1.0)
+        psi_normed = psi_sub_batch / norms
         
+        psi_conj = jnp.conj(psi_normed)[:, :, None]
+        psi_xor = psi_normed[:, xor_indices_jax]
+        V_complex = psi_conj * psi_xor
+        
+        Xi_complex = jnp.matmul(H_jax, V_complex)
+        expval_pauli = jnp.real(phases_jax[None, :, :] * Xi_complex)
+        
+        pauli_4_sum = jnp.sum(expval_pauli ** 4, axis=(1, 2))
+        dim = H_jax.shape[0]
+        sre_sub = -jnp.log2(pauli_4_sum / dim)
+        return sre_sub
+
+    def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size: int = 500) -> np.ndarray:
+        num_starts = psi_batch_jax.shape[0]
         results = []
         for i in range(0, num_starts, sub_batch_size):
-            sub_batch_np = psi_batch_np[i : i + sub_batch_size]
-            psi_gpu = cp.array(sub_batch_np, dtype=cp.complex128)
-            norms = cp.linalg.norm(psi_gpu, axis=1, keepdims=True)
-            norms = cp.where(norms > 1e-12, norms, 1.0)
-            psi_gpu = psi_gpu / norms
-            
-            psi_conj = cp.conj(psi_gpu)[:, :, None]
-            psi_xor = psi_gpu[:, xor_map]
-            V_complex = psi_conj * psi_xor
-            
-            Xi_complex = cp.matmul(h_gpu, V_complex)
-            expval_pauli = cp.real(phases_gpu[None, :, :] * Xi_complex)
-            
-            pauli_4_sum = cp.sum(expval_pauli ** 4, axis=(1, 2))
-            sre_sub = -cp.log2(pauli_4_sum / dim)
-            results.append(cp.asnumpy(sre_sub))
-            
-            del psi_gpu, psi_conj, psi_xor, V_complex, Xi_complex, expval_pauli, pauli_4_sum
-            cp.get_default_memory_pool().free_all_blocks()
-        
+            sub_batch = psi_batch_jax[i : i + sub_batch_size]
+            sre_sub = _compute_sre_sub_batch_jax(sub_batch, H_jax, phases_jax, xor_indices_jax)
+            results.append(np.array(sre_sub))
         return np.concatenate(results)
 
     return (
-        _sre_cache,
-        compute_sre_native_cupy_batch,
-        create_unnormalized_hadamard_gpu,
-        get_sre_gpu_cache,
+        _compute_sre_sub_batch_jax,
+        compute_sre_pure_jax_batch,
+        create_hadamard_jax,
+        get_pauli_y_phases_jax,
+        get_xor_indices_jax,
     )
 
 
@@ -294,8 +281,11 @@ def _(jax, jnp, random):
 def _(
     calculate_metrics,
     chunk_size_slider,
-    compute_sre_native_cupy_batch,
+    compute_sre_pure_jax_batch,
+    create_hadamard_jax,
     generate_stabilizer_states_and_generators,
+    get_pauli_y_phases_jax,
+    get_xor_indices_jax,
     jax,
     jaxopt,
     jnp,
@@ -314,7 +304,7 @@ def _(
 ):
     # Execution cell: triggers when run_button is clicked
     if not run_button.value:
-        execution_status = mo.md("💡 *Click 'Start GPU Trajectory Generation' above to launch simulation.*")
+        execution_status = mo.md("💡 *Click 'Start Pure JAX GPU Trajectory Generation' above to launch simulation.*")
         completed_files = []
     else:
         n_qubits = n_qubits_slider.value
@@ -328,8 +318,12 @@ def _(
         os.makedirs(out_dir, exist_ok=True)
         out_prefix = os.path.join(out_dir, f"{n_qubits}_qbt_{num_starts}_sds_ptmzng_jfr_")
         
+        H_jax = create_hadamard_jax(n_qubits)
+        phases_jax = get_pauli_y_phases_jax(n_qubits)
+        xor_indices_jax = get_xor_indices_jax(n_qubits)
+        
         completed_files = []
-        status_logs = [f"🚀 Initialized Native GPU Run: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps"]
+        status_logs = [f"🚀 Initialized Pure JAX GPU Run: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps"]
 
         for k in range(n_qubits, -1, -1):
             status_logs.append(f"\n⚡ Processing Gap {k} (k={k})...")
@@ -356,18 +350,17 @@ def _(
             vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
 
             avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
-            params_np = np.array(params_batch)
-            states_complex = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
+            states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
             
             t0_gap = time.time()
-            initial_sre = compute_sre_native_cupy_batch(states_complex)
+            initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
 
             purities_history = [np.array(avg_p)]
             max_purities_history = [np.array(max_p)]
             violations_history = [np.array(viol)]
             sre_history = [initial_sre]
 
-            initial_states_np = np.copy(states_complex)
+            initial_states_np = np.array(states_complex_jax)
 
             for chunk_idx in range(1, num_chunks + 1):
                 res = vmapped_run(params_batch, generators_jax)
@@ -378,13 +371,12 @@ def _(
                 max_purities_history.append(np.array(max_p))
                 violations_history.append(np.array(viol))
 
-                params_np = np.array(params_batch)
-                states_complex = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
+                states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
                 
-                sre_vals = compute_sre_native_cupy_batch(states_complex)
+                sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
                 sre_history.append(sre_vals)
 
-            final_states_np = np.copy(states_complex)
+            final_states_np = np.array(states_complex_jax)
 
             purities_history = np.array(purities_history).T.tolist()
             max_purities_history = np.array(max_purities_history).T.tolist()
