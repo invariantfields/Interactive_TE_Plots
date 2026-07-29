@@ -216,7 +216,7 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
         print(f"Error saving archive: {e}")
 
 # =====================================================================
-# 3. JAX Hildebrand Spectral Violation Optimization Engine
+# 3. Hybrid Adaptive Warm-Started Hildebrand Optimization Engine
 # =====================================================================
 def run_simulation():
     n_qubits = 7
@@ -242,7 +242,7 @@ def run_simulation():
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================")
-    print(f"RESTORED HILDEBRAND JAX GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
+    print(f"HYBRID ADAPTIVE HILDEBRAND GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
     print(f"Output directory: {out_dir}/")
     print("=======================================================")
 
@@ -250,8 +250,9 @@ def run_simulation():
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
+    # Exact Full Eigvalsh Metrics (Early Steps)
     @jax.jit
-    def get_purity_and_violation(psi_vec):
+    def get_purity_and_violation_exact(psi_vec):
         psi = psi_vec[:n_dim] + 1j * psi_vec[n_dim:]
         psi /= jnp.linalg.norm(psi)
         psi_tensor = psi.reshape((2,) * n_qubits)
@@ -275,31 +276,31 @@ def run_simulation():
         return avg_purity, max_purity, total_violation
 
     @jax.jit
-    def objective_fn(params):
-        _, _, total_viol = get_purity_and_violation(params)
+    def objective_fn_exact(params):
+        _, _, total_viol = get_purity_and_violation_exact(params)
         return total_viol
 
-    def single_opt(p):
+    def single_opt_exact(p):
         solver = jaxopt.LBFGS(
-            fun=objective_fn,
+            fun=objective_fn_exact,
             maxiter=chunk_size,
             tol=1e-11,
             history_size=5
         )
         return solver.run(p).params
 
-    vmapped_run = jax.jit(vmap(single_opt))
-    vmapped_metrics = jax.jit(vmap(get_purity_and_violation))
+    vmapped_run_exact = jax.jit(vmap(single_opt_exact))
+    vmapped_metrics_exact = jax.jit(vmap(get_purity_and_violation_exact))
 
-    def run_subbatched_opt(params_batch_np: np.ndarray):
+    def run_subbatched_opt_exact(params_batch_np: np.ndarray):
         num_starts_cur = params_batch_np.shape[0]
         new_params_np = np.empty_like(params_batch_np)
         avg_p_list, max_p_list, viol_list = [], [], []
 
         for i in range(0, num_starts_cur, sub_batch_size):
             p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-            p_opt = vmapped_run(p_sub)
-            avg_p, max_p, viol = vmapped_metrics(p_opt)
+            p_opt = vmapped_run_exact(p_sub)
+            avg_p, max_p, viol = vmapped_metrics_exact(p_opt)
             
             new_params_np[i : i + sub_batch_size] = np.array(p_opt)
             avg_p_list.append(np.array(avg_p))
@@ -322,11 +323,10 @@ def run_simulation():
 
         t0_gap = time.time()
         
-        # Initial metrics
         avg_p_list, max_p_list, viol_list = [], [], []
         for i in range(0, num_starts, sub_batch_size):
             p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
-            avg_p, max_p, viol = vmapped_metrics(p_sub)
+            avg_p, max_p, viol = vmapped_metrics_exact(p_sub)
             avg_p_list.append(np.array(avg_p))
             max_p_list.append(np.array(max_p))
             viol_list.append(np.array(viol))
@@ -349,7 +349,7 @@ def run_simulation():
         initial_states_np = np.array(states_complex_np)
 
         for chunk_idx in range(1, num_chunks + 1):
-            params_batch_np, avg_p, max_p, viol = run_subbatched_opt(params_batch_np)
+            params_batch_np, avg_p, max_p, viol = run_subbatched_opt_exact(params_batch_np)
 
             purities_history.append(avg_p)
             max_purities_history.append(max_p)
