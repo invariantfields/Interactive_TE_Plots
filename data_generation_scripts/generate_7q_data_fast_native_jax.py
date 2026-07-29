@@ -217,7 +217,7 @@ def pack_pkl_files(source_dir_or_files, output_archive_path):
         print(f"Error saving archive: {e}", flush=True)
 
 # =====================================================================
-# 3. Per-Seed Independent Warm-Start Optimization Engine
+# 3. Instant-Compiling Per-Seed Split Architecture Optimization Engine
 # =====================================================================
 def run_simulation():
     n_qubits = 7
@@ -243,7 +243,7 @@ def run_simulation():
     archive_path = os.path.join(out_dir, f"packed_{n_qubits}_qbt_{num_starts}_sds_{num_steps}_stps.pkl")
 
     print("=======================================================", flush=True)
-    print(f"PER-SEED INDEPENDENT WARM-START GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps", flush=True)
+    print(f"INSTANT PER-SEED SPLIT GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps", flush=True)
     print(f"Output directory: {out_dir}/", flush=True)
     print("=======================================================", flush=True)
 
@@ -251,7 +251,7 @@ def run_simulation():
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
 
-    # Exact Eigvalsh Function for single seed
+    # 1. Exact Eigvalsh Objective & Solver
     def objective_exact_single(params):
         psi = params[:n_dim] + 1j * params[n_dim:]
         psi /= jnp.linalg.norm(psi)
@@ -269,7 +269,18 @@ def run_simulation():
         viols = jnp.maximum(0.0, ex[:, -1] - rhs)
         return jnp.sum(viols**2)
 
-    # Warm-Started Rayleigh Function for single seed
+    def single_opt_exact(p):
+        solver = jaxopt.LBFGS(
+            fun=objective_exact_single,
+            maxiter=chunk_size,
+            tol=1e-11,
+            history_size=5
+        )
+        return solver.run(p).params
+
+    vmapped_run_exact = jax.jit(vmap(single_opt_exact))
+
+    # 2. Warm-Started Rayleigh Objective & Solver
     def objective_warmstart_single(params, evecs_prev):
         psi = params[:n_dim] + 1j * params[n_dim:]
         psi /= jnp.linalg.norm(psi)
@@ -290,17 +301,9 @@ def run_simulation():
         viols = jnp.maximum(0.0, ex[:, -1] - rhs)
         return jnp.sum(viols**2)
 
-    # Per-Seed Adaptive Objective (Vectorized branching)
-    def objective_adaptive_single(params, evecs_prev, is_warmstart):
-        return jnp.where(
-            is_warmstart,
-            objective_warmstart_single(params, evecs_prev),
-            objective_exact_single(params)
-        )
-
-    def single_opt_adaptive(p, evecs_prev, is_warmstart):
+    def single_opt_warmstart(p, evecs_prev):
         def obj(params):
-            return objective_adaptive_single(params, evecs_prev, is_warmstart)
+            return objective_warmstart_single(params, evecs_prev)
 
         solver = jaxopt.LBFGS(
             fun=obj,
@@ -310,7 +313,7 @@ def run_simulation():
         )
         return solver.run(p).params
 
-    vmapped_run_adaptive = jax.jit(vmap(single_opt_adaptive))
+    vmapped_run_warmstart = jax.jit(vmap(single_opt_warmstart))
 
     @jax.jit
     def get_purity_and_violation_exact(psi_vec):
@@ -374,18 +377,17 @@ def run_simulation():
 
         initial_states_np = np.array(states_complex_np)
         
-        # Track per-seed warm-start transition status
+        # Track per-seed warm-start transition status independently
         is_warmstart_flags = np.zeros(num_starts, dtype=bool)
 
         for chunk_idx in range(1, num_chunks + 1):
-            # Evaluate per-seed transition condition independently for each seed
+            # Evaluate per-seed transition condition independently
             if len(violations_history) >= 2:
                 viol_cur = violations_history[-1]   # (num_starts,)
                 viol_prev = violations_history[-2]  # (num_starts,)
                 
                 rel_change_per_seed = np.abs(viol_cur - viol_prev) / np.maximum(viol_prev, 1e-12)
                 
-                # Independent Per-Seed Warm-Start Condition:
                 # Seed i switches to warm-start if its individual violation change < 1e-3 or its violation < 1e-4
                 newly_switched = (rel_change_per_seed < 1e-3) | (viol_cur < 1e-4)
                 is_warmstart_flags = is_warmstart_flags | newly_switched
@@ -396,14 +398,30 @@ def run_simulation():
             for i in range(0, num_starts, sub_batch_size):
                 p_sub = jnp.array(params_batch_np[i : i + sub_batch_size])
                 evecs_sub = evecs_all[i : i + sub_batch_size]
-                is_warmstart_sub = jnp.array(is_warmstart_flags[i : i + sub_batch_size])
+                is_warmstart_sub = is_warmstart_flags[i : i + sub_batch_size]
 
-                # Per-Seed Independent Adaptive L-BFGS Optimization
-                p_opt = vmapped_run_adaptive(p_sub, evecs_sub, is_warmstart_sub)
+                warm_indices = np.where(is_warmstart_sub)[0]
+                exact_indices = np.where(~is_warmstart_sub)[0]
 
-                avg_p, max_p, viol, evecs_new = vmapped_metrics_exact(p_opt)
+                p_opt_sub = np.empty_like(params_batch_np[i : i + sub_batch_size])
+
+                # Run Warm-Start Solver for warm-started seeds in sub-batch
+                if len(warm_indices) > 0:
+                    p_warm_in = p_sub[warm_indices]
+                    evecs_warm_in = evecs_sub[warm_indices]
+                    p_opt_warm = vmapped_run_warmstart(p_warm_in, evecs_warm_in)
+                    p_opt_sub[warm_indices] = np.array(p_opt_warm)
+
+                # Run Exact Solver for exact seeds in sub-batch
+                if len(exact_indices) > 0:
+                    p_exact_in = p_sub[exact_indices]
+                    p_opt_exact = vmapped_run_exact(p_exact_in)
+                    p_opt_sub[exact_indices] = np.array(p_opt_exact)
+
+                p_opt_jax = jnp.array(p_opt_sub)
+                avg_p, max_p, viol, evecs_new = vmapped_metrics_exact(p_opt_jax)
                 
-                new_params_np[i : i + sub_batch_size] = np.array(p_opt)
+                new_params_np[i : i + sub_batch_size] = p_opt_sub
                 avg_p_list.append(np.array(avg_p))
                 max_p_list.append(np.array(max_p))
                 viol_list.append(np.array(viol))
