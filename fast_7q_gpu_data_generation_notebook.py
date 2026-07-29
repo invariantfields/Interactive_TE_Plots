@@ -62,12 +62,12 @@ def _():
 def _(mo):
     mo.md(
         """
-        # 🚀 High-Performance GPU Trajectory Generation
+        # 🚀 High-Performance Unbatched GPU Trajectory Generation
         ### Fast Walsh-Hadamard Transform (FWHT) SRE Engine | Optimized for RTX 6000 PRO (96GB VRAM)
 
         [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/invariantfields/Interactive_TE_Plots/blob/master/fast_7q_gpu_data_generation_notebook.py)
 
-        This notebook implements **100% GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **JAX L-BFGS state optimization**.
+        This notebook implements **100% GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **Single-vMap JAX L-BFGS state optimization**.
         It prints detailed **step-by-step progress** for every chunk ($k$-gap, steps, violations, purities, and SRE values).
         """
     )
@@ -85,7 +85,7 @@ def _(jax, mo):
         > [!NOTE]
         > **JAX GPU Accelerator Detected:** `{gpu_name}`  
         > **CUDA 13 Environment:** `cupy-cuda13x`, `jax[cuda13]`, `jaxopt[cuda13]`  
-        > **Mode:** Memory-Light 100% GPU XLA in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
+        > **Mode:** Fast Unbatched Single-vMap GPU XLA in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
         """
     )
     gpu_status_md
@@ -142,10 +142,10 @@ def _(hadamard, jax, jnp, np):
         return jnp.array(x_idx ^ b_idx)
 
     @jax.jit
-    def _compute_sre_sub_batch_jax(psi_sub_batch, H_jax, phases_jax, xor_indices_jax):
-        norms = jnp.linalg.norm(psi_sub_batch, axis=1, keepdims=True)
+    def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax):
+        norms = jnp.linalg.norm(psi_batch_jax, axis=1, keepdims=True)
         norms = jnp.where(norms > 1e-12, norms, 1.0)
-        psi_normed = psi_sub_batch / norms
+        psi_normed = psi_batch_jax / norms
         
         psi_conj = jnp.conj(psi_normed)[:, :, None]
         psi_xor = psi_normed[:, xor_indices_jax]
@@ -157,19 +157,9 @@ def _(hadamard, jax, jnp, np):
         pauli_4_sum = jnp.sum(expval_pauli ** 4, axis=(1, 2))
         dim = H_jax.shape[0]
         sre_sub = -jnp.log2(pauli_4_sum / dim)
-        return sre_sub
-
-    def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size: int = 250) -> np.ndarray:
-        num_starts = psi_batch_jax.shape[0]
-        results = []
-        for i in range(0, num_starts, sub_batch_size):
-            sub_batch = psi_batch_jax[i : i + sub_batch_size]
-            sre_sub = _compute_sre_sub_batch_jax(sub_batch, H_jax, phases_jax, xor_indices_jax)
-            results.append(np.array(sre_sub))
-        return np.concatenate(results)
+        return np.array(sre_sub)
 
     return (
-        _compute_sre_sub_batch_jax,
         compute_sre_pure_jax_batch,
         create_hadamard_jax,
         get_pauli_y_phases_jax,
@@ -178,7 +168,7 @@ def _(hadamard, jax, jnp, np):
 
 
 @app.cell
-def _(jax, jaxopt, jnp, random, vmap):
+def _(jax, jnp, random):
     # Optimized Memory-Light JAX Objective & Optimization Helpers
     def generate_stabilizer_states_and_generators(n_qubits, k, num_starts, seed=42):
         key = random.PRNGKey(seed)
@@ -260,48 +250,10 @@ def _(jax, jaxopt, jnp, random, vmap):
 
         return avg_p, max_p, viol
 
-    def run_subbatched_opt(params_batch, generators_jax, n_dim, k, chunk_size, sub_batch_size=250):
-        num_starts = params_batch.shape[0]
-        
-        def single_opt(p, g):
-            solver = jaxopt.LBFGS(
-                fun=lambda x: objective_fn(x, n_dim, g, k),
-                maxiter=chunk_size,
-                tol=1e-11,
-                history_size=10
-            )
-            return solver.run(p).params
-
-        vmapped_run = vmap(single_opt, in_axes=(0, 0))
-        vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
-
-        new_params_list = []
-        avg_p_list, max_p_list, viol_list = [], [], []
-
-        for i in range(0, num_starts, sub_batch_size):
-            p_sub = params_batch[i : i + sub_batch_size]
-            g_sub = generators_jax[i : i + sub_batch_size]
-            
-            p_opt = vmapped_run(p_sub, g_sub)
-            avg_p, max_p, viol = vmapped_metrics(p_opt, g_sub)
-            
-            new_params_list.append(p_opt)
-            avg_p_list.append(avg_p)
-            max_p_list.append(max_p)
-            viol_list.append(viol)
-
-        new_params = jnp.vstack(new_params_list)
-        avg_p_cat = jnp.concatenate(avg_p_list)
-        max_p_cat = jnp.concatenate(max_p_list)
-        viol_cat = jnp.concatenate(viol_list)
-
-        return new_params, avg_p_cat, max_p_cat, viol_cat
-
     return (
         calculate_metrics,
         generate_stabilizer_states_and_generators,
         objective_fn,
-        run_subbatched_opt,
     )
 
 
@@ -315,17 +267,18 @@ def _(
     get_pauli_y_phases_jax,
     get_xor_indices_jax,
     jax,
+    jaxopt,
     jnp,
     mo,
     n_qubits_slider,
     np,
     num_starts_input,
     num_steps_input,
+    objective_fn,
     os,
     out_dir_input,
     pickle,
     run_button,
-    run_subbatched_opt,
     time,
     vmap,
 ):
@@ -339,7 +292,6 @@ def _(
         num_steps = num_steps_input.value
         chunk_size = chunk_size_slider.value
         out_dir = out_dir_input.value
-        sub_batch_size = 250
         
         num_chunks = num_steps // chunk_size
         n_dim = 2**n_qubits
@@ -351,7 +303,7 @@ def _(
         xor_indices_jax = get_xor_indices_jax(n_qubits)
         
         completed_files = []
-        status_logs = [f"🚀 **Initialized Memory-Light GPU Run:** `{n_qubits} Qubits` | `{num_starts} Seeds` | `{num_steps} Steps`\n"]
+        status_logs = [f"🚀 **Initialized Fast Unbatched GPU Run:** `{n_qubits} Qubits` | `{num_starts} Seeds` | `{num_steps} Steps`\n"]
         print(f"=======================================================")
         print(f"GPU DATA GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
         print(f"=======================================================")
@@ -370,13 +322,23 @@ def _(
                 jnp.imag(initial_states_jax)
             ])
             
+            def single_opt(p, g):
+                solver = jaxopt.LBFGS(
+                    fun=lambda x: objective_fn(x, n_dim, g, k),
+                    maxiter=chunk_size,
+                    tol=1e-11,
+                    history_size=10
+                )
+                return solver.run(p).params
+
+            vmapped_run = vmap(single_opt, in_axes=(0, 0))
             vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
 
             avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
             states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
             
             t0_gap = time.time()
-            initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
+            initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
 
             step0_msg = f"  `Start Step 0` | Violation: `{float(jnp.mean(viol)):.2e}` | Mean SRE: `{np.mean(initial_sre):.4f}`"
             status_logs.append(step0_msg)
@@ -390,9 +352,8 @@ def _(
             initial_states_np = np.array(states_complex_jax)
 
             for chunk_idx in range(1, num_chunks + 1):
-                params_batch, avg_p, max_p, viol = run_subbatched_opt(
-                    params_batch, generators_jax, n_dim, k, chunk_size, sub_batch_size=sub_batch_size
-                )
+                params_batch = vmapped_run(params_batch, generators_jax)
+                avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
 
                 purities_history.append(np.array(avg_p))
                 max_purities_history.append(np.array(max_p))
@@ -400,7 +361,7 @@ def _(
 
                 states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
                 
-                sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
+                sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
                 sre_history.append(sre_vals)
 
                 step_num = chunk_idx * chunk_size
