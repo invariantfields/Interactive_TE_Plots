@@ -223,7 +223,7 @@ def run_simulation():
         vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
 
         # Initial metrics & SRE (Step 0)
-        avg_p, max_p, viol = vmapped_metrics(params_batch)
+        avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
         params_np = np.array(params_batch)
         states_complex = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
         
@@ -242,10 +242,10 @@ def run_simulation():
 
         for chunk_idx in range(1, num_chunks + 1):
             t_chunk_start = time.time()
-            res = vmapped_run(params_batch)
+            res = vmapped_run(params_batch, generators_jax)
             params_batch = res.params
 
-            avg_p, max_p, viol = vmapped_metrics(params_batch)
+            avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
             purities_history.append(np.array(avg_p))
             max_purities_history.append(np.array(max_p))
             violations_history.append(np.array(viol))
