@@ -53,10 +53,12 @@ def compute_sre_native_cupy_exact(psi_batch_np: np.ndarray) -> np.ndarray:
     # Xi_complex[s, z, x] = sum_b (-1)^(b . z) conj(psi[b ^ x]) psi[b]
     Xi_complex = cp.matmul(H_n, V_complex)  # Shape (num_starts, z_dim, x_dim)
     
-    # Number of Y operators for each (z, x) pair: count_ones(x & z)
-    z_grid = cp.arange(dim, dtype=cp.int32)[:, None]
-    x_grid = cp.arange(dim, dtype=cp.int32)[None, :]
-    num_y = cp.count_ones(z_grid & x_grid)  # Shape (dim, dim)
+    # Number of Y operators for each (z, x) pair: count ones in (z & x)
+    z_grid = np.arange(dim, dtype=np.int32)[:, None]
+    x_grid = np.arange(dim, dtype=np.int32)[None, :]
+    zx_and = z_grid & x_grid
+    num_y_np = np.vectorize(lambda v: bin(v).count('1'))(zx_and)
+    num_y = cp.array(num_y_np)
     
     # Global phase for Pauli operator: i^(num_y)
     # i^0 = 1, i^1 = i, i^2 = -1, i^3 = -i
