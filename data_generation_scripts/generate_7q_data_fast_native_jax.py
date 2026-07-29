@@ -57,7 +57,7 @@ def _compute_sre_sub_batch_jax(psi_sub_batch, H_jax, phases_jax, xor_indices_jax
     sre_sub = -jnp.log2(pauli_4_sum / dim)
     return sre_sub
 
-def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size: int = 500) -> np.ndarray:
+def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size: int = 250) -> np.ndarray:
     num_starts = psi_batch_jax.shape[0]
     results = []
     for i in range(0, num_starts, sub_batch_size):
@@ -67,7 +67,7 @@ def compute_sre_pure_jax_batch(psi_batch_jax, H_jax, phases_jax, xor_indices_jax
     return np.concatenate(results)
 
 # =====================================================================
-# 2. JAX Optimization Helpers
+# 2. Optimized Memory-Light JAX Objective & Optimization Helpers
 # =====================================================================
 def generate_stabilizer_states_and_generators(n_qubits, k, num_starts, seed=42):
     key = random.PRNGKey(seed)
@@ -120,20 +120,15 @@ def objective_fn(params, n_dim, generators, k):
     real_part = params[:n_dim]
     imag_part = params[n_dim:]
     psi = real_part + 1j * imag_part
-    norm = jnp.linalg.norm(psi)
-    psi = psi / norm
+    norm_sq = jnp.sum(real_part**2 + imag_part**2)
+    psi_normed = psi / jnp.sqrt(jnp.maximum(norm_sq, 1e-12))
 
-    purity_loss = 0.0
-    for i in range(n_dim):
-        rho_i = jnp.outer(psi, jnp.conj(psi))
-        tr_rho_2 = jnp.real(jnp.trace(rho_i @ rho_i))
-        purity_loss += (tr_rho_2 - 1.0)**2
+    purity_loss = (norm_sq - 1.0)**2
 
     violation_loss = 0.0
     if k > 0:
-        for g in generators:
-            expval = jnp.real(jnp.vdot(psi, g @ psi))
-            violation_loss += (expval - 1.0)**2
+        expvals = jnp.real(jnp.einsum('i,kij,j->k', jnp.conj(psi_normed), generators, psi_normed))
+        violation_loss = jnp.sum((expvals - 1.0)**2)
 
     return purity_loss + violation_loss
 
@@ -141,25 +136,55 @@ def calculate_metrics(params, n_dim, generators, k):
     real_part = params[:n_dim]
     imag_part = params[n_dim:]
     psi = real_part + 1j * imag_part
-    psi = psi / jnp.linalg.norm(psi)
+    norm_sq = jnp.sum(real_part**2 + imag_part**2)
+    psi_normed = psi / jnp.sqrt(jnp.maximum(norm_sq, 1e-12))
 
-    purities = []
-    for i in range(n_dim):
-        rho_i = jnp.outer(psi, jnp.conj(psi))
-        tr_rho_2 = jnp.real(jnp.trace(rho_i @ rho_i))
-        purities.append(tr_rho_2)
-
-    purities = jnp.array(purities)
-    avg_p = jnp.mean(purities)
-    max_p = jnp.max(purities)
+    avg_p = 1.0
+    max_p = 1.0
 
     viol = 0.0
     if k > 0:
-        for g in generators:
-            expval = jnp.real(jnp.vdot(psi, g @ psi))
-            viol += (expval - 1.0)**2
+        expvals = jnp.real(jnp.einsum('i,kij,j->k', jnp.conj(psi_normed), generators, psi_normed))
+        viol = jnp.sum((expvals - 1.0)**2)
 
     return avg_p, max_p, viol
+
+def run_subbatched_opt(params_batch, generators_jax, n_dim, k, chunk_size, sub_batch_size=250):
+    num_starts = params_batch.shape[0]
+    
+    def single_opt(p, g):
+        solver = jaxopt.LBFGS(
+            fun=lambda x: objective_fn(x, n_dim, g, k),
+            maxiter=chunk_size,
+            tol=1e-11,
+            history_size=10
+        )
+        return solver.run(p).params
+
+    vmapped_run = vmap(single_opt, in_axes=(0, 0))
+    vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
+
+    new_params_list = []
+    avg_p_list, max_p_list, viol_list = [], [], []
+
+    for i in range(0, num_starts, sub_batch_size):
+        p_sub = params_batch[i : i + sub_batch_size]
+        g_sub = generators_jax[i : i + sub_batch_size]
+        
+        p_opt = vmapped_run(p_sub, g_sub)
+        avg_p, max_p, viol = vmapped_metrics(p_opt, g_sub)
+        
+        new_params_list.append(p_opt)
+        avg_p_list.append(avg_p)
+        max_p_list.append(max_p)
+        viol_list.append(viol)
+
+    new_params = jnp.vstack(new_params_list)
+    avg_p_cat = jnp.concatenate(avg_p_list)
+    max_p_cat = jnp.concatenate(max_p_list)
+    viol_cat = jnp.concatenate(viol_list)
+
+    return new_params, avg_p_cat, max_p_cat, viol_cat
 
 # =====================================================================
 # 3. Main Data Generation Loop
@@ -169,6 +194,7 @@ def run_simulation():
     num_starts = 2000
     num_steps = 1500
     chunk_size = 50
+    sub_batch_size = 250
     num_chunks = num_steps // chunk_size
 
     n_dim = 2**n_qubits
@@ -177,13 +203,15 @@ def run_simulation():
     out_prefix = os.path.join(out_dir, f"{n_qubits}_qbt_{num_starts}_sds_ptmzng_jfr_")
 
     print("=======================================================")
-    print(f"FAST PURE JAX GPU DATA GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
+    print(f"FAST MEMORY-LIGHT GPU GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
     print(f"Output directory: {out_dir}/")
     print("=======================================================")
 
     H_jax = create_hadamard_jax(n_qubits)
     phases_jax = get_pauli_y_phases_jax(n_qubits)
     xor_indices_jax = get_xor_indices_jax(n_qubits)
+
+    vmapped_metrics_init = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k_val), in_axes=(0, 0))
 
     for k in range(n_qubits, -1, -1):
         print(f"\nComputing for {n_qubits}-qubits with initial {k}-qubit stabilized state (Gap {k}).")
@@ -196,26 +224,14 @@ def run_simulation():
             jnp.real(initial_states_jax),
             jnp.imag(initial_states_jax)
         ])
+
+        vmapped_metrics_k = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
         
-        def single_opt(p, g):
-            solver = jaxopt.LBFGS(
-                fun=lambda x: objective_fn(x, n_dim, g, k),
-                maxiter=chunk_size,
-                tol=1e-11,
-                history_size=20
-            )
-            return solver.run(p)
-
-        vmapped_run = vmap(single_opt, in_axes=(0, 0))
-        vmapped_metrics = vmap(lambda p, g: calculate_metrics(p, n_dim, g, k), in_axes=(0, 0))
-
-        # Initial metrics & SRE (Step 0)
-        avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
-        params_np = np.array(params_batch)
+        avg_p, max_p, viol = vmapped_metrics_k(params_batch, generators_jax)
         states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
         
         t0_gap = time.time()
-        initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
+        initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
         
         print(f"  Start Step 0 | Mean Violation: {float(jnp.mean(viol)):.2e} | Mean SRE: {np.mean(initial_sre):.4f}")
 
@@ -228,18 +244,17 @@ def run_simulation():
         initial_states_np = np.array(states_complex_jax)
 
         for chunk_idx in range(1, num_chunks + 1):
-            res = vmapped_run(params_batch, generators_jax)
-            params_batch = res.params
+            params_batch, avg_p, max_p, viol = run_subbatched_opt(
+                params_batch, generators_jax, n_dim, k, chunk_size, sub_batch_size=sub_batch_size
+            )
 
-            avg_p, max_p, viol = vmapped_metrics(params_batch, generators_jax)
             purities_history.append(np.array(avg_p))
             max_purities_history.append(np.array(max_p))
             violations_history.append(np.array(viol))
 
             states_complex_jax = params_batch[:, :n_dim] + 1j * params_batch[:, n_dim:]
             
-            # Pure JAX GPU SRE
-            sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
+            sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax, sub_batch_size=sub_batch_size)
             sre_history.append(sre_vals)
 
             step_num = chunk_idx * chunk_size
