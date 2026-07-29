@@ -3,6 +3,7 @@ import sys
 import time
 import pickle
 import numpy as np
+from scipy.linalg import hadamard
 import jax
 import jax.numpy as jnp
 from jax import random, vmap
@@ -12,18 +13,16 @@ import cupy as cp
 # Ensure GPU selection and memory sharing between JAX and CuPy
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
-os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".50"
+os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = ".40"
 jax.config.update("jax_enable_x64", True)
 
 # =====================================================================
 # 1. Native CuPy GPU Exact SRE Implementation (FWHT Algorithm)
 # =====================================================================
 def create_unnormalized_hadamard_gpu(n_qubits: int) -> cp.ndarray:
-    H1 = cp.array([[1.0, 1.0], [1.0, -1.0]], dtype=cp.float64)
-    H_n = H1
-    for _ in range(n_qubits - 1):
-        H_n = cp.kron(H_n, H1)
-    return H_n
+    dim = 2**n_qubits
+    H_np = hadamard(dim).astype(np.float64)
+    return cp.array(H_np)
 
 _N_QUBITS_CACHED = None
 _H_GPU = None
@@ -49,10 +48,6 @@ def _init_sre_gpu_cache(n_qubits: int = 7):
         _N_QUBITS_CACHED = n_qubits
 
 def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, sub_batch_size: int = 500) -> np.ndarray:
-    """
-    Computes exact S2 (alpha=2) SRE for a batch of state vectors natively on GPU using CuPy.
-    psi_batch_np: np.ndarray of shape (num_starts, 2^n_qubits), complex128
-    """
     num_starts, dim = psi_batch_np.shape
     n_qubits = int(np.log2(dim))
     _init_sre_gpu_cache(n_qubits)
@@ -76,7 +71,6 @@ def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, sub_batch_size: int 
         sre_sub = -cp.log2(pauli_4_sum / dim)
         results.append(cp.asnumpy(sre_sub))
         
-        # Free memory pool
         del psi_gpu, psi_conj, psi_xor, V_complex, Xi_complex, expval_pauli, pauli_4_sum
         cp.get_default_memory_pool().free_all_blocks()
     
@@ -125,7 +119,6 @@ def generate_stabilizer_states_and_generators(n_qubits, k, num_starts, seed=42):
                 psi = psi / norm
 
         states.append(psi)
-        
         if k > 0:
             generators_list.append(jnp.stack(generators))
         else:
@@ -241,7 +234,6 @@ def run_simulation():
         initial_states_np = np.copy(states_complex)
 
         for chunk_idx in range(1, num_chunks + 1):
-            t_chunk_start = time.time()
             res = vmapped_run(params_batch, generators_jax)
             params_batch = res.params
 
@@ -253,7 +245,6 @@ def run_simulation():
             params_np = np.array(params_batch)
             states_complex = params_np[:, :n_dim] + 1j * params_np[:, n_dim:]
             
-            # Fast Native CuPy GPU SRE (takes ~0.12s)
             sre_vals = compute_sre_native_cupy_batch(states_complex)
             sre_history.append(sre_vals)
 
@@ -265,7 +256,6 @@ def run_simulation():
 
         final_states_np = np.copy(states_complex)
 
-        # Transpose histories to match (num_starts, num_steps_checkpoints)
         purities_history = np.array(purities_history).T.tolist()
         max_purities_history = np.array(max_purities_history).T.tolist()
         violations_history = np.array(violations_history).T.tolist()
