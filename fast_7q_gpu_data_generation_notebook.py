@@ -4,8 +4,9 @@
 #     "marimo",
 #     "numpy",
 #     "scipy",
-#     "jax",
-#     "jaxopt",
+#     "cupy-cuda13x",
+#     "jax[cuda13]",
+#     "jaxopt[cuda13]",
 #     "matplotlib",
 #     "plotly",
 # ]
@@ -61,13 +62,13 @@ def _():
 def _(mo):
     mo.md(
         """
-        # 🚀 High-Performance Pure JAX GPU Trajectory Generation
+        # 🚀 High-Performance GPU Trajectory Generation
         ### Fast Walsh-Hadamard Transform (FWHT) SRE Engine | Optimized for RTX 6000 PRO (96GB VRAM)
 
         [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/invariantfields/Interactive_TE_Plots/blob/master/fast_7q_gpu_data_generation_notebook.py)
 
-        This notebook implements **100% Pure JAX GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **JAX L-BFGS state optimization**.
-        It achieves a **175× to 240× speedup** over traditional Julia CFFI wrappers while matching exact machine precision ($10^{-15}$) with zero external NVRTC dependencies.
+        This notebook implements **100% GPU Stabilizer Rényi Entropy ($S_2$) calculation** combined with **JAX L-BFGS state optimization**.
+        It prints detailed **step-by-step progress** for every chunk ($k$-gap, steps, violations, purities, and SRE values).
         """
     )
     return
@@ -83,7 +84,8 @@ def _(jax, mo):
         f"""
         > [!NOTE]
         > **JAX GPU Accelerator Detected:** `{gpu_name}`  
-        > **Mode:** 100% Pure JAX XLA in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
+        > **CUDA 13 Environment:** `cupy-cuda13x`, `jax[cuda13]`, `jaxopt[cuda13]`  
+        > **Mode:** 100% GPU XLA in-VRAM tensor contraction (Fast Walsh-Hadamard Transform).
         """
     )
     gpu_status_md
@@ -97,7 +99,7 @@ def _(mo):
     num_steps_input = mo.ui.number(start=100, stop=5000, value=1500, step=100, label="Optimization Steps")
     chunk_size_slider = mo.ui.slider(start=10, stop=250, value=50, step=10, label="Chunk Size (Steps)")
     out_dir_input = mo.ui.text(value="zip2", label="Output Directory")
-    run_button = mo.ui.run_button(label="⚡ Start Pure JAX GPU Trajectory Generation")
+    run_button = mo.ui.run_button(label="⚡ Start GPU Trajectory Generation")
 
     control_panel = mo.vstack([
         mo.md("### ⚙️ Simulation Control Panel"),
@@ -302,9 +304,9 @@ def _(
     time,
     vmap,
 ):
-    # Execution cell: triggers when run_button is clicked
+    # Execution cell: triggers when run_button is clicked with step-by-step progress logging
     if not run_button.value:
-        execution_status = mo.md("💡 *Click 'Start Pure JAX GPU Trajectory Generation' above to launch simulation.*")
+        execution_status = mo.md("💡 *Click 'Start GPU Trajectory Generation' above to launch simulation.*")
         completed_files = []
     else:
         n_qubits = n_qubits_slider.value
@@ -323,10 +325,15 @@ def _(
         xor_indices_jax = get_xor_indices_jax(n_qubits)
         
         completed_files = []
-        status_logs = [f"🚀 Initialized Pure JAX GPU Run: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps"]
+        status_logs = [f"🚀 **Initialized GPU Run:** `{n_qubits} Qubits` | `{num_starts} Seeds` | `{num_steps} Steps`\n"]
+        print(f"=======================================================")
+        print(f"GPU DATA GENERATION: {n_qubits} Qubits | {num_starts} Seeds | {num_steps} Steps")
+        print(f"=======================================================")
 
         for k in range(n_qubits, -1, -1):
-            status_logs.append(f"\n⚡ Processing Gap {k} (k={k})...")
+            gap_header = f"\n⚡ **Processing Gap {k}** (Initial {k}-qubit stabilized state)..."
+            status_logs.append(gap_header)
+            print(gap_header)
             
             initial_states_jax, generators_jax = generate_stabilizer_states_and_generators(
                 n_qubits, k, num_starts, seed=42 + k
@@ -355,6 +362,10 @@ def _(
             t0_gap = time.time()
             initial_sre = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
 
+            step0_msg = f"  `Start Step 0` | Violation: `{float(jnp.mean(viol)):.2e}` | Mean SRE: `{np.mean(initial_sre):.4f}`"
+            status_logs.append(step0_msg)
+            print(step0_msg)
+
             purities_history = [np.array(avg_p)]
             max_purities_history = [np.array(max_p)]
             violations_history = [np.array(viol)]
@@ -375,6 +386,14 @@ def _(
                 
                 sre_vals = compute_sre_pure_jax_batch(states_complex_jax, H_jax, phases_jax, xor_indices_jax)
                 sre_history.append(sre_vals)
+
+                step_num = chunk_idx * chunk_size
+                elapsed = time.time() - t0_gap
+                est_rem = (elapsed / chunk_idx) * (num_chunks - chunk_idx)
+                
+                step_msg = f"  `Step {step_num:5d}/{num_steps}` | Violation: `{float(jnp.mean(viol)):.2e}` | Mean SRE: `{np.mean(sre_vals):.4f}` | Elapsed: `{elapsed:.1f}s` | Est. Rem: `{est_rem:.1f}s`"
+                status_logs.append(step_msg)
+                print(step_msg)
 
             final_states_np = np.array(states_complex_jax)
 
@@ -398,9 +417,11 @@ def _(
                 pickle.dump(results_dict, _f_save)
 
             completed_files.append(save_filepath)
-            status_logs.append(f"  ✅ Gap {k} Saved: `{save_filepath}` ({time.time() - t0_gap:.1f}s)")
+            saved_msg = f"  ✅ **Gap {k} Saved:** `{save_filepath}` (Total Gap Time: `{time.time() - t0_gap:.1f}s`)"
+            status_logs.append(saved_msg)
+            print(saved_msg)
 
-        execution_status = mo.md("\n".join(status_logs))
+        execution_status = mo.md("\n\n".join(status_logs))
     
     execution_status
     return completed_files, execution_status
