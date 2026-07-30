@@ -1773,7 +1773,12 @@ def _(
 
 @app.cell
 def _(unpack_pkl_file):
-    unpack_pkl_file("file1(2).pkl", "")
+    unpack_pkl_file("file1(2).pkl", "zip3")
+    return
+
+
+@app.cell
+def _():
     return
 
 
