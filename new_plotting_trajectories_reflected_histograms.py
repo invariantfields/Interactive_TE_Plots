@@ -15,7 +15,7 @@
 import marimo
 
 __generated_with = "0.23.15"
-app = marimo.App(width="medium")
+app = marimo.App(width="full")
 
 
 @app.cell
@@ -167,6 +167,7 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 @app.cell
 def _(
+    finalize,
     go,
     is_TE,
     jl,
@@ -474,6 +475,7 @@ def _(
                                     t_copy[-1] = computed_final
                                 filtered_trajs.append(t_copy)
                             else:
+                                opt_len = len(data["average_purity"][j]) if ("average_purity" in data and len(data["average_purity"]) > j) else (len(traj) if len(traj) > 1 else 2)
                                 filtered_trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
                         else:
                             filtered_trajs.append(data[metric][j])
@@ -587,7 +589,7 @@ def _(
             fig = make_subplots(
                 rows=2, cols=1,
                 shared_xaxes=True,
-                vertical_spacing=0.12,
+                vertical_spacing=0.02,
                 subplot_titles=("SRE (S₂): Initial, TE, and non-TE", "State Proportions (TE vs non-TE)")
             )
 
@@ -891,6 +893,8 @@ def _(
                     )
                 )
             return finalize_arxiv_style(fig)
+
+
 
 
 
@@ -1428,7 +1432,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
 
         # 3. TE vs non-TE SRE & PROPORTIONS (2 STACKED SUBPLOTS)
         elif plot_type == "TE vs non-TE SRE":
-            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor='white')
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor='white', gridspec_kw={'hspace': 0})
             ax1.set_facecolor('white')
             ax2.set_facecolor('white')
 
@@ -1512,7 +1516,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3, label=r"$\text{Final TE SRE}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
             ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3, label=r"$\text{Final non-TE SRE}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
             ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
-            ax1.set_title(r"$\text{SRE }(S_2)\text{ \& State Proportions: Initial, TE, and non-TE}$", fontsize=12)
+            #ax1.set_title(r"$\text{SRE }(S_2)\text{ \& State Proportions: Initial, TE, and non-TE}$", fontsize=12)
             ax1.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
             ax1.legend(frameon=True, fontsize=9, loc="upper right")
 
@@ -1542,6 +1546,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ax2.legend(frameon=True, fontsize=9, loc="upper right")
 
             fig.tight_layout()
+            fig.subplots_adjust(hspace=0)
             return fig
 
         # 3b. TE vs non-TE Proportions — 2 bars for each gap (TE proportion & non-TE proportion)
@@ -1660,6 +1665,8 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
 
 
 
+
+
     return (plot_te_filtered_trajectories_matplotlib,)
 
 
@@ -1707,7 +1714,7 @@ def _(
 
 @app.cell
 def _(unpack_pkl_file):
-    unpack_pkl_file("file1(2).pkl", "zip3")
+    unpack_pkl_file("file12.pkl", "zip4")
     return
 
 
