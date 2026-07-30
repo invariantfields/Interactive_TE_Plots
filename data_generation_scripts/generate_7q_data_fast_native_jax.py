@@ -344,6 +344,12 @@ def run_simulation():
     completed_files = []
 
     for k_gap in range(n_qubits, -1, -1):
+        save_filepath = f"{out_prefix}{num_steps}_stps_{k_gap}.pkl"
+        if os.path.exists(save_filepath):
+            print(f"\nSkipping Gap {k_gap} - file already exists: {save_filepath}", flush=True)
+            completed_files.append(save_filepath)
+            continue
+
         print(f"\nComputing for {n_qubits}-qubits with initial random {k_gap}-qubit stabilized state (Gap {k_gap}).", flush=True)
         
         init_states = [rand_Almost_Stab_state_np(n_qubits, k_gap) for _ in range(num_starts)]
