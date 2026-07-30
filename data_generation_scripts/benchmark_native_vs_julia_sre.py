@@ -15,22 +15,17 @@ def create_hadamard_gpu(n_qubits: int) -> cp.ndarray:
         H_n = cp.kron(H_n, H)
     return H_n
 
-# Global pre-built GPU Hadamard & XOR index matrix for n=7
-_N_QUBITS_CACHED = None
-_H_GPU = None
-_XOR_INDICES_GPU = None
+SRE_GPU_CACHE = {}
 
-def _init_gpu_cache(n_qubits: int = 7):
-    global _N_QUBITS_CACHED, _H_GPU, _XOR_INDICES_GPU
-    if _N_QUBITS_CACHED != n_qubits:
+def get_gpu_sre_cache(n_qubits: int):
+    if n_qubits not in SRE_GPU_CACHE:
         dim = 2**n_qubits
-        _H_GPU = create_hadamard_gpu(n_qubits)
-        
-        # Precompute XOR lookup table for b in [0..dim-1], x in [0..dim-1]
+        H_n = create_hadamard_gpu(n_qubits)
         x_idx = cp.arange(dim, dtype=cp.int32)[:, None]
         b_idx = cp.arange(dim, dtype=cp.int32)[None, :]
-        _XOR_INDICES_GPU = x_idx ^ b_idx  # Shape (dim, dim)
-        _N_QUBITS_CACHED = n_qubits
+        xor_indices = x_idx ^ b_idx
+        SRE_GPU_CACHE[n_qubits] = (H_n, xor_indices)
+    return SRE_GPU_CACHE[n_qubits]
 
 def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, alpha: int = 2) -> np.ndarray:
     """
@@ -39,7 +34,7 @@ def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, alpha: int = 2) -> n
     """
     num_starts, dim = psi_batch_np.shape
     n_qubits = int(np.log2(dim))
-    _init_gpu_cache(n_qubits)
+    H_GPU, XOR_INDICES_GPU = get_gpu_sre_cache(n_qubits)
     
     # Copy batch to GPU
     psi_gpu = cp.array(psi_batch_np, dtype=cp.complex128)
@@ -50,23 +45,12 @@ def compute_sre_native_cupy_batch(psi_batch_np: np.ndarray, alpha: int = 2) -> n
     psi_gpu = psi_gpu / norms
     
     # Build V_batch tensor of shape (num_starts, x_dim, b_dim)
-    # V[s, x, b] = conj(psi[s, x]) * psi[s, x ^ b]
-    psi_conj = cp.conj(psi_gpu)[:, :, None]  # (num_starts, dim, 1)
+    psi_conj = cp.conj(psi_gpu)[:, :, None]
+    psi_xor = psi_gpu[:, XOR_INDICES_GPU]
     
-    # Gather psi(x ^ b) using precomputed XOR indices
-    # _XOR_INDICES_GPU has shape (dim, dim) where element (x, b) is x ^ b
-    psi_xor = psi_gpu[:, _XOR_INDICES_GPU]   # (num_starts, dim, dim)
-    
-    V_batch = cp.real(psi_conj * psi_xor)     # Real part of expectation
-    
-    # Apply Fast Walsh-Hadamard Transform along x-axis (axis 1): Xi = H @ V
-    # H_GPU shape: (dim, dim), V_batch shape: (num_starts, dim, dim)
-    Xi_batch = cp.matmul(_H_GPU, V_batch)    # Shape: (num_starts, dim, dim)
-    
-    # Sum Xi^4 over all 4^n Pauli operators (axes 1 and 2)
+    V_batch = cp.real(psi_conj * psi_xor)
+    Xi_batch = cp.matmul(H_GPU, V_batch)
     xi_4_sum = cp.sum(Xi_batch ** 4, axis=(1, 2))
-    
-    # S2 = -log2( (1 / 2^n) * sum(Xi^4) )
     sre_batch = -cp.log2(xi_4_sum / dim)
     
     return cp.asnumpy(sre_batch)

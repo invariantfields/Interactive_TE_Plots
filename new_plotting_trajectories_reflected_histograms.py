@@ -720,7 +720,7 @@ def _(
             all_yticklabels = [f"{int(p*100)}%" for p in prop_ticks[::-1]] + [f"{int(s)}" for s in pos_yticks]
 
             fig.update_layout(
-                title=f"SRE   & Reflected State Proportions  : Initial, TE, and non-TE",
+                #title=f"SRE   & Reflected State Proportions  : Initial, TE, and non-TE",
                 xaxis_title="Stabilizer gap",
                 yaxis_title="Proportion    ←  0  →  SRE  ",
                 barmode="group",
@@ -920,6 +920,8 @@ def _(
             return finalize_arxiv_style(fig)
 
 
+
+
     return compute_sre_exact, parse_gap_sre, plot_te_filtered_trajectories
 
 
@@ -951,7 +953,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     available_folders = []
 
     if data_source.value == "Local":
-        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7","zip1","zip2","zip3"]
+        candidate_dirs = ["zip4", "zip7"]
         available_folders = [
             d
             for d in candidate_dirs
@@ -1198,7 +1200,7 @@ def _(os, pickle):
 
 @app.cell
 def _(unpack_pkl_file):
-    unpack_pkl_file("packed_7_qbt_2000_sds_1500_stps.pkl", "zip2/")
+    unpack_pkl_file("file1(4).pkl", "zip4/")
     return
 
 
@@ -1331,7 +1333,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
 
                     color = colors[data_idx % len(colors)]
                     val_k = label.split("=")[-1].strip()
-                    ax.plot(steps, center, label=f"$k={val_k}$", color=color, linewidth=2.0)
+                    ax.plot(steps, center, label=f"$q={val_k}$", color=color, linewidth=2.0)
                     ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
                 ax.set_xlabel(r"$\text{Optimization Steps}$", fontsize=11)
@@ -1392,7 +1394,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                         continue
 
                     val_k = label.split("=")[-1].strip()
-                    x_labels.append(f"$k={val_k}$")
+                    x_labels.append(f"$q={val_k}$")
                     global_init_vals.extend(init_vals)
                     global_final_vals.extend(final_vals)
 
@@ -1451,21 +1453,23 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             fig.subplots_adjust(bottom=0.22)
             return fig
 
-        # 3. TE vs non-TE SRE — 3 bars for each gap (Initial SRE, TE SRE, non-TE SRE) + Reflected Counts  
+        # 3. TE vs non-TE SRE & PROPORTIONS (2 STACKED SUBPLOTS)
         elif plot_type == "TE vs non-TE SRE":
-            fig, ax = plt.subplots(figsize=(9.0, 6.0), facecolor='white')
-            ax.set_facecolor('white')
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor='white')
+            ax1.set_facecolor('white')
+            ax2.set_facecolor('white')
 
             x_labels = []
             init_centers = []
             init_errs = []
-            init_counts = []
             te_centers = []
             te_errs = []
-            te_counts = []
             non_te_centers = []
             non_te_errs = []
+
+            te_counts = []
             non_te_counts = []
+
             global_init = []
             global_te = []
             global_non_te = []
@@ -1512,7 +1516,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                 ic, ie = _stat(init_vals)
                 tc, te_e = _stat(te_vals)
                 nc, ne = _stat(non_te_vals)
-                init_centers.append(ic); init_errs.append(ie); init_counts.append(len(init_vals))
+                init_centers.append(ic); init_errs.append(ie)
                 te_centers.append(tc); te_errs.append(te_e); te_counts.append(len(te_vals))
                 non_te_centers.append(nc); non_te_errs.append(ne); non_te_counts.append(len(non_te_vals))
 
@@ -1522,7 +1526,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                 ic = np.mean(global_init) if central_tendency == "Average" else np.median(global_init)
                 tc = np.mean(global_te) if central_tendency == "Average" else np.median(global_te)
                 nc = np.mean(global_non_te) if central_tendency == "Average" else np.median(global_non_te)
-                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0); init_counts.append(len(global_init))
+                init_centers.append(ic); init_errs.append(np.std(global_init) if global_init else 0.0)
                 te_centers.append(tc); te_errs.append(np.std(global_te) if global_te else 0.0); te_counts.append(len(global_te))
                 non_te_centers.append(nc); non_te_errs.append(np.std(global_non_te) if global_non_te else 0.0); non_te_counts.append(len(global_non_te))
 
@@ -1530,21 +1534,16 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             width = 0.25
             ekw = dict(elinewidth=0.8, capthick=0.8)
 
-            # --- POSITIVE Y-AXIS: Original SRE values with error bars (3 bars for each gap) ---
-            b_init = ax.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
-                            label=r"$\text{Initial States SRE  }$", color="mediumseagreen",
-                            edgecolor="black", linewidth=0.5, error_kw=ekw)
-            b_te_sre = ax.bar(x, te_centers, width, yerr=te_errs, capsize=3,
-                              label=r"$\text{Final TE SRE  }$", color="royalblue",
-                              edgecolor="black", linewidth=0.5, error_kw=ekw)
-            b_non_te_sre = ax.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
-                                  label=r"$\text{Final non-TE SRE  }$", color="crimson",
-                                  edgecolor="black", linewidth=0.5, error_kw=ekw)
+            # Subplot 1 (Top): SRE Values
+            ax1.bar(x - width, init_centers, width, yerr=init_errs, capsize=3, label=r"$\text{Initial SRE}$", color="mediumseagreen", edgecolor="black", linewidth=0.5, error_kw=ekw)
+            ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3, label=r"$\text{Final TE SRE}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
+            ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3, label=r"$\text{Final non-TE SRE}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
+            ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
+            ax1.set_title(r"$\text{SRE }(S_2)\text{ \& State Proportions: Initial, TE, and non-TE}$", fontsize=12)
+            ax1.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+            ax1.legend(frameon=True, fontsize=9, loc="upper right")
 
-            # --- NEGATIVE Y-AXIS: Reflected proportions of TE (Light Blue) and non-TE (Light Red) ---
-            max_sre = max(max(init_centers or [5.0]), max(te_centers or [5.0]), max(non_te_centers or [5.0]))
-            prop_scale = max_sre * 0.75  # Scale 100% to -0.75 * max_sre
-
+            # Subplot 2 (Bottom): Upright Proportions
             te_props_list = []
             non_te_props_list = []
             for tc, nc in zip(te_counts, non_te_counts):
@@ -1556,52 +1555,20 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                     te_props_list.append(0.0)
                     non_te_props_list.append(0.0)
 
-            te_neg_heights = [-p * prop_scale for p in te_props_list]
-            non_te_neg_heights = [-p * prop_scale for p in non_te_props_list]
+            ax2.bar(x - width/2, te_props_list, width, label=r"$\text{TE States}$", color="royalblue", edgecolor="black", linewidth=0.5, alpha=0.9)
+            ax2.bar(x + width/2, non_te_props_list, width, label=r"$\text{non-TE States}$", color="crimson", edgecolor="black", linewidth=0.5, alpha=0.9)
 
-            # 2 bars on -y: TE (Light Blue) and non-TE (Light Red)
-            b_te_prop = ax.bar(x, te_neg_heights, width, color="cornflowerblue",
-                               edgecolor="black", linewidth=0.5, alpha=0.85, label=r"$\text{TE Proportion  }$")
-            b_non_te_prop = ax.bar(x + width, non_te_neg_heights, width, color="lightcoral",
-                                   edgecolor="black", linewidth=0.5, alpha=0.85, label=r"$\text{non-TE Proportion  }$")
+            ax2.set_xticks(x)
+            ax2.set_xticklabels(x_labels, fontsize=9.5)
+            ax2.set_xlabel(r"$\text{Stabilizer gap } (q)$", fontsize=11)
+            ax2.set_ylabel(r"$\text{Proportion of States}$", fontsize=11)
+            ax2.set_ylim(0, 1.05)
+            ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
+            ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
+            ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+            ax2.legend(frameon=True, fontsize=9, loc="upper right")
 
-            # Reference baseline at y=0
-            ax.axhline(0, color="black", linewidth=0.9, linestyle="-")
-
-            # Set custom ticks: Positive = SRE values, Negative = Percentages
-            pos_yticks = np.linspace(0, np.ceil(max_sre), 5)
-            prop_ticks = [0.25, 0.50, 0.75, 1.00]
-            neg_yticks = [-p * prop_scale for p in prop_ticks]
-
-            all_yticks = list(neg_yticks[::-1]) + list(pos_yticks)
-            all_yticklabels = [f"{int(p*100)}%" for p in prop_ticks[::-1]] + [f"{s:.1f}" if s % 1 != 0 else f"{int(s)}" for s in pos_yticks]
-
-            ax.set_yticks(all_yticks)
-            ax.set_yticklabels(all_yticklabels, fontsize=9)
-
-            ax.set_xticks(x)
-            ax.set_xticklabels(x_labels, fontsize=9.5)
-            ax.set_xlabel(r"$\text{Stabilizer gap } (q)$", fontsize=11)
-            ax.set_ylabel(
-        r"$\text{Proportion} \quad \longleftarrow \quad \longrightarrow \quad \text{SRE } (S_2)$",
-        va="center",
-        ha="right",
-        fontsize=10.5,  # Apply the blended transform
-        y=0.7,  # Explicitly places the center of the text at data coordinate y = 0
-    )
-            #ax.set_title(r"$\text{SRE (Magic)   vs Reflected State Proportions   (TE vs non-TE)}$", fontsize=12.5)
-
-            ax.spines["top"].set_visible(True)
-            ax.spines["right"].set_visible(True)
-            ax.tick_params(direction="in", top=True, right=True, which="both")
-            ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-
-            # Align legend handles so Blue & Light Blue are paired, and Red & Light Red are paired
-            legend_handles = [b_te_sre, b_te_prop, b_non_te_sre, b_non_te_prop, b_init]
-            ax.legend(handles=legend_handles, frameon=True, fontsize=8.5, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
-            ax.margins(x=0.04)
-
-            fig.subplots_adjust(bottom=0.22)
+            fig.tight_layout()
             return fig
 
         # 3b. TE vs non-TE Proportions — 2 bars for each gap (TE proportion & non-TE proportion)
@@ -1626,7 +1593,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                     continue
 
                 val_k = label.split("=")[-1].strip()
-                x_labels.append(f"$k={val_k}$")
+                x_labels.append(f"$q={val_k}$")
 
                 te_props.append(n_te / n_total)
                 non_te_props.append(n_non_te / n_total)
@@ -1653,7 +1620,6 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ax.set_xticklabels(x_labels, fontsize=10)
             ax.set_xlabel(r"$\text{Stabilizer gap } (q)$", fontsize=11)
             ax.set_ylabel(r"$\text{Proportion of States}$", fontsize=11)
-            #ax.set_title(r"$\text{Proportions of TE vs non-TE States for Each Gap } (k)$", fontsize=13)
             ax.set_ylim(0, 1.05)
             ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
             ax.set_yticklabels(["0%", "20%", "40%", "60%", "80%", "100%"], fontsize=9)
@@ -1667,7 +1633,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             fig.tight_layout()
             return fig
 
-        # 4. Reflected Histogram SRE
+        # 4. Upright Histogram SRE (Side-by-Side)
         elif plot_type in ["Histogram SRE", "Reflected Histogram SRE"]:
             fig, ax = plt.subplots(figsize=(8, 5.0), facecolor='white')
             ax.set_facecolor('white')
@@ -1691,31 +1657,20 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             if total_n > 0:
                 bins = np.linspace(0, max(max(all_te_sre or [5.0]), max(all_non_te_sre or [5.0])), 30)
 
-                # TE histogram pointing up  
                 te_counts, bin_edges = np.histogram(all_te_sre, bins=bins)
-
-                # non-TE histogram pointing down  
                 non_te_counts, _ = np.histogram(all_non_te_sre, bins=bins)
 
                 bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
-                bin_width = bin_edges[1] - bin_edges[0]
+                bin_width = (bin_edges[1] - bin_edges[0]) * 0.45
 
-                ax.bar(bin_centers, te_counts, width=bin_width, label=r"$\text{Final TE States  }$",
+                ax.bar(bin_centers - bin_width/2, te_counts, width=bin_width, label=r"$\text{Final TE States}$",
                        color="royalblue", edgecolor="black", linewidth=0.5, alpha=0.85)
-                ax.bar(bin_centers, -non_te_counts, width=bin_width, label=r"$\text{Final non-TE States  }$",
+                ax.bar(bin_centers + bin_width/2, non_te_counts, width=bin_width, label=r"$\text{Final non-TE States}$",
                        color="crimson", edgecolor="black", linewidth=0.5, alpha=0.85)
 
-                ax.axhline(0, color="black", linewidth=0.9)
-
-                max_c = max(max(te_counts) if len(te_counts) else 10, max(non_te_counts) if len(non_te_counts) else 10) * 1.15
-                c_step = max(1, int(max_c / 4))
-                yticks = np.arange(-int(max_c), int(max_c) + 1, c_step)
-                ax.set_yticks(yticks)
-                ax.set_yticklabels([f"{abs(y)}" for y in yticks], fontsize=9)
-
             ax.set_xlabel(r"$\text{Final SRE } (S_2)$", fontsize=11)
-            ax.set_ylabel(r"$\text{Count of States (non-TE   } \leftarrow 0 \rightarrow \text{ TE  )}$", fontsize=10.5)
-            ax.set_title(r"$\text{Reflected Histogram of Final SRE: TE   vs non-TE  }$", fontsize=12.5)
+            ax.set_ylabel(r"$\text{Count of States}$", fontsize=11)
+            ax.set_title(r"$\text{Histogram of Final SRE: TE vs non-TE}$", fontsize=12.5)
             ax.spines["top"].set_visible(True)
             ax.spines["right"].set_visible(True)
             ax.tick_params(direction="in", top=True, right=True, which="both")
@@ -1724,6 +1679,12 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
 
             fig.tight_layout()
             return fig
+
+
+
+
+
+
 
 
     return (plot_te_filtered_trajectories_matplotlib,)
@@ -1751,7 +1712,7 @@ def _(
     for _f in _mpl_files:
         _m = re.search(r'(?:stps|steps|stps_)(\d+)\.pkl$', _f)
         if _m:
-            _mpl_labels.append(f"k = {_m.group(1)}")
+            _mpl_labels.append(f"q = {_m.group(1)}")
         else:
             _mpl_labels.append(_f.split("/")[-1].replace(".pkl", ""))
 

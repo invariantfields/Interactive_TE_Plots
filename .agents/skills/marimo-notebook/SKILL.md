@@ -266,6 +266,23 @@ Once tests are added, you can run pytest from the commandline on the notebook to
 pytest <notebook.py>
 ```
 
+## Verification & High-Performance GPU Patterns
+
+### Notebook Integrity Check (`marimo check`)
+Always validate any created or edited marimo notebook with:
+```bash
+/home/naga/marimo/bin/marimo check <notebook.py>
+```
+Ensure code 0 (zero errors, zero warnings, zero DAG reactivity cycles).
+
+### Zero-Copy JAX ⟷ CuPy GPU Memory Sharing
+When integrating JAX optimization loops with CuPy GPU functions (e.g. SRE FWHT contracts):
+```python
+# Pass JAX GPU arrays directly into CuPy zero-copy
+psi_gpu = cp.asarray(jax_gpu_array, dtype=cp.complex128)
+```
+Avoid host CPU memory round-trips (`np.array(...)`). Pointer sharing occurs in 0.0 ms via `__cuda_array_interface__`.
+
 ## Additional resources
 
 - For marimo notebooks that run in width=columns [SQL.md](references/COLUMNS.md)
