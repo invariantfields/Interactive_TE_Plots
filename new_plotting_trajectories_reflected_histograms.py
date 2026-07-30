@@ -580,25 +580,26 @@ def _(
                 ),
             )
             fig.update_xaxes(title_text="Optimization Steps")
-            return finalize_arxiv_style(fig)
-
-        # ------------------------------------------------------------
-        # TE vs non-TE REFLECTED SRE   & COUNTS   COMPARISON
+            return finalize        # ------------------------------------------------------------
+        # TE vs non-TE SRE & PROPORTIONS (2 STACKED SUBPLOTS)
         # ------------------------------------------------------------
         if plot_type == "TE vs non-TE SRE":
-            fig = go.Figure()
+            fig = make_subplots(
+                rows=2, cols=1,
+                shared_xaxes=True,
+                vertical_spacing=0.12,
+                subplot_titles=("SRE (S₂): Initial, TE, and non-TE", "State Proportions (TE vs non-TE)")
+            )
 
             x_ticks = []
             init_centers = []
             init_errs = []
-            init_counts = []
-
             te_centers = []
             te_errs = []
-            te_counts = []
-
             non_te_centers = []
             non_te_errs = []
+
+            te_counts = []
             non_te_counts = []
 
             global_init_sre_vals = []
@@ -652,7 +653,6 @@ def _(
 
                 init_centers.append(np.mean(init_sre_vals) if central_tendency == "Average" else np.median(init_sre_vals))
                 init_errs.append(np.std(init_sre_vals) if len(init_sre_vals) > 1 else 0.0)
-                init_counts.append(len(init_sre_vals))
 
                 if te_sre_vals:
                     te_centers.append(np.mean(te_sre_vals) if central_tendency == "Average" else np.median(te_sre_vals))
@@ -671,7 +671,6 @@ def _(
             x_ticks.append("All Gaps Combined")
             init_centers.append(np.mean(global_init_sre_vals) if central_tendency == "Average" else np.median(global_init_sre_vals))
             init_errs.append(np.std(global_init_sre_vals) if len(global_init_sre_vals) > 1 else 0.0)
-            init_counts.append(len(global_init_sre_vals))
 
             if global_te_sre_vals:
                 te_centers.append(np.mean(global_te_sre_vals) if central_tendency == "Average" else np.median(global_te_sre_vals))
@@ -687,10 +686,6 @@ def _(
             else:
                 non_te_centers.append(0.0); non_te_errs.append(0.0); non_te_counts.append(0)
 
-            # Scale proportions to negative y-axis
-            max_sre = max(max(init_centers or [5.0]), max(te_centers or [5.0]), max(non_te_centers or [5.0]))
-            prop_scale = max_sre * 0.75
-
             te_props_list = []
             non_te_props_list = []
             for tc, nc in zip(te_counts, non_te_counts):
@@ -702,35 +697,28 @@ def _(
                     te_props_list.append(0.0)
                     non_te_props_list.append(0.0)
 
-            te_neg = [-p * prop_scale for p in te_props_list]
-            non_te_neg = [-p * prop_scale for p in non_te_props_list]
+            # Subplot 1 (Top): SRE Bar Chart
+            fig.add_trace(go.Bar(x=x_ticks, y=init_centers, error_y=dict(type='data', array=init_errs, visible=True), name="Initial SRE", marker_color="mediumseagreen", opacity=0.9), row=1, col=1)
+            fig.add_trace(go.Bar(x=x_ticks, y=te_centers, error_y=dict(type='data', array=te_errs, visible=True), name="Final TE SRE", marker_color="royalblue", opacity=0.9), row=1, col=1)
+            fig.add_trace(go.Bar(x=x_ticks, y=non_te_centers, error_y=dict(type='data', array=non_te_errs, visible=True), name="Final non-TE SRE", marker_color="crimson", opacity=0.9), row=1, col=1)
 
-            # +y SRE & -y Proportion Traces aligned: Green -> Blue -> Light Blue -> Red -> Light Red
-            fig.add_trace(go.Bar(x=x_ticks, y=init_centers, error_y=dict(type='data', array=init_errs, visible=True), name="Initial SRE  ", marker_color="mediumseagreen", opacity=0.9))
-            fig.add_trace(go.Bar(x=x_ticks, y=te_centers, error_y=dict(type='data', array=te_errs, visible=True), name="Final TE SRE  ", marker_color="royalblue", opacity=0.9))
-            fig.add_trace(go.Bar(x=x_ticks, y=te_neg, name="TE Proportion  ", marker_color="cornflowerblue", opacity=0.85))
-            fig.add_trace(go.Bar(x=x_ticks, y=non_te_centers, error_y=dict(type='data', array=non_te_errs, visible=True), name="Final non-TE SRE  ", marker_color="crimson", opacity=0.9))
-            fig.add_trace(go.Bar(x=x_ticks, y=non_te_neg, name="non-TE Proportion  ", marker_color="lightcoral", opacity=0.85))
-
-            prop_ticks = [0.25, 0.50, 0.75, 1.00]
-            pos_yticks = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
-            neg_yticks = [-p * prop_scale for p in prop_ticks]
-
-            all_yticks = neg_yticks[::-1] + pos_yticks
-            all_yticklabels = [f"{int(p*100)}%" for p in prop_ticks[::-1]] + [f"{int(s)}" for s in pos_yticks]
+            # Subplot 2 (Bottom): Normal Upright Proportions Bar Chart
+            fig.add_trace(go.Bar(x=x_ticks, y=te_props_list, name="TE States", marker_color="royalblue", opacity=0.9), row=2, col=1)
+            fig.add_trace(go.Bar(x=x_ticks, y=non_te_props_list, name="non-TE States", marker_color="crimson", opacity=0.9), row=2, col=1)
 
             fig.update_layout(
-                #title=f"SRE   & Reflected State Proportions  : Initial, TE, and non-TE",
-                xaxis_title="Stabilizer gap",
-                yaxis_title="Proportion    ←  0  →  SRE  ",
+                title=f"SRE & State Proportions: Initial, TE, and non-TE",
                 barmode="group",
                 hovermode="x unified",
                 template="plotly_white",
+                height=700,
                 margin=dict(b=120),
                 font=dict(family="Computer Modern"),
-                legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5),
-                yaxis=dict(tickmode='array', tickvals=all_yticks, ticktext=all_yticklabels)
+                legend=dict(orientation="h", yanchor="top", y=-0.12, xanchor="center", x=0.5)
             )
+            fig.update_yaxes(title_text="SRE (S₂)", row=1, col=1)
+            fig.update_yaxes(title_text="Proportion of States", tickformat='.0%', range=[0, 1.05], row=2, col=1)
+            fig.update_xaxes(title_text="Stabilizer gap", row=2, col=1)
             return finalize_arxiv_style(fig)
 
         # ------------------------------------------------------------
@@ -819,7 +807,7 @@ def _(
             return finalize_arxiv_style(fig)
 
         # ------------------------------------------------------------
-        # REFLECTED HISTOGRAM OF SRE VALUES (TE VS NON-TE PROPORTIONS)
+        # HISTOGRAM OF SRE VALUES (SIDE-BY-SIDE UPRIGHT)
         # ------------------------------------------------------------
         if plot_type in ["Histogram SRE", "Reflected Histogram SRE"]:
             fig = go.Figure()
@@ -859,47 +847,37 @@ def _(
                 bins = np.linspace(0, max(max(all_te_sre or [5.0]), max(all_non_te_sre or [5.0])), 30)
 
                 te_counts, bin_edges = np.histogram(all_te_sre, bins=bins)
-                te_props = te_counts / total_n
-
                 non_te_counts, _ = np.histogram(all_non_te_sre, bins=bins)
-                non_te_props = non_te_counts / total_n
 
                 bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
-                bin_width = bin_edges[1] - bin_edges[0]
 
                 # Upward bars for TE
                 fig.add_trace(
                     go.Bar(
                         x=bin_centers,
-                        y=te_props,
-                        width=bin_width,
+                        y=te_counts,
                         name="TE States",
                         marker_color="royalblue",
                         opacity=0.85
                     )
                 )
 
-                # Downward (negative) bars for non-TE
+                # Upward bars for non-TE (Side-by-side)
                 fig.add_trace(
                     go.Bar(
                         x=bin_centers,
-                        y=[-p for p in non_te_props],
-                        width=bin_width,
+                        y=non_te_counts,
                         name="non-TE States",
                         marker_color="crimson",
                         opacity=0.85
                     )
                 )
 
-                max_prop = max(max(te_props) if len(te_props) else 0.1, max(non_te_props) if len(non_te_props) else 0.1) * 1.15
-                yticks = np.linspace(-max_prop, max_prop, 7)
-                yticklabels = [f"{abs(y)*100:.1f}%" for y in yticks]
-
                 fig.update_layout(
-                    title="Reflected Histogram of Final SRE: TE vs non-TE Proportions",
-                    xaxis_title="Final  S₂)",
-                    yaxis_title="Proportion of Total States",
-                    barmode="relative",
+                    title="Histogram of Final SRE: TE vs non-TE States",
+                    xaxis_title="Final SRE (S₂)",
+                    yaxis_title="State Count",
+                    barmode="group",
                     hovermode="x unified",
                     template="plotly_white",
                     margin=dict(b=120),
@@ -910,11 +888,6 @@ def _(
                         y=-0.15,
                         xanchor="center",
                         x=0.5,
-                    ),
-                    yaxis=dict(
-                        tickmode='array',
-                        tickvals=yticks,
-                        ticktext=yticklabels,
                     )
                 )
             return finalize_arxiv_style(fig)
@@ -1735,11 +1708,6 @@ def _(
 @app.cell
 def _(unpack_pkl_file):
     unpack_pkl_file("file1(2).pkl", "zip3")
-    return
-
-
-@app.cell
-def _():
     return
 
 
