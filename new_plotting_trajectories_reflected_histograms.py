@@ -951,7 +951,7 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     available_folders = []
 
     if data_source.value == "Local":
-        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7","zip1","zip2"]
+        candidate_dirs = ["correct_data", "data", "new_data", "more_data", "data_zip_7","zip1","zip2","zip3"]
         available_folders = [
             d
             for d in candidate_dirs
@@ -1772,7 +1772,8 @@ def _(
 
 
 @app.cell
-def _():
+def _(unpack_pkl_file):
+    unpack_pkl_file("file1(2).pkl", "")
     return
 
 
