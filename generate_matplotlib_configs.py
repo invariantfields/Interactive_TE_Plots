@@ -5,6 +5,7 @@ import glob
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import defaultdict
 from itertools import combinations
 
 # -------------------------------------------------------------------
@@ -62,7 +63,8 @@ def parse_filename_info(filepath):
             'stps': int(stps),
             'gap': int(gap),
             'label': f"$q={gap}$",
-            'tag': f"{qbt}q_{sds}sds"
+            'run_tag': f"{qbt}q_{sds}sds_{stps}stps",
+            'display_tag': f"{qbt}q ({sds} seeds, {stps} steps)"
         }
     
     m_gap = re.search(r'(\d+)\.pkl$', filename)
@@ -73,7 +75,8 @@ def parse_filename_info(filepath):
         'stps': 2500,
         'gap': gap_val,
         'label': f"$q={gap_val}$",
-        'tag': "7q_2000sds"
+        'run_tag': "7q_2000sds_2500stps",
+        'display_tag': "7q (2000 seeds, 2500 steps)"
     }
 
 def parse_gap_sort_key(filepath):
@@ -86,15 +89,15 @@ def get_dynamic_step_mes(file_path, traj_len):
         return float(info['stps']) / (traj_len - 1)
     return 50.0
 
-def load_dataset_files(data_dir="zip7"):
+def load_dataset_runs(data_dir="zip7"):
     files = sorted(glob.glob(os.path.join(data_dir, "*.pkl")), key=parse_gap_sort_key)
-    loaded = []
+    run_groups = defaultdict(list)
     for f in files:
         with open(f, "rb") as fp:
             data = pickle.load(fp)
         info = parse_filename_info(f)
-        loaded.append((data, info, f))
-    return loaded
+        run_groups[info['run_tag']].append((data, info, f))
+    return run_groups
 
 # -------------------------------------------------------------------
 # Config 1 & Config 2: Line Chart matching new_plotting_trajectories_reflected_histograms.py
@@ -111,7 +114,6 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
     n_plots = len(selected_metrics)
     fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False, facecolor="white")
 
-    # Preserve exact loaded_data order for line plots
     for col_idx, metric in enumerate(selected_metrics):
         ax = axes[0, col_idx]
         ax.set_title(metric_map[metric], fontsize=13)
@@ -268,7 +270,6 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
     ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
     ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-    # Duplicate legend removed from bottom subplot per user instruction!
 
     fig.subplots_adjust(hspace=0)
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
@@ -279,28 +280,35 @@ def main():
     import sys
     target_dir = sys.argv[1] if len(sys.argv) > 1 else "zip7"
     print(f"Loading dataset files from {target_dir}...")
-    loaded_data = load_dataset_files(target_dir)
-    if not loaded_data:
+    run_groups = load_dataset_runs(target_dir)
+    if not run_groups:
         print(f"No .pkl files found in {target_dir}/!")
         return
 
-    tag_str = loaded_data[0][1]['tag']
-    print(f"Loaded {len(loaded_data)} data files for dataset tag '{tag_str}' from {target_dir}/.")
+    print(f"Found {len(run_groups)} distinct run(s) in {target_dir}/:")
+    for run_tag, items in run_groups.items():
+        print(f"  - Run Signature '{run_tag}': {len(items)} files")
 
-    # Config 1: Line chart, all metrics, TE states, Average
-    fn1 = f"matplotlib_{tag_str}_config1_te_linechart.png"
-    print(f"\n--- Generating Config 1: Linechart ({tag_str}, TE States) ---")
-    plot_linechart_config(loaded_data, filter_mode="TE States", output_path=fn1)
+    for run_tag, loaded_data in run_groups.items():
+        display_tag = loaded_data[0][1]['display_tag']
+        print(f"\n=======================================================")
+        print(f"Processing Run: {run_tag} ({display_tag})")
+        print(f"=======================================================")
 
-    # Config 2: Line chart, all metrics, Non-TE states, Average
-    fn2 = f"matplotlib_{tag_str}_config2_non_te_linechart.png"
-    print(f"\n--- Generating Config 2: Linechart ({tag_str}, Non-TE States) ---")
-    plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
+        # Config 1: Line chart, all metrics, TE states, Average
+        fn1 = f"matplotlib_{run_tag}_config1_te_linechart.png"
+        print(f"--- Generating Config 1: Linechart ({run_tag}, TE States) ---")
+        plot_linechart_config(loaded_data, filter_mode="TE States", output_path=fn1)
 
-    # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0, Single Legend)
-    fn3 = f"matplotlib_{tag_str}_config3_te_vs_non_te_sre.png"
-    print(f"\n--- Generating Config 3: TE vs non-TE SRE ({tag_str}) ---")
-    plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)
+        # Config 2: Line chart, all metrics, Non-TE states, Average
+        fn2 = f"matplotlib_{run_tag}_config2_non_te_linechart.png"
+        print(f"--- Generating Config 2: Linechart ({run_tag}, Non-TE States) ---")
+        plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
+
+        # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0, Single Legend)
+        fn3 = f"matplotlib_{run_tag}_config3_te_vs_non_te_sre.png"
+        print(f"--- Generating Config 3: TE vs non-TE SRE ({run_tag}) ---")
+        plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)
 
 if __name__ == "__main__":
     main()
