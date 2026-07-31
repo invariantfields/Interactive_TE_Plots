@@ -63,6 +63,7 @@ def _():
 
     # Suppress all warnings globally to avoid logging overhead in loops
     warnings.filterwarnings("ignore")
+    os.environ["MARIMO_OUTPUT_MAX_BYTES"] = "10000000"
 
     _CACHE_FILE = "_plot_cache.pkl"
 
