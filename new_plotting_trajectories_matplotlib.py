@@ -1302,7 +1302,9 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                     for j, t in enumerate(trajs):
                         arr[j, :len(t)] = t
 
-                    steps = np.arange(max_len) * step_mes
+                    _stps_match = re.search(r'(\d+)_stps', file or "")
+                    effective_step_mes = (float(_stps_match.group(1)) / (max_len - 1)) if (_stps_match and max_len > 1) else step_mes
+                    steps = np.arange(max_len) * effective_step_mes
 
                     if central_tendency == "Average":
                         center = np.nanmean(arr, axis=0)
