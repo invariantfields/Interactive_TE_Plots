@@ -11,7 +11,6 @@ from itertools import combinations
 # Fast Vectorized Batch Quantum TE Evaluation
 # -------------------------------------------------------------------
 def is_appt_batch(x_batch):
-    # x_batch shape: (N, D, D)
     N, D, _ = x_batch.shape
     purities = np.sum(x_batch.real**2 + x_batch.imag**2, axis=(1, 2))
     bound = 1.0 / (D - 1.0)
@@ -26,7 +25,7 @@ def is_appt_batch(x_batch):
     return is_te_mask
 
 def is_TE_dataset(states, dim=2):
-    states = np.asarray(states)  # (N, 128)
+    states = np.asarray(states)
     N, L = states.shape
     n = int(np.log2(L))
     k = n - n // 2
@@ -52,25 +51,38 @@ def is_TE_dataset(states, dim=2):
         
     return te_flags
 
-def parse_gap(file_path):
-    filename = os.path.basename(file_path)
-    match = re.search(r'_stps_(\d+)\.pkl$', filename)
-    if not match:
-        match = re.search(r'gap_(\d+)', filename, re.IGNORECASE)
-    if match:
-        return int(match.group(1))
-    return 0
+def parse_filename_info(filepath):
+    filename = os.path.basename(filepath)
+    m = re.search(r'(\d+)_qbt_(\d+)_sds_.*?_(\d+)_stps_(\d+)\.pkl$', filename)
+    if m:
+        qbt, sds, stps, gap = m.groups()
+        return {
+            'qbt': int(qbt),
+            'sds': int(sds),
+            'stps': int(stps),
+            'gap': int(gap),
+            'label': f"{qbt}q_{sds}sds (q={gap})",
+            'short_label': f"q={gap}",
+            'tag': f"{qbt}q_{sds}sds"
+        }
+    
+    # Fallback pattern
+    m_gap = re.search(r'(\d+)\.pkl$', filename)
+    gap_val = int(m_gap.group(1)) if m_gap else 0
+    return {
+        'qbt': 7,
+        'sds': 2000,
+        'stps': 2500,
+        'gap': gap_val,
+        'label': f"7q_2000sds (q={gap_val})",
+        'short_label': f"q={gap_val}",
+        'tag': "7q_2000sds"
+    }
 
 def get_dynamic_step_mes(file_path, traj_len):
-    """
-    Dynamically find steps for measurement from the file name (_stps_)
-    and number of entries in the trajectory array.
-    """
-    filename = os.path.basename(file_path)
-    match = re.search(r'(\d+)_stps', filename)
-    if match and traj_len > 1:
-        total_steps = float(match.group(1))
-        return total_steps / (traj_len - 1)
+    info = parse_filename_info(file_path)
+    if info.get('stps') and traj_len > 1:
+        return float(info['stps']) / (traj_len - 1)
     return 50.0
 
 def load_dataset_files(data_dir="zip7"):
@@ -79,9 +91,8 @@ def load_dataset_files(data_dir="zip7"):
     for f in files:
         with open(f, "rb") as fp:
             data = pickle.load(fp)
-        gap_val = parse_gap(f)
-        label = f"k = {gap_val}"
-        loaded.append((data, label, f))
+        info = parse_filename_info(f)
+        loaded.append((data, info, f))
     return loaded
 
 # -------------------------------------------------------------------
@@ -99,11 +110,13 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
     n_plots = len(selected_metrics)
     fig, axes = plt.subplots(1, n_plots, figsize=(4.5 * n_plots, 4.5), squeeze=False, facecolor="white")
 
+    tag_str = loaded_data[0][1]['tag'] if loaded_data else "7q_2000sds"
+
     for col_idx, metric in enumerate(selected_metrics):
         ax = axes[0, col_idx]
         ax.set_title(metric_map[metric], fontsize=13, fontweight="bold")
 
-        for data_idx, (data, label, file_path) in enumerate(loaded_data):
+        for data_idx, (data, info, file_path) in enumerate(loaded_data):
             final_states = data["final_states"]
             te_mask = is_TE_dataset(final_states)
 
@@ -132,14 +145,14 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
 
             steps = np.arange(max_len) * step_mes
 
-            # Average aggregation
             center = np.nanmean(arr, axis=0)
             std = np.nanstd(arr, axis=0)
             lower_bound = center - std
             upper_bound = center + std
 
             color = colors[data_idx % len(colors)]
-            ax.plot(steps, center, label=f"{label} (n={len(indices)})", color=color, linewidth=2.0)
+            label_text = f"{info['label']} (n={len(indices)})"
+            ax.plot(steps, center, label=label_text, color=color, linewidth=2.0)
             ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
         ax.set_xlabel(r"$\text{Optimization Steps}$", fontsize=11)
@@ -149,7 +162,7 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
         ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
         ax.legend(frameon=True, fontsize=9, loc="best")
 
-    plt.suptitle(f"Trajectories ({filter_mode} — Average Aggregation)", fontsize=14, y=1.02)
+    plt.suptitle(f"{tag_str} Trajectories ({filter_mode} — Average Aggregation)", fontsize=14, y=1.02)
     fig.tight_layout()
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
@@ -163,6 +176,8 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     ax1.set_facecolor("white")
     ax2.set_facecolor("white")
 
+    tag_str = loaded_data[0][1]['tag'] if loaded_data else "7q_2000sds"
+
     x_labels = []
     init_centers, init_errs, init_counts = [], [], []
     te_centers, te_errs, te_counts = [], [], []
@@ -171,9 +186,9 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
 
     global_init, global_te, global_non_te = [], [], []
 
-    for data, label, file_path in loaded_data:
+    for data, info, file_path in loaded_data:
         te_mask = is_TE_dataset(data["final_states"])
-        derived_init_sre = parse_gap(file_path)
+        derived_init_sre = info['gap']
 
         init_vals = []
         te_vals = []
@@ -188,8 +203,7 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
             else:
                 non_te_vals.append(final_sre)
 
-        val_k = label.split("=")[-1].strip()
-        x_labels.append(f"$q={val_k}$")
+        x_labels.append(f"$q={info['gap']}$")
 
         global_init.extend(init_vals)
         global_te.extend(te_vals)
@@ -257,7 +271,7 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     ax1.bar_label(b_non_te, labels=[f"n={n}" for n in non_counts], fontsize=7, padding=0, color="black")
 
     ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
-    ax1.set_title(r"$\text{TE vs non-TE SRE and State Proportions}$", fontsize=13)
+    ax1.set_title(f"{tag_str} TE vs non-TE SRE and State Proportions", fontsize=13, fontweight="bold")
     ax1.spines["top"].set_visible(True)
     ax1.spines["right"].set_visible(True)
     ax1.tick_params(direction="in", top=True, right=True, which="both")
@@ -294,19 +308,23 @@ def main():
         print("No .pkl files found in zip7/!")
         return
 
-    print(f"Loaded {len(loaded_data)} data files from zip7/.")
+    tag_str = loaded_data[0][1]['tag']
+    print(f"Loaded {len(loaded_data)} data files for dataset tag '{tag_str}' from zip7/.")
 
     # Config 1: Line chart, all metrics, TE states, Average
-    print("\n--- Generating Config 1: Linechart (TE States, Average, Dynamic Step Size) ---")
-    plot_linechart_config(loaded_data, filter_mode="TE States", output_path="matplotlib_config1_te_linechart.png")
+    fn1 = f"matplotlib_{tag_str}_config1_te_linechart.png"
+    print(f"\n--- Generating Config 1: Linechart ({tag_str}, TE States) ---")
+    plot_linechart_config(loaded_data, filter_mode="TE States", output_path=fn1)
 
     # Config 2: Line chart, all metrics, Non-TE states, Average
-    print("\n--- Generating Config 2: Linechart (Non-TE States, Average, Dynamic Step Size) ---")
-    plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path="matplotlib_config2_non_te_linechart.png")
+    fn2 = f"matplotlib_{tag_str}_config2_non_te_linechart.png"
+    print(f"\n--- Generating Config 2: Linechart ({tag_str}, Non-TE States) ---")
+    plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
 
     # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0)
-    print("\n--- Generating Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0) ---")
-    plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te_vs_non_te_sre.png")
+    fn3 = f"matplotlib_{tag_str}_config3_te_vs_non_te_sre.png"
+    print(f"\n--- Generating Config 3: TE vs non-TE SRE ({tag_str}) ---")
+    plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)
 
 if __name__ == "__main__":
     main()
