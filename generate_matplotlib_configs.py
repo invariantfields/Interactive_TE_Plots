@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from itertools import combinations
 
+OUTPUT_DIR = "plots"
+
 # -------------------------------------------------------------------
 # Fast Vectorized Batch Quantum TE Evaluation
 # -------------------------------------------------------------------
@@ -63,8 +65,7 @@ def parse_filename_info(filepath):
             'stps': int(stps),
             'gap': int(gap),
             'label': f"$q={gap}$",
-            'run_tag': f"{qbt}q_{sds}sds_{stps}stps",
-            'display_tag': f"{qbt}q ({sds} seeds, {stps} steps)"
+            'clean_prefix': f"{qbt}q_{sds}_{stps}stps"
         }
     
     m_gap = re.search(r'(\d+)\.pkl$', filename)
@@ -75,8 +76,7 @@ def parse_filename_info(filepath):
         'stps': 2500,
         'gap': gap_val,
         'label': f"$q={gap_val}$",
-        'run_tag': "7q_2000sds_2500stps",
-        'display_tag': "7q (2000 seeds, 2500 steps)"
+        'clean_prefix': "7q_2000_2500stps"
     }
 
 def parse_gap_sort_key(filepath):
@@ -96,13 +96,13 @@ def load_dataset_runs(data_dir="zip7"):
         with open(f, "rb") as fp:
             data = pickle.load(fp)
         info = parse_filename_info(f)
-        run_groups[info['run_tag']].append((data, info, f))
+        run_groups[info['clean_prefix']].append((data, info, f))
     return run_groups
 
 # -------------------------------------------------------------------
-# Config 1 & Config 2: Line Chart matching new_plotting_trajectories_reflected_histograms.py
+# Config 1 & Config 2: Line Chart
 # -------------------------------------------------------------------
-def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="matplotlib_linechart.png"):
+def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="te_linechart.png"):
     selected_metrics = ["sre", "average_purity", "max_purity"]
     metric_map = {
         "sre": "SRE",
@@ -147,7 +147,6 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
 
             steps = np.arange(max_len) * step_mes
 
-            # Average aggregation
             center = np.nanmean(arr, axis=0)
             std = np.nanstd(arr, axis=0)
             lower_bound = center - std
@@ -170,9 +169,9 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
     print(f"Saved: {output_path}")
 
 # -------------------------------------------------------------------
-# Config 3: TE vs non-TE SRE matching new_plotting_trajectories_reflected_histograms.py (hspace=0, Single Legend)
+# Config 3: TE vs non-TE SRE
 # -------------------------------------------------------------------
-def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te_vs_non_te_sre.png"):
+def plot_te_vs_non_te_sre_config(loaded_data, output_path="te_vs_non_te_sre.png"):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor="white", gridspec_kw={"hspace": 0})
     ax1.set_facecolor("white")
     ax2.set_facecolor("white")
@@ -231,23 +230,22 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
         te_counts.append(len(global_te))
 
         non_te_centers.append(np.mean(global_non_te) if global_non_te else 0.0)
-        non_te_errs.append(np.std(global_non_te) if len(global_non_te) > 1 else 0.0)
+        non_te_errs.append(np.std(global_non_te) if len(global_non_te) > 0 else 0.0)
         non_counts.append(len(global_non_te))
 
     x = np.arange(len(x_labels))
     width = 0.25
     ekw = dict(elinewidth=0.8, capthick=0.8)
 
-    # Subplot 1 (Top): SRE Values with Single Unified Legend
+    # Subplot 1 (Top): SRE Values
     ax1.bar(x - width, init_centers, width, yerr=init_errs, capsize=3, label=r"$\text{Initial SRE}$", color="mediumseagreen", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3, label=r"$\text{Final TE SRE}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3, label=r"$\text{Final non-TE SRE}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
     ax1.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-    # Single Legend on Top Subplot
     ax1.legend(frameon=True, fontsize=9, loc="upper right")
 
-    # Subplot 2 (Bottom): Upright Proportions (No duplicate legend)
+    # Subplot 2 (Bottom): Upright Proportions
     te_props_list = []
     non_te_props_list = []
     for tc, nc in zip(te_counts, non_counts):
@@ -279,6 +277,9 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
 def main():
     import sys
     target_dir = sys.argv[1] if len(sys.argv) > 1 else "zip7"
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
     print(f"Loading dataset files from {target_dir}...")
     run_groups = load_dataset_runs(target_dir)
     if not run_groups:
@@ -286,28 +287,21 @@ def main():
         return
 
     print(f"Found {len(run_groups)} distinct run(s) in {target_dir}/:")
-    for run_tag, items in run_groups.items():
-        print(f"  - Run Signature '{run_tag}': {len(items)} files")
 
-    for run_tag, loaded_data in run_groups.items():
-        display_tag = loaded_data[0][1]['display_tag']
-        print(f"\n=======================================================")
-        print(f"Processing Run: {run_tag} ({display_tag})")
-        print(f"=======================================================")
+    for prefix, loaded_data in run_groups.items():
+        print(f"\nProcessing Run: {prefix} ({len(loaded_data)} files)")
 
-        # Config 1: Line chart, all metrics, TE states, Average
-        fn1 = f"matplotlib_{run_tag}_config1_te_linechart.png"
-        print(f"--- Generating Config 1: Linechart ({run_tag}, TE States) ---")
+        fn1 = os.path.join(OUTPUT_DIR, f"{prefix}_te_linechart.png")
+        fn2 = os.path.join(OUTPUT_DIR, f"{prefix}_non_te_linechart.png")
+        fn3 = os.path.join(OUTPUT_DIR, f"{prefix}_te_vs_non_te_sre.png")
+
+        print(f"--- Generating Config 1: Linechart ({prefix}, TE States) ---")
         plot_linechart_config(loaded_data, filter_mode="TE States", output_path=fn1)
 
-        # Config 2: Line chart, all metrics, Non-TE states, Average
-        fn2 = f"matplotlib_{run_tag}_config2_non_te_linechart.png"
-        print(f"--- Generating Config 2: Linechart ({run_tag}, Non-TE States) ---")
+        print(f"--- Generating Config 2: Linechart ({prefix}, Non-TE States) ---")
         plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
 
-        # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0, Single Legend)
-        fn3 = f"matplotlib_{run_tag}_config3_te_vs_non_te_sre.png"
-        print(f"--- Generating Config 3: TE vs non-TE SRE ({run_tag}) ---")
+        print(f"--- Generating Config 3: TE vs non-TE SRE ({prefix}) ---")
         plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)
 
 if __name__ == "__main__":
