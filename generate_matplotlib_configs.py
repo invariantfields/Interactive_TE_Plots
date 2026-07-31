@@ -103,11 +103,11 @@ def load_dataset_runs(data_dir="zip7"):
 # Config 1 & Config 2: Line Chart
 # -------------------------------------------------------------------
 def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="TE.png"):
-    selected_metrics = ["sre", "average_purity", "max_purity"]
+    selected_metrics = ["average_purity", "max_purity", "sre"]
     metric_map = {
-        "sre": "SRE",
         "average_purity": "Average Purity",
-        "max_purity": "Max Purity"
+        "max_purity": "Max Purity",
+        "sre": "SRE"
     }
     colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
