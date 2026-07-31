@@ -1622,7 +1622,7 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-    return
+    return (matplotlib_plot,)
 
 
 if __name__ == "__main__":

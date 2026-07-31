@@ -1703,7 +1703,7 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-    return
+    return (matplotlib_plot,)
 
 
 @app.cell
