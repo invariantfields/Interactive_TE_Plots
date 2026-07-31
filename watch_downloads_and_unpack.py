@@ -123,7 +123,15 @@ def check_and_process():
         print(f"[{get_timestamp()}] Unpacking {filename} into {TARGET_DEST_DIR}...")
         unpacked_ok = unpack_pkl_file(dest_path, TARGET_DEST_DIR)
 
-        # 3. Push to git
+        # 3. Automatically regenerate Matplotlib plot figures for newly unpacked data
+        print(f"[{get_timestamp()}] Regenerating plot figures in plots/...")
+        try:
+            subprocess.run([sys.executable, "generate_matplotlib_configs.py", TARGET_DEST_DIR], check=True)
+            print(f"[{get_timestamp()}] Plot figures updated successfully.")
+        except Exception as e:
+            print(f"[{get_timestamp()}] Error generating plot figures: {e}")
+
+        # 4. Push all changes (data + plots) to git
         push_to_git(filename)
 
         # Mark as processed
