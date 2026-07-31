@@ -61,12 +61,10 @@ def parse_filename_info(filepath):
             'sds': int(sds),
             'stps': int(stps),
             'gap': int(gap),
-            'label': f"{qbt}q_{sds}sds (q={gap})",
-            'short_label': f"q={gap}",
+            'label': f"$q={gap}$",
             'tag': f"{qbt}q_{sds}sds"
         }
     
-    # Fallback pattern
     m_gap = re.search(r'(\d+)\.pkl$', filename)
     gap_val = int(m_gap.group(1)) if m_gap else 0
     return {
@@ -74,8 +72,7 @@ def parse_filename_info(filepath):
         'sds': 2000,
         'stps': 2500,
         'gap': gap_val,
-        'label': f"7q_2000sds (q={gap_val})",
-        'short_label': f"q={gap_val}",
+        'label': f"$q={gap_val}$",
         'tag': "7q_2000sds"
     }
 
@@ -96,25 +93,23 @@ def load_dataset_files(data_dir="zip7"):
     return loaded
 
 # -------------------------------------------------------------------
-# Config 1 & Config 2: Line Chart for TE / non-TE States (All Metrics)
+# Config 1 & Config 2: Line Chart matching new_plotting_trajectories_reflected_histograms.py
 # -------------------------------------------------------------------
 def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="matplotlib_linechart.png"):
     selected_metrics = ["sre", "average_purity", "max_purity"]
     metric_map = {
-        "sre": r"$\text{SRE } (S_2)$",
-        "average_purity": r"$\text{Average Purity}$",
-        "max_purity": r"$\text{Max Purity}$"
+        "sre": "SRE",
+        "average_purity": "Average Purity",
+        "max_purity": "Max Purity"
     }
-    colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9"]
+    colors = ["#0052CC", "#FF2A54", "#00875A", "#FFAB00", "#6554C0", "#00B8D9", "#FF5630", "#36B37E"]
 
     n_plots = len(selected_metrics)
-    fig, axes = plt.subplots(1, n_plots, figsize=(4.5 * n_plots, 4.5), squeeze=False, facecolor="white")
-
-    tag_str = loaded_data[0][1]['tag'] if loaded_data else "7q_2000sds"
+    fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False, facecolor="white")
 
     for col_idx, metric in enumerate(selected_metrics):
         ax = axes[0, col_idx]
-        ax.set_title(metric_map[metric], fontsize=13, fontweight="bold")
+        ax.set_title(metric_map[metric], fontsize=13)
 
         for data_idx, (data, info, file_path) in enumerate(loaded_data):
             final_states = data["final_states"]
@@ -145,14 +140,14 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
 
             steps = np.arange(max_len) * step_mes
 
+            # Average aggregation
             center = np.nanmean(arr, axis=0)
             std = np.nanstd(arr, axis=0)
             lower_bound = center - std
             upper_bound = center + std
 
             color = colors[data_idx % len(colors)]
-            label_text = f"{info['label']} (n={len(indices)})"
-            ax.plot(steps, center, label=label_text, color=color, linewidth=2.0)
+            ax.plot(steps, center, label=info['label'], color=color, linewidth=2.0)
             ax.fill_between(steps, lower_bound, upper_bound, color=color, alpha=0.2, edgecolor="none")
 
         ax.set_xlabel(r"$\text{Optimization Steps}$", fontsize=11)
@@ -162,27 +157,23 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
         ax.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0")
         ax.legend(frameon=True, fontsize=9, loc="best")
 
-    plt.suptitle(f"{tag_str} Trajectories ({filter_mode} — Average Aggregation)", fontsize=14, y=1.02)
     fig.tight_layout()
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {output_path}")
 
 # -------------------------------------------------------------------
-# Config 3: TE vs non-TE SRE (2 Subplots Upright Stack with hspace=0)
+# Config 3: TE vs non-TE SRE matching new_plotting_trajectories_reflected_histograms.py (hspace=0)
 # -------------------------------------------------------------------
 def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te_vs_non_te_sre.png"):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor="white", gridspec_kw={"hspace": 0})
     ax1.set_facecolor("white")
     ax2.set_facecolor("white")
 
-    tag_str = loaded_data[0][1]['tag'] if loaded_data else "7q_2000sds"
-
     x_labels = []
     init_centers, init_errs, init_counts = [], [], []
     te_centers, te_errs, te_counts = [], [], []
     non_te_centers, non_te_errs, non_counts = [], [], []
-    te_props_list, non_te_props_list = [], []
 
     global_init, global_te, global_non_te = [], [], []
 
@@ -221,16 +212,6 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
         non_te_errs.append(np.std(non_te_vals) if len(non_te_vals) > 1 else 0.0)
         non_counts.append(len(non_te_vals))
 
-        tc = len(te_vals)
-        nc = len(non_te_vals)
-        tot = tc + nc
-        if tot > 0:
-            te_props_list.append(tc / tot)
-            non_te_props_list.append(nc / tot)
-        else:
-            te_props_list.append(0.0)
-            non_te_props_list.append(0.0)
-
     # All Combined
     if global_init:
         x_labels.append(r"$\mathrm{All\ Combined}$")
@@ -246,42 +227,32 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
         non_te_errs.append(np.std(global_non_te) if len(global_non_te) > 1 else 0.0)
         non_counts.append(len(global_non_te))
 
-        tot = len(global_te) + len(global_non_te)
-        if tot > 0:
-            te_props_list.append(len(global_te) / tot)
-            non_te_props_list.append(len(global_non_te) / tot)
-        else:
-            te_props_list.append(0.0)
-            non_te_props_list.append(0.0)
-
     x = np.arange(len(x_labels))
     width = 0.25
     ekw = dict(elinewidth=0.8, capthick=0.8)
 
-    # Top Subplot: SRE
-    b_init = ax1.bar(x - width, init_centers, width, yerr=init_errs, capsize=3,
-                     label=r"$\text{Initial States}$", color="mediumseagreen", edgecolor="black", linewidth=0.5, error_kw=ekw)
-    b_te = ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3,
-                   label=r"$\text{Final TE States}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
-    b_non_te = ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3,
-                       label=r"$\text{Final non-TE States}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
-
-    ax1.bar_label(b_init, labels=[f"n={n}" for n in init_counts], fontsize=7, padding=3, color="black")
-    ax1.bar_label(b_te, labels=[f"n={n}" for n in te_counts], fontsize=7, padding=5, color="black")
-    ax1.bar_label(b_non_te, labels=[f"n={n}" for n in non_counts], fontsize=7, padding=0, color="black")
-
+    # Subplot 1 (Top): SRE Values
+    ax1.bar(x - width, init_centers, width, yerr=init_errs, capsize=3, label=r"$\text{Initial SRE}$", color="mediumseagreen", edgecolor="black", linewidth=0.5, error_kw=ekw)
+    ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3, label=r"$\text{Final TE SRE}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
+    ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3, label=r"$\text{Final non-TE SRE}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
-    ax1.set_title(f"{tag_str} TE vs non-TE SRE and State Proportions", fontsize=13, fontweight="bold")
-    ax1.spines["top"].set_visible(True)
-    ax1.spines["right"].set_visible(True)
-    ax1.tick_params(direction="in", top=True, right=True, which="both")
     ax1.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
     ax1.legend(frameon=True, fontsize=9, loc="upper right")
 
-    # Bottom Subplot: Proportions
-    width_prop = 0.35
-    ax2.bar(x - width_prop/2, te_props_list, width_prop, label=r"$\text{TE States}$", color="royalblue", edgecolor="black", linewidth=0.5, alpha=0.9)
-    ax2.bar(x + width_prop/2, non_te_props_list, width_prop, label=r"$\text{non-TE States}$", color="crimson", edgecolor="black", linewidth=0.5, alpha=0.9)
+    # Subplot 2 (Bottom): Upright Proportions
+    te_props_list = []
+    non_te_props_list = []
+    for tc, nc in zip(te_counts, non_counts):
+        tot = tc + nc
+        if tot > 0:
+            te_props_list.append(tc / tot)
+            non_te_props_list.append(nc / tot)
+        else:
+            te_props_list.append(0.0)
+            non_te_props_list.append(0.0)
+
+    ax2.bar(x - width/2, te_props_list, width, label=r"$\text{TE States}$", color="royalblue", edgecolor="black", linewidth=0.5, alpha=0.9)
+    ax2.bar(x + width/2, non_te_props_list, width, label=r"$\text{non-TE States}$", color="crimson", edgecolor="black", linewidth=0.5, alpha=0.9)
 
     ax2.set_xticks(x)
     ax2.set_xticklabels(x_labels, fontsize=9.5)
@@ -290,9 +261,6 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     ax2.set_ylim(0, 1.05)
     ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
     ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
-    ax2.spines["top"].set_visible(True)
-    ax2.spines["right"].set_visible(True)
-    ax2.tick_params(direction="in", top=True, right=True, which="both")
     ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
     ax2.legend(frameon=True, fontsize=9, loc="upper right")
 
