@@ -76,6 +76,10 @@ def parse_filename_info(filepath):
         'tag': "7q_2000sds"
     }
 
+def parse_gap_sort_key(filepath):
+    info = parse_filename_info(filepath)
+    return info['gap']
+
 def get_dynamic_step_mes(file_path, traj_len):
     info = parse_filename_info(file_path)
     if info.get('stps') and traj_len > 1:
@@ -83,7 +87,7 @@ def get_dynamic_step_mes(file_path, traj_len):
     return 50.0
 
 def load_dataset_files(data_dir="zip7"):
-    files = sorted(glob.glob(os.path.join(data_dir, "*.pkl")))
+    files = sorted(glob.glob(os.path.join(data_dir, "*.pkl")), key=parse_gap_sort_key)
     loaded = []
     for f in files:
         with open(f, "rb") as fp:
@@ -107,6 +111,7 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
     n_plots = len(selected_metrics)
     fig, axes = plt.subplots(1, n_plots, figsize=(4 * n_plots, 4.5), sharex=True, squeeze=False, facecolor="white")
 
+    # Preserve exact loaded_data order for line plots
     for col_idx, metric in enumerate(selected_metrics):
         ax = axes[0, col_idx]
         ax.set_title(metric_map[metric], fontsize=13)
@@ -163,7 +168,7 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="mat
     print(f"Saved: {output_path}")
 
 # -------------------------------------------------------------------
-# Config 3: TE vs non-TE SRE matching new_plotting_trajectories_reflected_histograms.py (hspace=0)
+# Config 3: TE vs non-TE SRE matching new_plotting_trajectories_reflected_histograms.py (hspace=0, Single Legend)
 # -------------------------------------------------------------------
 def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te_vs_non_te_sre.png"):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor="white", gridspec_kw={"hspace": 0})
@@ -231,15 +236,16 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     width = 0.25
     ekw = dict(elinewidth=0.8, capthick=0.8)
 
-    # Subplot 1 (Top): SRE Values
+    # Subplot 1 (Top): SRE Values with Single Unified Legend
     ax1.bar(x - width, init_centers, width, yerr=init_errs, capsize=3, label=r"$\text{Initial SRE}$", color="mediumseagreen", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.bar(x, te_centers, width, yerr=te_errs, capsize=3, label=r"$\text{Final TE SRE}$", color="royalblue", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.bar(x + width, non_te_centers, width, yerr=non_te_errs, capsize=3, label=r"$\text{Final non-TE SRE}$", color="crimson", edgecolor="black", linewidth=0.5, error_kw=ekw)
     ax1.set_ylabel(r"$\text{SRE } (S_2)$", fontsize=11)
     ax1.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+    # Single Legend on Top Subplot
     ax1.legend(frameon=True, fontsize=9, loc="upper right")
 
-    # Subplot 2 (Bottom): Upright Proportions
+    # Subplot 2 (Bottom): Upright Proportions (No duplicate legend)
     te_props_list = []
     non_te_props_list = []
     for tc, nc in zip(te_counts, non_counts):
@@ -262,7 +268,7 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
     ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
     ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-    ax2.legend(frameon=True, fontsize=9, loc="upper right")
+    # Duplicate legend removed from bottom subplot per user instruction!
 
     fig.subplots_adjust(hspace=0)
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
@@ -289,7 +295,7 @@ def main():
     print(f"\n--- Generating Config 2: Linechart ({tag_str}, Non-TE States) ---")
     plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
 
-    # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0)
+    # Config 3: TE vs non-TE SRE (2 Stacked Subplots hspace=0, Single Legend)
     fn3 = f"matplotlib_{tag_str}_config3_te_vs_non_te_sre.png"
     print(f"\n--- Generating Config 3: TE vs non-TE SRE ({tag_str}) ---")
     plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)

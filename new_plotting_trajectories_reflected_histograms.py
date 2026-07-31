@@ -1536,7 +1536,6 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
             ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
             ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
-            ax2.legend(frameon=True, fontsize=9, loc="upper right")
 
             fig.tight_layout()
             fig.subplots_adjust(hspace=0)
