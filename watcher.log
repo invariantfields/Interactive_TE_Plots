@@ -1,0 +1,12 @@
+[2026-07-31 21:04:10] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-07-31 21:04:10] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-07-31 21:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-07-31 21:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
