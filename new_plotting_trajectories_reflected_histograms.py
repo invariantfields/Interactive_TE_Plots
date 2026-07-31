@@ -166,20 +166,7 @@ def hex_to_rgba(hex_color, alpha=0.2):
 
 
 @app.cell
-def _(
-    finalize,
-    go,
-    is_TE,
-    jl,
-    make_subplots,
-    np,
-    opt_len,
-    os,
-    pc,
-    pickle,
-    plot_cache,
-    re,
-):
+def _(go, is_TE, jl, make_subplots, np, os, pc, pickle, plot_cache, re):
     def compute_sre_exact(psi_np, alpha=2):
         """Compute exact SRE using HadaMAG.jl via JuliaCall."""
         if jl is None:
@@ -582,7 +569,9 @@ def _(
                 ),
             )
             fig.update_xaxes(title_text="Optimization Steps")
-            return finalize        # ------------------------------------------------------------
+            return finalize_arxiv_style(fig)
+
+        # ------------------------------------------------------------
         # TE vs non-TE SRE & PROPORTIONS (2 STACKED SUBPLOTS)
         # ------------------------------------------------------------
         if plot_type == "TE vs non-TE SRE":
@@ -899,6 +888,10 @@ def _(
 
 
 
+
+
+
+
     return compute_sre_exact, parse_gap_sre, plot_te_filtered_trajectories
 
 
@@ -930,8 +923,8 @@ def _(GithubFileSystem, data_source, mo, os, refresh_button):
     available_folders = []
 
     if data_source.value == "Local":
-        candidate_dirs = ["zip4", "zip7"]
-        available_folders = [
+        candidate_dirs = ["zip4", "zip7", "correct_data", "data_zip_7"]
+        available_folders =  [
             d
             for d in candidate_dirs
             if os.path.exists(d)
@@ -1281,7 +1274,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
                                 if abs(t_copy[0]) <= 1e-5 and derived_init_sre != 0.0:
                                     t_copy[0] = derived_init_sre
                                 if abs(t_copy[-1]) <= 1e-5 and abs(derived_init_sre) > 1e-5:
-                                    t_copy[-1] = computed_final
+                                    t_copy[-1] = final_sre
                                 trajs.append(t_copy)
                             else:
                                 trajs.append(list(np.linspace(init_sre, final_sre, opt_len)))
@@ -1667,6 +1660,8 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
 
 
 
+
+
     return (plot_te_filtered_trajectories_matplotlib,)
 
 
@@ -1715,6 +1710,11 @@ def _(
 @app.cell
 def _(unpack_pkl_file):
     unpack_pkl_file("file12.pkl", "zip4")
+    return
+
+
+@app.cell
+def _():
     return
 
 
