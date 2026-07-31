@@ -10,3 +10,7 @@
   - Interval: 30 minutes
   - Mode: Single Run (--once)
 [2026-07-31 21:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+Traceback (most recent call last):
+  File "/home/naga/Interactive_TE_Plots/generate_matplotlib_configs.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
