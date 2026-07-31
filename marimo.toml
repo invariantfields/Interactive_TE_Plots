@@ -1,0 +1,3 @@
+[runtime]
+output_max_bytes = 100000000
+auto_instantiate = true
