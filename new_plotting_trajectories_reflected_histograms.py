@@ -1713,10 +1713,5 @@ def _(unpack_pkl_file):
     return
 
 
-@app.cell
-def _():
-    return
-
-
 if __name__ == "__main__":
     app.run()

@@ -1682,10 +1682,5 @@ def _(parse_gap_sre):
     return
 
 
-@app.cell
-def _():
-    return
-
-
 if __name__ == "__main__":
     app.run()

@@ -79,6 +79,17 @@ def push_to_git(filename):
     except Exception as e:
         print(f"[{get_timestamp()}] Error pushing to git: {e}")
 
+def is_file_ready(file_path):
+    if os.path.exists(file_path + ".crdownload") or os.path.exists(file_path + ".tmp"):
+        return False
+    try:
+        size1 = os.path.getsize(file_path)
+        time.sleep(1.5)
+        size2 = os.path.getsize(file_path)
+        return size1 == size2 and size1 > 0
+    except Exception:
+        return False
+
 def check_and_process():
     processed = load_processed_files()
     pkl_files = sorted(glob.glob(os.path.join(DOWNLOADS_DIR, "*.pkl")))
@@ -90,6 +101,10 @@ def check_and_process():
         filename = os.path.basename(src_path)
         # Use filename as unique identifier
         if filename in processed:
+            continue
+
+        if not is_file_ready(src_path):
+            print(f"[{get_timestamp()}] Skipping {filename} (file download currently in progress)...")
             continue
 
         print(f"\n[{get_timestamp()}] Found new pkl file: {filename}")
