@@ -276,14 +276,16 @@ def plot_te_vs_non_te_sre_config(loaded_data, output_path="matplotlib_config3_te
     print(f"Saved: {output_path}")
 
 def main():
-    print("Loading dataset files from zip7...")
-    loaded_data = load_dataset_files("zip7")
+    import sys
+    target_dir = sys.argv[1] if len(sys.argv) > 1 else "zip7"
+    print(f"Loading dataset files from {target_dir}...")
+    loaded_data = load_dataset_files(target_dir)
     if not loaded_data:
-        print("No .pkl files found in zip7/!")
+        print(f"No .pkl files found in {target_dir}/!")
         return
 
     tag_str = loaded_data[0][1]['tag']
-    print(f"Loaded {len(loaded_data)} data files for dataset tag '{tag_str}' from zip7/.")
+    print(f"Loaded {len(loaded_data)} data files for dataset tag '{tag_str}' from {target_dir}/.")
 
     # Config 1: Line chart, all metrics, TE states, Average
     fn1 = f"matplotlib_{tag_str}_config1_te_linechart.png"
