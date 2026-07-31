@@ -65,7 +65,7 @@ def parse_filename_info(filepath):
             'stps': int(stps),
             'gap': int(gap),
             'label': f"$q={gap}$",
-            'clean_prefix': f"{qbt}q_{sds}_{stps}stps"
+            'short_tag': f"{qbt}q_{sds}"
         }
     
     m_gap = re.search(r'(\d+)\.pkl$', filename)
@@ -76,7 +76,7 @@ def parse_filename_info(filepath):
         'stps': 2500,
         'gap': gap_val,
         'label': f"$q={gap_val}$",
-        'clean_prefix': "7q_2000_2500stps"
+        'short_tag': "7q_2000"
     }
 
 def parse_gap_sort_key(filepath):
@@ -96,13 +96,13 @@ def load_dataset_runs(data_dir="zip7"):
         with open(f, "rb") as fp:
             data = pickle.load(fp)
         info = parse_filename_info(f)
-        run_groups[info['clean_prefix']].append((data, info, f))
+        run_groups[info['short_tag']].append((data, info, f))
     return run_groups
 
 # -------------------------------------------------------------------
 # Config 1 & Config 2: Line Chart
 # -------------------------------------------------------------------
-def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="te_linechart.png"):
+def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="TE.png"):
     selected_metrics = ["sre", "average_purity", "max_purity"]
     metric_map = {
         "sre": "SRE",
@@ -169,9 +169,9 @@ def plot_linechart_config(loaded_data, filter_mode="TE States", output_path="te_
     print(f"Saved: {output_path}")
 
 # -------------------------------------------------------------------
-# Config 3: TE vs non-TE SRE
+# Config 3: TE vs non-TE SRE (Hist)
 # -------------------------------------------------------------------
-def plot_te_vs_non_te_sre_config(loaded_data, output_path="te_vs_non_te_sre.png"):
+def plot_te_vs_non_te_sre_config(loaded_data, output_path="Hist.png"):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(9.0, 7.5), sharex=True, facecolor="white", gridspec_kw={"hspace": 0})
     ax1.set_facecolor("white")
     ax2.set_facecolor("white")
@@ -291,17 +291,17 @@ def main():
     for prefix, loaded_data in run_groups.items():
         print(f"\nProcessing Run: {prefix} ({len(loaded_data)} files)")
 
-        fn1 = os.path.join(OUTPUT_DIR, f"{prefix}_te_linechart.png")
-        fn2 = os.path.join(OUTPUT_DIR, f"{prefix}_non_te_linechart.png")
-        fn3 = os.path.join(OUTPUT_DIR, f"{prefix}_te_vs_non_te_sre.png")
+        fn1 = os.path.join(OUTPUT_DIR, f"{prefix}_TE.png")
+        fn2 = os.path.join(OUTPUT_DIR, f"{prefix}_NTE.png")
+        fn3 = os.path.join(OUTPUT_DIR, f"{prefix}_Hist.png")
 
-        print(f"--- Generating Config 1: Linechart ({prefix}, TE States) ---")
+        print(f"--- Generating Config 1: Linechart ({fn1}) ---")
         plot_linechart_config(loaded_data, filter_mode="TE States", output_path=fn1)
 
-        print(f"--- Generating Config 2: Linechart ({prefix}, Non-TE States) ---")
+        print(f"--- Generating Config 2: Linechart ({fn2}) ---")
         plot_linechart_config(loaded_data, filter_mode="Non-TE States", output_path=fn2)
 
-        print(f"--- Generating Config 3: TE vs non-TE SRE ({prefix}) ---")
+        print(f"--- Generating Config 3: Hist ({fn3}) ---")
         plot_te_vs_non_te_sre_config(loaded_data, output_path=fn3)
 
 if __name__ == "__main__":
