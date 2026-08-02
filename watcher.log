@@ -474,3 +474,31 @@ Traceback (most recent call last):
   File "/home/naga/Interactive_TE_Plots/generate_matplotlib_configs.py", line 6, in <module>
     import numpy as np
 ModuleNotFoundError: No module named 'numpy'
+To github.com:invariantfields/Interactive_TE_Plots.git
+   b81a627..ada5cac  master -> master
+[2026-08-02 11:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+
+[2026-08-02 11:00:02] Found new pkl file: file1(10).pkl
+[2026-08-02 11:00:02] Copying /mnt/c/Users/Naga/Downloads/file1(10).pkl -> /home/naga/Interactive_TE_Plots/file1(10).pkl...
+[2026-08-02 11:00:03] Copy complete.
+[2026-08-02 11:00:03] Unpacking file1(10).pkl into zip7...
+Error loading archive: No module named 'numpy'
+[2026-08-02 11:00:03] Regenerating plot figures in plots/...
+[2026-08-02 11:00:03] Error generating plot figures: Command '['/usr/bin/python3', 'generate_matplotlib_configs.py', 'zip7']' returned non-zero exit status 1.
+[2026-08-02 11:00:03] Staging and pushing changes to git...
+[2026-08-02 11:00:04] Git commit successful: feat(data): unpack new pkl file 'file1(10).pkl' into zip7 [2026-08-02 11:00:04]
+[2026-08-02 11:00:14] Git push completed successfully.
+[2026-08-02 11:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 11:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+Traceback (most recent call last):
+  File "/home/naga/Interactive_TE_Plots/generate_matplotlib_configs.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
