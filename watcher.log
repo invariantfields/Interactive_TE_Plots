@@ -14,3 +14,463 @@ Traceback (most recent call last):
   File "/home/naga/Interactive_TE_Plots/generate_matplotlib_configs.py", line 6, in <module>
     import numpy as np
 ModuleNotFoundError: No module named 'numpy'
+To github.com:invariantfields/Interactive_TE_Plots.git
+   9c250a2..b81a627  master -> master
+[2026-07-31 22:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+
+[2026-07-31 22:00:03] Found new pkl file: file1(9).pkl
+[2026-07-31 22:00:03] Copying /mnt/c/Users/Naga/Downloads/file1(9).pkl -> /home/naga/Interactive_TE_Plots/file1(9).pkl...
+[2026-07-31 22:00:03] Copy complete.
+[2026-07-31 22:00:03] Unpacking file1(9).pkl into zip7...
+Error loading archive: No module named 'numpy'
+[2026-07-31 22:00:03] Regenerating plot figures in plots/...
+[2026-07-31 22:00:03] Error generating plot figures: Command '['/usr/bin/python3', 'generate_matplotlib_configs.py', 'zip7']' returned non-zero exit status 1.
+[2026-07-31 22:00:03] Staging and pushing changes to git...
+[2026-07-31 22:00:04] Git commit successful: feat(data): unpack new pkl file 'file1(9).pkl' into zip7 [2026-07-31 22:00:04]
+[2026-07-31 22:00:12] Git push completed successfully.
+[2026-07-31 22:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-07-31 22:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-07-31 23:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-07-31 23:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-07-31 23:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-07-31 23:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 00:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 00:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 00:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 00:30:02] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 01:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 01:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 01:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 01:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 02:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 02:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 02:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 02:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 03:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 03:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 03:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 03:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 04:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 04:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 04:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 04:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 05:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 05:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 05:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 05:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 06:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 06:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 06:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 06:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 07:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 07:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 07:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 07:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 08:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 08:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 08:30:02] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 08:30:02] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 09:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 09:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 09:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 09:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 10:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 10:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 10:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 10:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 11:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 11:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 11:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 11:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 12:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 12:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 12:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 12:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 13:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 13:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 13:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 13:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 14:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 14:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 14:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 14:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 15:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 15:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 15:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 15:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 16:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 16:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 16:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 16:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 17:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 17:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 17:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 17:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 18:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 18:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 18:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 18:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 19:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 19:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 19:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 19:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 20:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 20:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 20:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 20:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 21:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 21:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 21:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 21:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 22:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 22:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 22:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 22:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 23:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 23:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-01 23:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-01 23:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 00:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 00:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 00:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 00:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 01:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 01:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 01:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 01:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 02:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 02:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 02:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 02:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 03:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 03:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 03:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 03:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 04:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 04:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 04:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 04:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 05:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 05:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 05:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 05:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 06:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 06:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 06:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 06:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 07:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 07:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 07:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 07:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 08:00:02] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 08:00:02] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 08:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 08:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 09:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 09:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 09:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 09:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 10:00:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 10:00:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+[2026-08-02 10:30:01] Starting Download Watcher Service...
+  - Source folder: /mnt/c/Users/Naga/Downloads
+  - Target directory: zip7
+  - Interval: 30 minutes
+  - Mode: Single Run (--once)
+[2026-08-02 10:30:01] No new .pkl files found in /mnt/c/Users/Naga/Downloads.
+Traceback (most recent call last):
+  File "/home/naga/Interactive_TE_Plots/generate_matplotlib_configs.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'

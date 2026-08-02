@@ -63,7 +63,6 @@ def _():
 
     # Suppress all warnings globally to avoid logging overhead in loops
     warnings.filterwarnings("ignore")
-    os.environ["MARIMO_OUTPUT_MAX_BYTES"] = "10000000"
 
     _CACHE_FILE = "_plot_cache.pkl"
 
@@ -1171,7 +1170,7 @@ def _(os, pickle):
 
 @app.cell
 def _(unpack_pkl_file):
-    unpack_pkl_file("file1(4).pkl", "zip4/")
+    unpack_pkl_file("file1(10).pkl", "zip7/")
     return
 
 
@@ -1537,6 +1536,7 @@ def _(compute_sre_exact, is_TE, np, parse_gap_sre, pickle, plt, re):
             ax2.set_yticks([0.0, 0.25, 0.50, 0.75, 1.00])
             ax2.set_yticklabels(["0%", "25%", "50%", "75%", "100%"], fontsize=9)
             ax2.grid(True, linestyle="--", linewidth=0.5, color="#e0e0e0", axis="y")
+            ax2.legend(frameon=True, fontsize=9, loc="upper right")
 
             fig.tight_layout()
             fig.subplots_adjust(hspace=0)
@@ -1704,12 +1704,17 @@ def _(
 
     matplotlib_plot = _mpl_fig
     matplotlib_plot
-    return (matplotlib_plot,)
+    return
 
 
 @app.cell
 def _(unpack_pkl_file):
     unpack_pkl_file("file12.pkl", "zip4")
+    return
+
+
+@app.cell
+def _():
     return
 
 
